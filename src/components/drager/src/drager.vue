@@ -12,6 +12,10 @@
         @mousedown="onDotMousedown(item, $event)"
       >
       </div>
+
+      <div ref="rotateRef" class="es-drager-rotate" @mousedown="onRotateMousedown">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"/></svg>
+      </div>
     </div>
   </div>
 </template>
@@ -38,6 +42,7 @@ const props = defineProps({
   }
 })
 const dragRef = ref<HTMLElement | null>(null)
+const rotateRef = ref<HTMLElement | null>(null)
 const { selected } = useDrager(dragRef, props)
 
 // 计算圆点位置
@@ -54,7 +59,11 @@ function getDotStyle(item: IDot) {
   return style
 }
 
-// 按下小圆点
+/**
+ * 缩放
+ * @param dotInfo 
+ * @param e 
+ */
 function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   e.stopPropagation()
   e.preventDefault()
@@ -104,7 +113,39 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
     el.style.top = `${top}px`
   }
 
-  const onMouseup = (e: MouseEvent) => {
+  setupMove(onMousemove)
+}
+
+/**
+ * 旋转
+ * @param e 
+ */
+function onRotateMousedown(e: MouseEvent) {
+  e.stopPropagation()
+  e.preventDefault()
+  const el = dragRef.value!
+  const elRect = el.getBoundingClientRect()
+  setupMove((e: MouseEvent) => {
+    // 旋转中心位置
+    const centerX = elRect.left + elRect.width / 2
+    const centerY = elRect.top + elRect.height / 2
+
+    const diffX = centerX - e.clientX
+    const diffY = centerY - e.clientY
+    // Math.atan2(y,x) 返回x轴到(x,y)的角度 // pi值
+    const radians = Math.atan2(diffY, diffX)
+
+    const angle = radians * 180 / Math.PI - 90 // 角度
+    el.style.transform = `rotate(${angle}deg)`
+  })
+}
+
+/**
+ * 统一处理拖拽事件
+ * @param onMousemove 鼠标移动处理函数
+ */
+function setupMove(onMousemove: (e: MouseEvent) => void) {
+  const onMouseup = (_e: MouseEvent) => {
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
   }
@@ -140,7 +181,16 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
     &[data-side="bottom-right"] {
       transform: translate(50%, 50%);
     }
-    
+  }
+  &-rotate {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -200%);
+    width: 16px;
+    height: 16px;
+    color: aqua;
+    font-size: 20px;
   }
 }
 </style>
