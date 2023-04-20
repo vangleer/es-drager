@@ -1,15 +1,14 @@
 <template>
-  <button @click="handleClick">按钮</button>
   <div ref="dragRef" class="es-drager">
     <slot />
     
     <div v-show="selected">
       <div
-        v-for="item in dotList"
+        v-for="item, index in dotList"
         :key="item.side"
         class="es-drager-dot"
         :data-side="item.side"
-        :style="getDotStyle(item)"
+        :style="getDotStyle(index + 1)"
         @mousedown="onDotMousedown(item, $event)"
       >
       </div>
@@ -25,16 +24,25 @@
 import { ref } from 'vue'
 import { IDot } from './drager'
 import { useDrager } from './use-drager'
-const dotList: IDot[] = [
-  { side: 'top', cursor: 'n-resize' },
-  { side: 'bottom', cursor: 'n-resize' },
-  { side: 'left', cursor: 'e-resize' },
-  { side: 'right', cursor: 'e-resize' },
-  { side: 'top-left', cursor: 'se-resize' },
-  { side: 'top-right', cursor: 'sw-resize' },
-  { side: 'bottom-left', cursor: 'sw-resize' },
-  { side: 'bottom-right', cursor: 'se-resize' }
-]
+const dotList = ref<IDot[]>([
+  { side: 'top-left' },
+  { side: 'top' },
+  { side: 'top-right' },
+
+  { side: 'left' },
+  { side: 'right' },
+  
+  { side: 'bottom-left' },
+  { side: 'bottom' },
+  { side: 'bottom-right' }
+])
+
+const cursorKeys: any = {
+  '18': 'se-resize',
+  '27': 'n-resize',
+  '36': 'sw-resize',
+  '45': 'e-resize'
+}
 
 const props = defineProps({
   teleport: {
@@ -47,35 +55,56 @@ const rotateRef = ref<HTMLElement | null>(null)
 const angle = ref(0)
 const { selected } = useDrager(dragRef, props)
 
-function handleClick() {
-  const elRect = dragRef.value!.getBoundingClientRect()
-  console.log(elRect, angle.value)
+function changeList() {
+  
+  // console.log(angle.value, Math.round(Math.abs(angle.value) / 30))
+  const n = Math.round(Math.abs(angle.value) / 30) - 1
+  if (n <= 0) return
+  const len = dotList.value.length
 
-  createDiv(elRect)
-}
+  const originArr = [...dotList.value]
+  dotList.value = []
+  let i = n - 1, index = 0
+  while(index < len) {
+    console.log(i)
+    if (i < 0) {
+      i = len - 1
+    }
+    const item = originArr[i]
+    dotList.value.push({ ...item })
+    i--
+    index++
+  }
 
-function createDiv(elRect: DOMRect) {
-  const el = document.createElement('div')
-  el.style.position = 'absolute'
-  el.style.left = elRect.left + 'px'
-  el.style.top = elRect.top + 'px'
+  console.log(dotList.value, 'dotList.value')
+  // if (angle.value > 0) {
 
-  el.className = 'es-temp'
-  document.querySelector(props.teleport)!.appendChild(el)
+  // } else if (angle.value < 0)  {
+
+  // }
 }
 
 // 计算圆点位置
-function getDotStyle(item: IDot) {
-  const [side, position] = item.side.split('-')
-  const style = { [side]: '0%', cursor: item.cursor }
-  if (!position) {
-    const side2 = ['top', 'bottom'].includes(side) ? 'left' : 'top'
-    style[side2] = '50%'
-  } else {
-    style[position] = '0%'
+function getDotStyle(item: number) {
+  let left = 0, top = 0
+
+  const pairs = [item, 9 - item].sort((a, b) => a - b)
+
+  if (item <= 3) { // 上
+    left = (item - 1) * 50
+  } else if (item <= 5) { // 中
+    left = (item - 4) * 100
+    top = 50
+  } else { // 下
+    left = (item - 6) * 50
+    top = 100
   }
 
-  return style
+  return {
+    left: `${left}%`,
+    top: `${top}%`,
+    cursor: cursorKeys[pairs.join('')]
+  }
 }
 
 /**
@@ -157,6 +186,8 @@ function onRotateMousedown(e: MouseEvent) {
 
     angle.value = radians * 180 / Math.PI - 90 // 角度
     el.style.transform = `rotate(${angle.value}deg)`
+
+    changeList()
   })
 }
 
@@ -187,21 +218,14 @@ function setupMove(onMousemove: (e: MouseEvent) => void) {
   }
   &-dot {
     position: absolute;
+    left: 0;
+    top: 0;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: yellowgreen;
     transform: translate(-50%, -50%);
     cursor: se-resize;
-    &[data-side*="right"] {
-      transform: translate(50%, -50%);
-    }
-    &[data-side*="bottom"] {
-      transform: translate(-50%, 50%);
-    }
-    &[data-side="bottom-right"] {
-      transform: translate(50%, 50%);
-    }
   }
   &-rotate {
     position: absolute;
@@ -214,9 +238,5 @@ function setupMove(onMousemove: (e: MouseEvent) => void) {
     font-size: 20px;
   }
 }
-.es-temp {
-  width: 10px;
-  height: 10px;
-  background-color: red;
-}
+
 </style>

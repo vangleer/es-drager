@@ -1,7 +1,7 @@
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export type IDot = {
   side: IDotSide,
-  cursor: string
+  cursor?: string
 }
 
 export const DragerProps = {
