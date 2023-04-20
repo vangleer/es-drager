@@ -5,6 +5,8 @@ export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractProp
   const dragRef = ref()
   const isMousedown = ref(false)
   const selected = ref(false)
+  const x = ref(props.left)
+  const y = ref(props.top)
   function onMousedown(e: MouseEvent) {
     isMousedown.value = true
     selected.value = true
@@ -33,26 +35,25 @@ export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractProp
       let moveX = e.clientX - mouseX
       let moveY = e.clientY - mouseY
 
-      // 判断x最小最大边界
-      moveX = moveX < minX ? minX : moveX
-      moveX = moveX > maxX ? maxX : moveX
+      if (props.boundary) {
+        // 判断x最小最大边界
+        moveX = moveX < minX ? minX : moveX
+        moveX = moveX > maxX ? maxX : moveX
 
-      // 判断y最小最大边界
-      moveY = moveY < minY ? minY : moveY
-      moveY = moveY > maxY ? maxY : moveY
+        // 判断y最小最大边界
+        moveY = moveY < minY ? minY : moveY
+        moveY = moveY > maxY ? maxY : moveY
+      }
       
       el.style.left = moveX + 'px'
       el.style.top = moveY + 'px'
-      // el.style.transform = `translate(${moveX}px, ${moveY}px)`
+      x.value = moveX
+      y.value = mouseY
     }
-    const onMouseup = (e: MouseEvent) => {
+
+    setupMove(onMousemove, (e: MouseEvent) => {
       isMousedown.value = false
-      console.log('up')
-      document.removeEventListener('mousemove', onMousemove)
-      document.removeEventListener('mouseup', onMouseup)
-    }
-    document.addEventListener('mousemove', onMousemove)
-    document.addEventListener('mouseup', onMouseup)
+    })
   }
 
   const clickOutsize = () => {
@@ -71,6 +72,22 @@ export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractProp
   return {
     isMousedown,
     selected,
-    dragRef
+    dragRef,
+    x,
+    y
   }
+}
+
+/**
+ * 统一处理拖拽事件
+ * @param onMousemove 鼠标移动处理函数
+ */
+export function setupMove(onMousemove: (e: MouseEvent) => void, onMouseupCb?: (e: MouseEvent) => void) {
+  const onMouseup = (_e: MouseEvent) => {
+    onMouseupCb && onMouseupCb(_e)
+    document.removeEventListener('mousemove', onMousemove)
+    document.removeEventListener('mouseup', onMouseup)
+  }
+  document.addEventListener('mousemove', onMousemove)
+  document.addEventListener('mouseup', onMouseup)
 }

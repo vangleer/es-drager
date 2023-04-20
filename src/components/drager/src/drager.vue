@@ -1,68 +1,54 @@
 <template>
-  <button @click="handleClick">按钮</button>
-  <div ref="dragRef" class="es-drager">
-    <slot />
-    
-    <div v-show="selected">
-      <div
-        v-for="item in dotList"
-        :key="item.side"
-        class="es-drager-dot"
-        :data-side="item.side"
-        :style="getDotStyle(item)"
-        @mousedown="onDotMousedown(item, $event)"
-      >
-      </div>
+  <Teleport :to="teleport">
+    <div ref="dragRef" class="es-drager" :style="dragStyle">
+      <slot />
+      
+      <div v-show="selected">
+        <div
+          v-for="item in dotList"
+          :key="item.side"
+          class="es-drager-dot"
+          :data-side="item.side"
+          :style="getDotStyle(item)"
+          @mousedown="onDotMousedown(item, $event)"
+        >
+        </div>
 
-      <div ref="rotateRef" class="es-drager-rotate" @mousedown="onRotateMousedown">
-        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"/></svg>
+        <div
+          v-if="rotatable"
+          ref="rotateRef"
+          class="es-drager-rotate"
+          @mousedown="onRotateMousedown"
+        >
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"/></svg>
+        </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
-import { IDot } from './drager'
-import { useDrager } from './use-drager'
-const dotList: IDot[] = [
-  { side: 'top', cursor: 'n-resize' },
-  { side: 'bottom', cursor: 'n-resize' },
-  { side: 'left', cursor: 'e-resize' },
-  { side: 'right', cursor: 'e-resize' },
-  { side: 'top-left', cursor: 'se-resize' },
-  { side: 'top-right', cursor: 'sw-resize' },
-  { side: 'bottom-left', cursor: 'sw-resize' },
-  { side: 'bottom-right', cursor: 'se-resize' }
-]
+import { computed, ref } from 'vue'
+import { DragerProps, IDot, withUnit, dotList } from './drager'
+import { useDrager, setupMove } from './use-drager'
 
-const props = defineProps({
-  teleport: {
-    type: String,
-    default: '.es-paint-box'
-  }
-})
+const props = defineProps(DragerProps)
+const emit = defineEmits(['move', 'resize'])
+
 const dragRef = ref<HTMLElement | null>(null)
 const rotateRef = ref<HTMLElement | null>(null)
 const angle = ref(0)
 const { selected } = useDrager(dragRef, props)
 
-function handleClick() {
-  const elRect = dragRef.value!.getBoundingClientRect()
-  console.log(elRect, angle.value)
-
-  createDiv(elRect)
-}
-
-function createDiv(elRect: DOMRect) {
-  const el = document.createElement('div')
-  el.style.position = 'absolute'
-  el.style.left = elRect.left + 'px'
-  el.style.top = elRect.top + 'px'
-
-  el.className = 'es-temp'
-  document.querySelector(props.teleport)!.appendChild(el)
-}
+const dragStyle = computed(() => {
+  return {
+    width: withUnit(props.width),
+    height: withUnit(props.height),
+    left: withUnit(props.left),
+    top: withUnit(props.top),
+    '--es-drag-color': props.color
+  }
+})
 
 // 计算圆点位置
 function getDotStyle(item: IDot) {
@@ -160,19 +146,6 @@ function onRotateMousedown(e: MouseEvent) {
   })
 }
 
-/**
- * 统一处理拖拽事件
- * @param onMousemove 鼠标移动处理函数
- */
-function setupMove(onMousemove: (e: MouseEvent) => void) {
-  const onMouseup = (_e: MouseEvent) => {
-    document.removeEventListener('mousemove', onMousemove)
-    document.removeEventListener('mouseup', onMouseup)
-  }
-  document.addEventListener('mousemove', onMousemove)
-  document.addEventListener('mouseup', onMouseup)
-}
-
 </script>
 
 <style lang='scss'>
@@ -181,7 +154,7 @@ function setupMove(onMousemove: (e: MouseEvent) => void) {
   z-index: 1000;
   width: 200px;
   height: 120px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--es-drag-color);
   &:hover {
     cursor: move;
   }
@@ -190,7 +163,7 @@ function setupMove(onMousemove: (e: MouseEvent) => void) {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: yellowgreen;
+    background-color: var(--es-drag-color);
     transform: translate(-50%, -50%);
     cursor: se-resize;
     &[data-side*="right"] {
@@ -210,13 +183,8 @@ function setupMove(onMousemove: (e: MouseEvent) => void) {
     transform: translate(-50%, -200%);
     width: 16px;
     height: 16px;
-    color: aqua;
+    color: var(--es-drag-color);
     font-size: 20px;
   }
-}
-.es-temp {
-  width: 10px;
-  height: 10px;
-  background-color: red;
 }
 </style>
