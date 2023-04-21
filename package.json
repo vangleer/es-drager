@@ -1,6 +1,6 @@
 {
   "name": "es-drager",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "A drag and zoom component based on vue3",
   "keywords": [
     "drag",
