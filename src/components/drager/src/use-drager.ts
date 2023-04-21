@@ -1,12 +1,22 @@
-import { Ref, onMounted, ref, onBeforeUnmount, ExtractPropTypes } from 'vue'
+import { Ref, onMounted, ref, ExtractPropTypes, } from 'vue'
 import { DragerProps } from './drager'
 let zIndex = 1000
-export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractPropTypes<typeof DragerProps>) {
+
+export function useDrager(
+  targetRef: Ref<HTMLElement | null>,
+  props: Partial<ExtractPropTypes<typeof DragerProps>>, 
+  emit: Function
+) {
+  
   const dragRef = ref()
   const isMousedown = ref(false)
   const selected = ref(false)
-  const x = ref(props.left)
-  const y = ref(props.top)
+  const dragData = ref({
+    width: props.width,
+    height: props.height,
+    left: props.left,
+    top: props.top
+  })
   function onMousedown(e: MouseEvent) {
     isMousedown.value = true
     selected.value = true
@@ -14,18 +24,20 @@ export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractProp
     const downX = e.clientX
     const downY = e.clientY
     const elRect = el.getBoundingClientRect()
-    el.style.zIndex = zIndex++ + ''
-    const parentEl = document.querySelector(props.teleport)
-
-    const parentElRect = parentEl!.getBoundingClientRect()
-    // 最小x
-    const minX = parentElRect.left
-    // 最大x
-    const maxX = parentElRect.left + parentElRect.width - elRect.width
-    // 最小y
-    const minY = parentElRect.top
-    // 最大y
-    const maxY = parentElRect.top + parentElRect.height - elRect.height
+    el.style.zIndex = useZIndex()
+    let minX = 0, maxX = 0, minY = 0, maxY = 0
+    if (props.boundary) {
+      const parentEl = el.parentElement || document.body
+      const parentElRect = parentEl!.getBoundingClientRect()
+      // 最小x
+      minX = parentElRect.left
+      // 最大x
+      maxX = parentElRect.left + parentElRect.width - elRect.width
+      // 最小y
+      minY = parentElRect.top
+      // 最大y
+      maxY = parentElRect.top + parentElRect.height - elRect.height
+    }
 
     // 鼠标在盒子里的位置
     const mouseX = downX - elRect.left
@@ -45,37 +57,34 @@ export function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractProp
         moveY = moveY > maxY ? maxY : moveY
       }
       
-      el.style.left = moveX + 'px'
-      el.style.top = moveY + 'px'
-      x.value = moveX
-      y.value = mouseY
+      dragData.value.left = moveX
+      dragData.value.top = moveY
+      emit && emit('move', dragData.value)
     }
 
     setupMove(onMousemove, (e: MouseEvent) => {
       isMousedown.value = false
+      document.addEventListener('click', clickOutsize, { once: true })
     })
   }
 
   const clickOutsize = () => {
-    console.log('document click...')
     selected.value = false
   }
   onMounted(() => {
     if (!targetRef.value) return
     targetRef.value.addEventListener('mousedown', onMousedown)
   })
-
-  onBeforeUnmount(() => {
-    document.removeEventListener('click', clickOutsize)
-  })
-
   return {
     isMousedown,
     selected,
     dragRef,
-    x,
-    y
+    dragData
   }
+}
+
+export function useZIndex() {
+  return ++zIndex + ''
 }
 
 /**

@@ -1,3 +1,4 @@
+import { Ref, InjectionKey } from 'vue'
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export type IDot = {
   side: IDotSide,
@@ -5,10 +6,6 @@ export type IDot = {
 }
 
 export const DragerProps = {
-  teleport: { // 挂载到哪里
-    type: String,
-    default: 'body'
-  },
   rotatable: { // 暂未实现
     type: Boolean,
     default: false
@@ -37,6 +34,12 @@ export const DragerProps = {
     default: '#3a7afe'
   }
 }
+
+
+type DragContext = {
+  dragRef: Ref<HTMLElement | null>
+}
+export const DragContextKey: InjectionKey<DragContext> = Symbol('DragContextKey')
 
 export const dotList: IDot[] = [
   { side: 'top', cursor: 'n-resize' },

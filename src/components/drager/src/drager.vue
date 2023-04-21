@@ -1,51 +1,45 @@
 <template>
-  <Teleport :to="teleport">
-    <div ref="dragRef" class="es-drager" :style="dragStyle">
-      <slot />
-      
-      <div v-show="selected">
-        <div
-          v-for="item in dotList"
-          :key="item.side"
-          class="es-drager-dot"
-          :data-side="item.side"
-          :style="getDotStyle(item)"
-          @mousedown="onDotMousedown(item, $event)"
-        >
-        </div>
-
-        <div
-          v-if="rotatable"
-          ref="rotateRef"
-          class="es-drager-rotate"
-          @mousedown="onRotateMousedown"
-        >
-          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"/></svg>
-        </div>
+  <div ref="dragRef" class="es-drager" :style="dragStyle" @click.stop>
+    <slot />
+    
+    <div v-show="selected">
+      <div
+        v-for="item in dotList"
+        :key="item.side"
+        class="es-drager-dot"
+        :data-side="item.side"
+        :style="getDotStyle(item)"
+        @mousedown="onDotMousedown(item, $event)"
+      >
       </div>
     </div>
-  </Teleport>
+
+    <Rotate :visible="true" />
+  </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
-import { DragerProps, IDot, withUnit, dotList } from './drager'
+import { computed, ref, provide } from 'vue'
+import { DragerProps, IDot, withUnit, dotList, DragContextKey } from './drager'
 import { useDrager, setupMove } from './use-drager'
-
+import Rotate from './rotate.vue'
 const props = defineProps(DragerProps)
 const emit = defineEmits(['move', 'resize'])
 
 const dragRef = ref<HTMLElement | null>(null)
-const rotateRef = ref<HTMLElement | null>(null)
-const angle = ref(0)
-const { selected } = useDrager(dragRef, props)
+const { selected, dragData } = useDrager(dragRef, props, emit)
+
+provide(DragContextKey, {
+  dragRef
+})
 
 const dragStyle = computed(() => {
+  const { width, height, left, top } = dragData.value
   return {
-    width: withUnit(props.width),
-    height: withUnit(props.height),
-    left: withUnit(props.left),
-    top: withUnit(props.top),
+    width: withUnit(width),
+    height: withUnit(height),
+    left: withUnit(left),
+    top: withUnit(top),
     '--es-drag-color': props.color
   }
 })
@@ -112,38 +106,12 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
       height = -height
       top -= height
     }
-    el.style.width = `${width}px`
-    el.style.height = `${height}px`
-    el.style.left = `${left}px`
-    el.style.top = `${top}px`
+
+    dragData.value = { left, top, width, height }
+    emit('resize', dragData.value)
   }
 
   setupMove(onMousemove)
-}
-
-/**
- * 旋转
- * @param e 
- */
-function onRotateMousedown(e: MouseEvent) {
-  e.stopPropagation()
-  e.preventDefault()
-  const el = dragRef.value!
-  const elRect = el.getBoundingClientRect()
-  // 旋转中心位置
-  const centerX = elRect.left + elRect.width / 2
-  const centerY = elRect.top + elRect.height / 2
-
-  setupMove((e: MouseEvent) => {
-
-    const diffX = centerX - e.clientX
-    const diffY = centerY - e.clientY
-    // Math.atan2(y,x) 返回x轴到(x,y)的角度 // pi值
-    const radians = Math.atan2(diffY, diffX)
-
-    angle.value = radians * 180 / Math.PI - 90 // 角度
-    el.style.transform = `rotate(${angle.value}deg)`
-  })
 }
 
 </script>
@@ -175,16 +143,6 @@ function onRotateMousedown(e: MouseEvent) {
     &[data-side="bottom-right"] {
       transform: translate(50%, 50%);
     }
-  }
-  &-rotate {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -200%);
-    width: 16px;
-    height: 16px;
-    color: var(--es-drag-color);
-    font-size: 20px;
   }
 }
 </style>

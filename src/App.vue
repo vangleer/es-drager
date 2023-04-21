@@ -1,6 +1,8 @@
 <template>
   <div class="es-paint-box">
-    <Drager />
+    <Drager boundary>
+      123465
+    </Drager>
   </div>
 </template>
 
