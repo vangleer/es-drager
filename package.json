@@ -1,21 +1,55 @@
 {
   "name": "es-drager",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "0.0.3",
+  "description": "A simple drag component based on vue3",
+  "keywords": [
+    "drag",
+    "vue-drager",
+    "es-drager"
+  ],
+  "homepage": "https://github.com/vangleer/es-drager",
+  "bugs": {
+    "url": "https://github.com/vangleer/es-drager/issues"
+  },
+  "license": "MIT",
+  "author": "huangwantong <965002107@qq.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./*": "./*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vangleer/es-drager.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
+    "build:lib": "node ./scripts/build.js",
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "@types/node": "^18.15.13",
+    "es-drager": "^0.0.3",
+    "vue": ">=3.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
     "sass": "^1.62.0",
     "typescript": "^4.9.3",
     "vite": "^4.2.0",
+    "vite-plugin-dts": "^2.3.0",
     "vue-tsc": "^1.2.0"
-  }
+  },
+  "peerDependencies": {
+    "vue": ">=3.2.0"
+  },
+  "typings": "dist/drager/index.d.ts"
 }
