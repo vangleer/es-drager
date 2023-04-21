@@ -10,13 +10,14 @@ export const DragerProps = {
     type: Boolean,
     default: true
   },
-  rotatable: { // 暂未实现
+  rotatable: {
     type: Boolean,
     default: false
   },
-  boundary: { // 现在边界
+  boundary: { // 边界
     type: Boolean
   },
+  disabled: Boolean,
   width: {
     type: [Number, String],
     default: 100

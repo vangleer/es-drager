@@ -18,6 +18,7 @@ export function useDrager(
     top: props.top
   })
   function onMousedown(e: MouseEvent) {
+    if (props.disabled) return
     isMousedown.value = true
     selected.value = true
     const el = targetRef.value!

@@ -1,20 +1,22 @@
 <template>
-  <div ref="dragRef" class="es-drager" :style="dragStyle" @click.stop>
+  <div ref="dragRef" :class="['es-drager', { disabled }]" :style="dragStyle" @click.stop>
     <slot />
     
-    <div v-if="zoomable" v-show="selected">
-      <div
-        v-for="item in dotList"
-        :key="item.side"
-        class="es-drager-dot"
-        :data-side="item.side"
-        :style="getDotStyle(item)"
-        @mousedown="onDotMousedown(item, $event)"
-      >
+    <template v-if="!disabled && zoomable">
+      <div v-show="selected">
+        <div
+          v-for="item in dotList"
+          :key="item.side"
+          class="es-drager-dot"
+          :data-side="item.side"
+          :style="getDotStyle(item)"
+          @mousedown="onDotMousedown(item, $event)"
+        >
+        </div>
       </div>
-    </div>
+    </template>
 
-    <Rotate :visible="true" />
+    <Rotate :visible="!disabled && rotatable" />
   </div>
 </template>
 
@@ -40,7 +42,7 @@ const dragStyle = computed(() => {
     height: withUnit(height),
     left: withUnit(left),
     top: withUnit(top),
-    '--es-drag-color': props.color
+    '--es-drager-color': props.color
   }
 })
 
@@ -108,7 +110,11 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   z-index: 1000;
   width: 200px;
   height: 120px;
-  border: 1px solid var(--es-drag-color, #3a7afe);
+  border: 1px solid var(--es-drager-color, #3a7afe);
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+  }
   &:hover {
     cursor: move;
   }
@@ -117,7 +123,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: var(--es-drag-color, #3a7afe);
+    background-color: var(--es-drager-color, #3a7afe);
     transform: translate(-50%, -50%);
     cursor: se-resize;
     &[data-side*="right"] {
