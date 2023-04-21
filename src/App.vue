@@ -1,13 +1,18 @@
 <template>
   <div class="es-paint-box">
-    <Drager boundary>
+    <!-- <Drager boundary @move="handleMove">
       123465
-    </Drager>
+    </Drager> -->
+    <div v-drager="{ boundary: true }"></div>
   </div>
 </template>
 
 <script setup lang='ts'>
 import Drager from './components/drager'
+
+function handleMove(data: any) {
+  console.log(data, 'data')
+}
 
 </script>
 

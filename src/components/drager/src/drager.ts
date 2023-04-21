@@ -6,6 +6,10 @@ export type IDot = {
 }
 
 export const DragerProps = {
+  zoomable: {
+    type: Boolean,
+    default: true
+  },
   rotatable: { // 暂未实现
     type: Boolean,
     default: false
@@ -51,6 +55,20 @@ export const dotList: IDot[] = [
   { side: 'bottom-left', cursor: 'sw-resize' },
   { side: 'bottom-right', cursor: 'se-resize' }
 ]
+
+// 计算圆点位置
+export function getDotStyle(item: IDot) {
+  const [side, position] = item.side.split('-')
+  const style = { [side]: '0%', cursor: item.cursor }
+  if (!position) {
+    const side2 = ['top', 'bottom'].includes(side) ? 'left' : 'top'
+    style[side2] = '50%'
+  } else {
+    style[position] = '0%'
+  }
+
+  return style
+}
 
 export const withUnit = (val: number | string = 0) => {
   return parseInt(val + '') + 'px'

@@ -2,7 +2,7 @@
   <div ref="dragRef" class="es-drager" :style="dragStyle" @click.stop>
     <slot />
     
-    <div v-show="selected">
+    <div v-if="zoomable" v-show="selected">
       <div
         v-for="item in dotList"
         :key="item.side"
@@ -20,7 +20,7 @@
 
 <script setup lang='ts'>
 import { computed, ref, provide } from 'vue'
-import { DragerProps, IDot, withUnit, dotList, DragContextKey } from './drager'
+import { DragerProps, IDot, withUnit, dotList, DragContextKey, getDotStyle } from './drager'
 import { useDrager, setupMove } from './use-drager'
 import Rotate from './rotate.vue'
 const props = defineProps(DragerProps)
@@ -43,20 +43,6 @@ const dragStyle = computed(() => {
     '--es-drag-color': props.color
   }
 })
-
-// 计算圆点位置
-function getDotStyle(item: IDot) {
-  const [side, position] = item.side.split('-')
-  const style = { [side]: '0%', cursor: item.cursor }
-  if (!position) {
-    const side2 = ['top', 'bottom'].includes(side) ? 'left' : 'top'
-    style[side2] = '50%'
-  } else {
-    style[position] = '0%'
-  }
-
-  return style
-}
 
 /**
  * 缩放
@@ -122,7 +108,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   z-index: 1000;
   width: 200px;
   height: 120px;
-  border: 1px solid var(--es-drag-color);
+  border: 1px solid var(--es-drag-color, #3a7afe);
   &:hover {
     cursor: move;
   }
@@ -131,7 +117,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: var(--es-drag-color);
+    background-color: var(--es-drag-color, #3a7afe);
     transform: translate(-50%, -50%);
     cursor: se-resize;
     &[data-side*="right"] {
