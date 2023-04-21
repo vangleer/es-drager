@@ -1,7 +1,7 @@
 {
   "name": "es-drager",
-  "version": "0.0.3",
-  "description": "A simple drag component based on vue3",
+  "version": "0.0.6",
+  "description": "A drag and zoom component based on vue3",
   "keywords": [
     "drag",
     "vue-drager",
@@ -21,7 +21,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
+      "require": "./dist/index.umd.js",
+      "types": "./dist/drager/index.d.ts"
     },
     "./*": "./*"
   },
@@ -37,7 +38,7 @@
   },
   "dependencies": {
     "@types/node": "^18.15.13",
-    "es-drager": "^0.0.3",
+    "es-drager": "^0.0.6",
     "vue": ">=3.2.0"
   },
   "devDependencies": {
