@@ -63,7 +63,7 @@ function onRotateMousedown(e: MouseEvent) {
   transform: translate(-50%, -200%);
   width: 16px;
   height: 16px;
-  color: var(--es-drag-color);
+  color: var(--es-drager-color);
   font-size: 20px;
 }
 </style>

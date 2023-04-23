@@ -1,20 +1,26 @@
 <template>
   <div class="es-paint-box">
     <Drager boundary rotatable @move="handleMove">
-      Drager
+      <div class="my-comp">
+        Drager1
+      </div>
     </Drager>
-
-    <!-- <Drager2 boundary @move="handleMove">
-      Drager
-    </Drager2> -->
-    <!-- <div v-drager="{ boundary: true }"></div> -->
+    <Drager boundary rotatable @move="handleMove">
+      <div class="my-comp">
+        Drager2
+      </div>
+    </Drager>
+    <Drager boundary rotatable @move="handleMove">
+      <div class="my-comp">
+        Drager3
+      </div>
+    </Drager>
   </div>
 </template>
 
 <script setup lang='ts'>
-// import Drager from 'es-drager'
-// import Drager2 from './drager'
-import Drager from './drager2/drager2.vue'
+
+import Drager from './drager'
 function handleMove(data: any) {
   console.log(data, 'data')
 }
@@ -23,9 +29,17 @@ function handleMove(data: any) {
 
 <style lang='scss' scoped>
 .es-paint-box {
-  width: 520px;
-  height: 520px;
+  width: 820px;
+  height: 320px;
   border: 1px solid #ccc;
   margin: 100px auto;
+}
+.my-comp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #c3dddc;
 }
 </style>

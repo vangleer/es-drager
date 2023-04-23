@@ -7,17 +7,19 @@
   >
     <slot />
 
-    <div v-show="selected">
-      <div
-        v-for="item in dotList"
-        :key="item.side"
-        class="es-drager-dot"
-        :data-side="item.side"
-        :style="getDotStyle(item)"
-        @mousedown="onDotMousedown(item, $event)"
-      >
+    <template v-if="zoomable">
+      <div v-show="selected">
+        <div
+          v-for="item in dotList"
+          :key="item.side"
+          class="es-drager-dot"
+          :data-side="item.side"
+          :style="getDotStyle(item)"
+          @mousedown="onDotMousedown(item, $event)"
+        >
+        </div>
       </div>
-    </div>
+    </template>
 
     <div
       v-if="rotatable"
@@ -246,7 +248,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   document.addEventListener('mouseup', onMouseup)
 }
 
-
+// 旋转实现方案: https://www.deanhan.cn/js-rotate-resize.html
 function onRotateMousedown(e: MouseEvent) {
   e.stopPropagation()
   e.preventDefault()

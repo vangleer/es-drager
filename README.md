@@ -1,7 +1,5 @@
 # es-drager 拖拽组件
 
-旋转实现方案: https://www.deanhan.cn/js-rotate-resize.html
-
 <p align="center">
 	<a href="https://www.npmjs.com/package/commander" target="_blank">
 		<img src="https://img.shields.io/badge/vuejs-vue3.x-green" alt="commander">

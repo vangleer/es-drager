@@ -16,7 +16,7 @@
       </div>
     </template>
 
-    <Rotate :visible="!disabled && rotatable" />
+    <Rotate :visible="!disabled && rotatable && selected" />
   </div>
 </template>
 
