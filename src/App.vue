@@ -1,15 +1,20 @@
 <template>
   <div class="es-paint-box">
-    <Drager boundary @move="handleMove" disabled>
-      123465
+    <Drager boundary rotatable @move="handleMove">
+      Drager
     </Drager>
-    <div v-drager="{ boundary: true }"></div>
+
+    <!-- <Drager2 boundary @move="handleMove">
+      Drager
+    </Drager2> -->
+    <!-- <div v-drager="{ boundary: true }"></div> -->
   </div>
 </template>
 
 <script setup lang='ts'>
 // import Drager from 'es-drager'
-import Drager from './drager'
+// import Drager2 from './drager'
+import Drager from './drager2/drager2.vue'
 function handleMove(data: any) {
   console.log(data, 'data')
 }
@@ -18,8 +23,9 @@ function handleMove(data: any) {
 
 <style lang='scss' scoped>
 .es-paint-box {
-  width: 500px;
-  height: 500px;
+  width: 520px;
+  height: 520px;
   border: 1px solid #ccc;
+  margin: 100px auto;
 }
 </style>
