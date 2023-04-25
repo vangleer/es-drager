@@ -87,7 +87,6 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['move', 'resize', 'rotate'])
-const angle = ref(0)
 const dragRef = ref<HTMLElement | null>(null)
 const isMousedown = ref(false)
 type DragData = {
@@ -178,6 +177,10 @@ function onMousedown(e: MouseEvent) {
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
 }
+function twoPointDistance(x: number, y: number, x1: number, y1: number){
+    let dep = Math.sqrt(Math.pow((x - x1), 2) + Math.pow((y - y1), 2))
+    return dep
+}
 
 /**
  * 缩放
@@ -194,27 +197,33 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   const elRect = el.getBoundingClientRect()
   
   const onMousemove = (e: MouseEvent) => {
+    // 鼠标离小圆点的直线距离
+    let dis = twoPointDistance(downX, downY, e.clientX, e.clientY)
+
+    // if (downX < e.clientX || downY < e.clientY) {
+    //   console.log('放大')
+    // } else {
+    //   console.log('缩小')
+    //   dis = -dis
+    // }
+
     // 移动的x距离
-    const disX = e.clientX - downX
+    const disX = dis
     // 移动的y距离
-    const disY = e.clientY - downY
+    const disY = dis
+
+    
+    // console.log(dis, disX, disY)
+    // dragData.value.width = elRect.width + dis
 
     const [side, position] = dotInfo.side.split('-')
     const hasT = side === 'top'
     const hasL = [side, position].includes('left')
 
-    let width = elRect.width, left = elRect.left
-    if (hasL) {
-      width -= disX
-      left += disX
-    } else {
-      width += disX
-    }
-
-    // let width = elRect.width + (hasL ? -disX : disX)
+    let width = elRect.width + (hasL ? -disX : disX)
     let height = elRect.height + (hasT ? -disY : disY)
     
-    // let left = elRect.left + (hasL ? disX : 0)
+    let left = elRect.left + (hasL ? disX : 0)
     let top = elRect.top + (hasT ? disY : 0)
 
     if (!position) { // 如果是四个正方位
@@ -236,7 +245,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
       top -= height
     }
 
-    dragData.value = { left, top, width, height }
+    dragData.value = { left: 0, top: 0, width, height }
     emit('resize', dragData.value)
   }
 
@@ -265,12 +274,17 @@ function onRotateMousedown(e: MouseEvent) {
     const radians = Math.atan2(diffY, diffX)
 
     dragData.value.angle = radians * 180 / Math.PI - 90 // 角度
-    emit('rotate', angle.value)
+    emit('rotate', dragData.value)
   }
 
   const onMouseup = (_e: MouseEvent) => {
+    
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
+
+    function adjustDotList(angle: number) {
+
+    }
   }
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)

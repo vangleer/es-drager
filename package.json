@@ -14,15 +14,15 @@
   "license": "MIT",
   "author": "huangwantong <965002107@qq.com>",
   "files": [
-    "dist"
+    "lib"
   ],
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "main": "./lib/index.umd.js",
+  "module": "./lib/index.es.js",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/drager/index.d.ts"
+      "import": "./lib/index.es.js",
+      "require": "./lib/index.umd.js",
+      "types": "./lib/drager/index.d.ts"
     },
     "./*": "./*"
   },
@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "build:lib": "node ./scripts/build.js",
+    "build:lib": "vite build --config vite.config.lib.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -52,5 +52,5 @@
   "peerDependencies": {
     "vue": ">=3.2.0"
   },
-  "typings": "dist/drager/index.d.ts"
+  "typings": "lib/drager/index.d.ts"
 }

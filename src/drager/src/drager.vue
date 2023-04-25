@@ -1,5 +1,5 @@
 <template>
-  <div ref="dragRef" :class="['es-drager', { disabled }]" :style="dragStyle" @click.stop>
+  <div ref="dragRef" :class="['es-drager', { disabled, dragging: isMousedown }]" :style="dragStyle" @click.stop>
     <slot />
     
     <template v-if="!disabled && zoomable">
@@ -15,8 +15,8 @@
         </div>
       </div>
     </template>
-
-    <Rotate :visible="!disabled && rotatable && selected" />
+    
+    <Rotate :visible="!disabled && selected" />
   </div>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps(DragerProps)
 const emit = defineEmits(['move', 'resize'])
 
 const dragRef = ref<HTMLElement | null>(null)
-const { selected, dragData } = useDrager(dragRef, props, emit)
+const { selected, dragData, isMousedown } = useDrager(dragRef, props, emit)
 
 provide(DragContextKey, {
   dragRef
@@ -111,6 +111,9 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   width: 200px;
   height: 120px;
   border: 1px solid var(--es-drager-color, #3a7afe);
+  &.dragging {
+    user-select: none;
+  }
   &.disabled {
     opacity: 0.4;
     cursor: not-allowed !important;
