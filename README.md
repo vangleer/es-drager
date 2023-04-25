@@ -10,6 +10,8 @@
 </p>
 <p>&nbsp;</p>
 
+[example](https://vangleer.github.io/es-drager)
+
 ## 🌈介绍
 
 基于 vue3.x + CompositionAPI + typescript + vite 的可拖拽、缩放、旋转的组件
