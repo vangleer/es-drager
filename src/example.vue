@@ -13,7 +13,9 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import Drager from './drager'
+// import Drager from './drager'
+import 'es-drager/lib/style.css'
+import Drager from 'es-drager'
 
 const dragList = ref([
   { text: '移动', zoomable: false },
