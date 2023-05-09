@@ -128,6 +128,10 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
   width: 200px;
   height: 120px;
   border: 1px solid var(--es-drager-color, #3a7afe);
+  > * {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
   &.dragging {
     user-select: none;
   }

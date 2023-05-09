@@ -30,7 +30,6 @@ const rotateRef = ref<HTMLElement | null>(null)
 const angle = computed({
   get: () => props.modelValue,
   set: (val) => {
-    console.log(val, 123456)
     emit('update:modelValue', val)
   }
 })

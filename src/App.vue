@@ -1,23 +1,15 @@
 <template>
   <div class="es-app">
-    <!-- <Example /> -->
-
-    <Drager :left="left" :top="100" :angle="30" />
-
-    <button @click="change">change</button>
+    <Basic />
+    <!-- <Event /> -->
+    <!-- <Slot /> -->
   </div>
 </template>
 
 <script setup lang='ts'>
-import Example from './example.vue'
-import Drager from './drager/src/drager.vue'
-import { ref } from 'vue';
-
-const left = ref(100)
-
-function change() {
-  left.value = 200
-}
+import Basic from './examples/basic.vue'
+// import Event from './examples/event.vue'
+// import Slot from './examples/slot.vue'
 </script>
 
 <style lang='scss'>
