@@ -18,7 +18,7 @@ const props = defineProps({
   visible: Boolean
 })
 
-const emit = defineEmits(['rotate'])
+const emit = defineEmits(['rotate', 'rotate-end'])
 
 const { dragRef } = inject(DragContextKey) || {}
 
@@ -46,10 +46,13 @@ function onRotateMousedown(e: MouseEvent) {
     // Math.atan2(y,x) 返回x轴到(x,y)的角度 // pi值
     const radians = Math.atan2(diffY, diffX)
 
-    angle.value = radians * 180 / Math.PI - 90 // 角度
+    const deg = radians * 180 / Math.PI - 90
+    angle.value = (deg + 360) % 360
 
     emit('rotate', angle.value)
     el.style.transform = `rotate(${angle.value}deg)`
+  }, () => {
+    emit('rotate-end', angle.value)
   })
 }
 

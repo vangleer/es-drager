@@ -1,28 +1,11 @@
 import { Directive } from 'vue'
-import { dotList, getDotStyle, IDot, DragerProps } from './drager'
+import { IDot, DragerProps } from './drager'
 import { setupMove, useZIndex } from './use-drager'
 const defaultProps = Object.keys(DragerProps).reduce((obj: any, key) => {
   obj[key] = (DragerProps as any)[key].default
   return obj
 }, {})
 
-function createDot(el: HTMLElement) {
-  for (let i = 0; i < dotList.length; i++) {
-    const dotEl = document.createElement('div')
-    dotEl.className = 'es-drager-dot'
-
-    const style = getDotStyle(dotList[i])
-    Object.keys(style).forEach(key => {
-      (dotEl.style as any)[key] = style[key]
-    })
-    dotEl.setAttribute('data-side', dotList[i].side)
-    el.appendChild(dotEl)
-
-    dotEl.addEventListener('mousedown', (e) => {
-      onDotMousedown(dotList[i], e, el)
-    })
-  }
-}
 
 /**
  * 缩放
@@ -130,7 +113,7 @@ export const Drager: Directive = {
     }
 
     if (props.zoomable) {
-      createDot(el)
+      // createDot(el)
     }
   },
   unmounted(el: HTMLElement) {

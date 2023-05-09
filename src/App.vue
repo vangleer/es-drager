@@ -1,12 +1,14 @@
 <template>
   <div class="es-app">
-    <Example />
+    <!-- <Example /> -->
+
+    <Drager :left="100" :top="100" />
   </div>
 </template>
 
 <script setup lang='ts'>
-import Example from './example.vue'
-
+// import Example from './example.vue'
+import Drager from './drager/src/drager.vue'
 </script>
 
 <style lang='scss'>

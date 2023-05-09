@@ -1,5 +1,5 @@
 import { Ref, onMounted, ref, ExtractPropTypes, } from 'vue'
-import { DragerProps } from './drager'
+import { DragerProps, DragData } from './drager'
 let zIndex = 1000
 
 export function useDrager(
@@ -15,16 +15,17 @@ export function useDrager(
     width: props.width,
     height: props.height,
     left: props.left,
-    top: props.top
+    top: props.top,
+    angle: 0
   })
   function onMousedown(e: MouseEvent) {
     if (props.disabled) return
     isMousedown.value = true
     selected.value = true
     const el = targetRef.value!
-    const downX = e.clientX
-    const downY = e.clientY
-    const elRect = el.getBoundingClientRect()
+    let { clientX: downX, clientY: downY } = e
+    
+    const { width = 0, height = 0, left = 0, top = 0 } = dragData.value
     el.style.zIndex = useZIndex()
     let minX = 0, maxX = 0, minY = 0, maxY = 0
     if (props.boundary) {
@@ -33,16 +34,16 @@ export function useDrager(
       // 最小x
       minX = parentElRect.left
       // 最大x
-      maxX = parentElRect.left + parentElRect.width - elRect.width
+      maxX = parentElRect.left + parentElRect.width - width
       // 最小y
       minY = parentElRect.top
       // 最大y
-      maxY = parentElRect.top + parentElRect.height - elRect.height
+      maxY = parentElRect.top + parentElRect.height - height
     }
 
     // 鼠标在盒子里的位置
-    const mouseX = downX - elRect.left
-    const mouseY = downY - elRect.top
+    const mouseX = downX - left
+    const mouseY = downY - top
 
     const onMousemove = (e: MouseEvent) => {
       let moveX = e.clientX - mouseX
@@ -60,6 +61,7 @@ export function useDrager(
       
       dragData.value.left = moveX
       dragData.value.top = moveY
+      
       emit && emit('move', dragData.value)
     }
 

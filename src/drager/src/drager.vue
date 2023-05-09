@@ -5,31 +5,33 @@
     <template v-if="!disabled && zoomable">
       <div v-show="selected">
         <div
-          v-for="item in dotList"
-          :key="item.side"
+          v-for="item, index in dotList"
+          :key="index"
           class="es-drager-dot"
           :data-side="item.side"
-          :style="getDotStyle(item)"
+          :style="{ ...item }"
           @mousedown="onDotMousedown(item, $event)"
         >
         </div>
       </div>
     </template>
     
-    <Rotate :visible="!disabled && selected" />
+    <Rotate :visible="!disabled && selected" @rotate-end="handleRotateEnd" />
   </div>
 </template>
 
 <script setup lang='ts'>
 import { computed, ref, provide } from 'vue'
-import { DragerProps, IDot, withUnit, dotList, DragContextKey, getDotStyle } from './drager'
+import { DragerProps, DragData, withUnit, DragContextKey, getDotList, getLength, degToRadian, getNewStyle, centerToTL } from './drager'
 import { useDrager, setupMove } from './use-drager'
 import Rotate from './rotate.vue'
+
 const props = defineProps(DragerProps)
 const emit = defineEmits(['move', 'resize'])
-
 const dragRef = ref<HTMLElement | null>(null)
 const { selected, dragData, isMousedown } = useDrager(dragRef, props, emit)
+
+const dotList = ref(getDotList())
 
 provide(DragContextKey, {
   dragRef
@@ -46,56 +48,65 @@ const dragStyle = computed(() => {
   }
 })
 
+function handleRotateEnd(angle: number) {
+  // cursorList.value = getNewCursorArray(angle)
+  console.log(angle, 'angle')
+  dragData.value.angle = angle
+  dotList.value = getDotList(angle)
+}
+
 /**
  * 缩放
  * @param dotInfo 
  * @param e 
  */
-function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
+function onDotMousedown(dotInfo: any, e: MouseEvent) {
   e.stopPropagation()
   e.preventDefault()
   // 获取鼠标按下的坐标
   const downX = e.clientX
   const downY = e.clientY
-  const el = dragRef.value!
-  const elRect = el.getBoundingClientRect()
-  
+  const { width = 0, height = 0, left = 0, top = 0 } = dragData.value
+
+  const centerX = left + width / 2
+  const centerY = top + height / 2
+  const rect = { width, height, centerX, centerY, rotateAngle: dragData.value.angle }
+  const type = dotInfo.side
+  const { minWidth, minHeight, aspectRatio } = props
+
+  const formatData = (data: DragData, centerX: number, centerY: number) => {
+    const { width, height } = data
+    return {
+      width: Math.abs(width),
+      height: Math.abs(height),
+      left: centerX - Math.abs(width) / 2,
+      top: centerY - Math.abs(height) / 2
+    }
+  }
+
   const onMousemove = (e: MouseEvent) => {
-    // 移动的x距离
-    const disX = e.clientX - downX
-    // 移动的y距离
-    const disY = e.clientY - downY
 
-    const [side, position] = dotInfo.side.split('-')
-    const hasT = side === 'top'
-    const hasL = [side, position].includes('left')
+    const { clientX, clientY } = e
+    const deltaX = clientX - downX
+    const deltaY = clientY - downY
+    const alpha = Math.atan2(deltaY, deltaX)
+    const deltaL = getLength(deltaX, deltaY)
+    const isShiftKey = e.shiftKey
 
-    let width = elRect.width + (hasL ? -disX : disX)
-    let height = elRect.height + (hasT ? -disY : disY)
-    
-    let left = elRect.left + (hasL ? disX : 0)
-    let top = elRect.top + (hasT ? disY : 0)
+    const beta = alpha - degToRadian(rect.rotateAngle)
+    const deltaW = deltaL * Math.cos(beta)
+    const deltaH = deltaL * Math.sin(beta)
+    const ratio = isShiftKey && !aspectRatio ? rect.width / rect.height : aspectRatio
+    const {
+      position: { centerX, centerY },
+      size: { width, height }
+    } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
+   
+    const pData = centerToTL({ centerX, centerY, width, height, angle: dragData.value.angle })
 
-    if (!position) { // 如果是四个正方位
-      if (['top', 'bottom'].includes(side)) {
-        // 上下就不改变宽度
-        width = elRect.width
-      } else {
-        // 左右就不改变高度
-        height = elRect.height
-      }
-    }
+    dragData.value = { ...dragData.value, ...formatData(pData, centerX, centerY) }
 
-    if (width < 0) {
-      width = -width
-      left -= width
-    }
-    if (height < 0) {
-      height = -height
-      top -= height
-    }
-
-    dragData.value = { left, top, width, height }
+    console.log(dragData.value, 'dragData.value')
     emit('resize', dragData.value)
   }
 
