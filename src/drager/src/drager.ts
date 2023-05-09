@@ -1,36 +1,9 @@
-import { Ref, InjectionKey, PropType } from 'vue'
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+export type EventType = 'change' | 'drag' | 'drag-start' | 'drag-end' | 'resize' | 'resize-start' | 'resize-end' | 'rotate' | 'rotate-start' | 'rotate-end'
 export type IDot = {
   side: IDotSide,
   cursor?: string
 }
-
-// interface DragerProps {
-//   zoomable: boolean
-//   rotatable: boolean
-//   boundary?: boolean
-//   disabled?: boolean
-//   width: number
-//   height: number
-//   left: number
-//   top: number
-//   color: string
-//   minWidth: number
-//   minHeight: number
-//   aspectRatio?: number
-// }
-
-// const DragerPropsDefault = {
-//   zoomable: true,
-//   rotatable: false,
-//   width: 100,
-//   height: 100,
-//   left: 100,
-//   top: 100,
-//   color: '#3a7afe',
-//   minWidth: -Infinity,
-//   minHeight: -Infinity
-// }
 
 export const DragerProps = {
   zoomable: {
@@ -61,6 +34,10 @@ export const DragerProps = {
     type: Number,
     default: 0
   },
+  angle: {
+    type: Number,
+    default: 0
+  },
   color: {
     type: String,
     default: '#3a7afe'
@@ -83,13 +60,8 @@ export type DragData = {
   height: number
   left: number
   top: number
-  angle: 0
+  angle: number
 }
-
-type DragContext = {
-  dragRef: Ref<HTMLElement | null>
-}
-export const DragContextKey: InjectionKey<DragContext> = Symbol('DragContextKey')
 
 export const withUnit = (val: number | string = 0) => {
   return parseInt(val + '') + 'px'
@@ -144,7 +116,6 @@ export const getLength = (x: number, y: number) => Math.sqrt(x * x + y * y)
 const cos = (deg: number) => Math.cos(degToRadian(deg))
 const sin = (deg: number) => Math.sin(degToRadian(deg))
 export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: number, ratio: number | undefined, minWidth: number, minHeight: number) => {
-  console.log(type, rect, deltaW, deltaH, ratio, minWidth, minHeight)
   let { width, height, centerX, centerY, rotateAngle } = rect
   const widthFlag = width < 0 ? -1 : 1
   const heightFlag = height < 0 ? -1 : 1
@@ -327,3 +298,13 @@ export const centerToTL = ({ centerX, centerY, width, height, angle }: any): Dra
   height,
   angle
 })
+
+export const formatData = (data: DragData, centerX: number, centerY: number) => {
+  const { width, height } = data
+  return {
+    width: Math.abs(width),
+    height: Math.abs(height),
+    left: centerX - Math.abs(width) / 2,
+    top: centerY - Math.abs(height) / 2
+  }
+}

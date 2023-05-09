@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="visible"
     ref="rotateRef"
     class="es-drager-rotate"
     @mousedown="onRotateMousedown"
@@ -10,20 +9,31 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, inject } from 'vue'
-import { DragContextKey } from './drager'
+import { ref, computed, PropType } from 'vue'
+import { DragData } from './drager'
 import { setupMove } from './use-drager'
 
 const props = defineProps({
-  visible: Boolean
+  modelValue: {
+    type: Number,
+    default: 0
+  },
+  dragData: {
+    type: Object as PropType<DragData>,
+    required: true
+  }
 })
 
-const emit = defineEmits(['rotate', 'rotate-end'])
-
-const { dragRef } = inject(DragContextKey) || {}
+const emit = defineEmits(['update:modelValue', 'rotate', 'rotate-start', 'rotate-end'])
 
 const rotateRef = ref<HTMLElement | null>(null)
-const angle = ref(0)
+const angle = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    console.log(val, 123456)
+    emit('update:modelValue', val)
+  }
+})
 
 /**
  * 旋转
@@ -32,13 +42,12 @@ const angle = ref(0)
 function onRotateMousedown(e: MouseEvent) {
   e.stopPropagation()
   e.preventDefault()
-  if (!dragRef || !dragRef.value) return console.error('[es-drager] rotate need dragRef')
-  const el = dragRef.value!
-  const elRect = el.getBoundingClientRect()
+  const { width, height, left, top } = props.dragData
   // 旋转中心位置
-  const centerX = elRect.left + elRect.width / 2
-  const centerY = elRect.top + elRect.height / 2
-
+  const centerX = left + width / 2
+  const centerY = top + height / 2
+  
+  emit('rotate-start', angle.value)
   setupMove((e: MouseEvent) => {
 
     const diffX = centerX - e.clientX
@@ -50,7 +59,6 @@ function onRotateMousedown(e: MouseEvent) {
     angle.value = (deg + 360) % 360
 
     emit('rotate', angle.value)
-    el.style.transform = `rotate(${angle.value}deg)`
   }, () => {
     emit('rotate-end', angle.value)
   })

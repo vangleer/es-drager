@@ -4,19 +4,19 @@ let zIndex = 1000
 
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
-  props: Partial<ExtractPropTypes<typeof DragerProps>>, 
+  props: ExtractPropTypes<typeof DragerProps>, 
   emit: Function
 ) {
   
   const dragRef = ref()
   const isMousedown = ref(false)
   const selected = ref(false)
-  const dragData = ref({
+  const dragData = ref<DragData>({
     width: props.width,
     height: props.height,
     left: props.left,
     top: props.top,
-    angle: 0
+    angle: props.angle
   })
   function onMousedown(e: MouseEvent) {
     if (props.disabled) return
@@ -25,7 +25,7 @@ export function useDrager(
     const el = targetRef.value!
     let { clientX: downX, clientY: downY } = e
     
-    const { width = 0, height = 0, left = 0, top = 0 } = dragData.value
+    const { width, height, left, top } = dragData.value
     el.style.zIndex = useZIndex()
     let minX = 0, maxX = 0, minY = 0, maxY = 0
     if (props.boundary) {
@@ -44,7 +44,7 @@ export function useDrager(
     // 鼠标在盒子里的位置
     const mouseX = downX - left
     const mouseY = downY - top
-
+    emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseEvent) => {
       let moveX = e.clientX - mouseX
       let moveY = e.clientY - mouseY
@@ -62,12 +62,13 @@ export function useDrager(
       dragData.value.left = moveX
       dragData.value.top = moveY
       
-      emit && emit('move', dragData.value)
+      emit && emit('drag', dragData.value)
     }
 
     setupMove(onMousemove, (e: MouseEvent) => {
       isMousedown.value = false
       document.addEventListener('click', clickOutsize, { once: true })
+      emit && emit('drag-end', dragData.value)
     })
   }
 

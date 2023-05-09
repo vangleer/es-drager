@@ -16,43 +16,49 @@
       </div>
     </template>
     
-    <Rotate :visible="!disabled && selected" @rotate-end="handleRotateEnd" />
+    <Rotate
+      v-if="!disabled && selected"
+      v-model="dragData.angle"
+      :drag-data="dragData"
+      @rotate="emitFn('rotate', dragData)"
+      @rotate-start="emitFn('rotate-start', dragData)"
+      @rotate-end="handleRotateEnd"
+    />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, provide } from 'vue'
-import { DragerProps, DragData, withUnit, DragContextKey, getDotList, getLength, degToRadian, getNewStyle, centerToTL } from './drager'
+import { computed, ref, watch } from 'vue'
+import { DragerProps, formatData, withUnit, getDotList, getLength, degToRadian, getNewStyle, centerToTL, EventType } from './drager'
 import { useDrager, setupMove } from './use-drager'
 import Rotate from './rotate.vue'
 
 const props = defineProps(DragerProps)
-const emit = defineEmits(['move', 'resize'])
+const emit = defineEmits(['change', 'drag', 'drag-start', 'drag-end', 'resize', 'resize-start', 'resize-end', 'rotate', 'rotate-start', 'rotate-end'])
+const emitFn = (type: EventType, ...args: any) => {
+  emit(type, ...args)
+  emit('change', ...args)
+}
 const dragRef = ref<HTMLElement | null>(null)
-const { selected, dragData, isMousedown } = useDrager(dragRef, props, emit)
+const { selected, dragData, isMousedown } = useDrager(dragRef, props, emitFn)
 
 const dotList = ref(getDotList())
 
-provide(DragContextKey, {
-  dragRef
-})
-
 const dragStyle = computed(() => {
-  const { width, height, left, top } = dragData.value
+  const { width, height, left, top, angle } = dragData.value
   return {
     width: withUnit(width),
     height: withUnit(height),
     left: withUnit(left),
     top: withUnit(top),
+    transform: `rotate(${angle}deg)`,
     '--es-drager-color': props.color
   }
 })
 
 function handleRotateEnd(angle: number) {
-  // cursorList.value = getNewCursorArray(angle)
-  console.log(angle, 'angle')
-  dragData.value.angle = angle
   dotList.value = getDotList(angle)
+  emitFn('rotate-end', dragData.value)
 }
 
 /**
@@ -66,29 +72,25 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
   // 获取鼠标按下的坐标
   const downX = e.clientX
   const downY = e.clientY
-  const { width = 0, height = 0, left = 0, top = 0 } = dragData.value
+  const { width, height, left, top } = dragData.value
 
+  // 中心点
   const centerX = left + width / 2
   const centerY = top + height / 2
+
   const rect = { width, height, centerX, centerY, rotateAngle: dragData.value.angle }
   const type = dotInfo.side
-  const { minWidth, minHeight, aspectRatio } = props
 
-  const formatData = (data: DragData, centerX: number, centerY: number) => {
-    const { width, height } = data
-    return {
-      width: Math.abs(width),
-      height: Math.abs(height),
-      left: centerX - Math.abs(width) / 2,
-      top: centerY - Math.abs(height) / 2
-    }
-  }
+  const { minWidth, minHeight, aspectRatio } = props
+  emitFn('resize-start', dragData.value)
 
   const onMousemove = (e: MouseEvent) => {
 
     const { clientX, clientY } = e
+    // 距离
     const deltaX = clientX - downX
     const deltaY = clientY - downY
+
     const alpha = Math.atan2(deltaY, deltaX)
     const deltaL = getLength(deltaX, deltaY)
     const isShiftKey = e.shiftKey
@@ -97,21 +99,25 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
     const deltaW = deltaL * Math.cos(beta)
     const deltaH = deltaL * Math.sin(beta)
     const ratio = isShiftKey && !aspectRatio ? rect.width / rect.height : aspectRatio
+    
     const {
       position: { centerX, centerY },
       size: { width, height }
     } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
    
     const pData = centerToTL({ centerX, centerY, width, height, angle: dragData.value.angle })
-
     dragData.value = { ...dragData.value, ...formatData(pData, centerX, centerY) }
-
-    console.log(dragData.value, 'dragData.value')
-    emit('resize', dragData.value)
+    emitFn('resize', dragData.value)
   }
 
-  setupMove(onMousemove)
+  setupMove(onMousemove, () => {
+    emitFn('resize-end', dragData.value)
+  })
 }
+
+watch(() => [props.width, props.height, props.left, props.top, props.angle], ([width, height, left, top, angle]) => {
+  dragData.value = { ...dragData.value, width, height, left, top, angle }
+})
 
 </script>
 
