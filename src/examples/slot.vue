@@ -13,6 +13,6 @@
 
 <script setup lang='ts'>
 import Drager from '../drager'
-import imgUrl from './demo.png'
+import imgUrl from '../assets/demo.png'
 
 </script>
