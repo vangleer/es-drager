@@ -1,14 +1,15 @@
 import { Ref, ExtractPropTypes } from 'vue';
 import { DragerProps } from './drager';
-export declare function useDrager(targetRef: Ref<HTMLElement | null>, props: Partial<ExtractPropTypes<typeof DragerProps>>, emit: Function): {
+export declare function useDrager(targetRef: Ref<HTMLElement | null>, props: ExtractPropTypes<typeof DragerProps>, emit: Function): {
     isMousedown: Ref<boolean>;
     selected: Ref<boolean>;
     dragRef: Ref<any>;
     dragData: Ref<{
-        width: string | number | undefined;
-        height: string | number | undefined;
-        left: string | number | undefined;
-        top: string | number | undefined;
+        width: number;
+        height: number;
+        left: number;
+        top: number;
+        angle: number;
     }>;
 };
 export declare function useZIndex(): string;

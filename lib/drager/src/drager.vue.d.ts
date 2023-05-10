@@ -1,5 +1,5 @@
 declare const _sfc_main: import("vue").DefineComponent<{
-    zoomable: {
+    resizable: {
         type: BooleanConstructor;
         default: boolean;
     };
@@ -12,27 +12,42 @@ declare const _sfc_main: import("vue").DefineComponent<{
     };
     disabled: BooleanConstructor;
     width: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     height: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     left: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     top: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
+        default: number;
+    };
+    angle: {
+        type: NumberConstructor;
         default: number;
     };
     color: {
         type: StringConstructor;
         default: string;
     };
-}, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("move" | "resize")[], "move" | "resize", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
-    zoomable: {
+    minWidth: {
+        type: NumberConstructor;
+        default: number;
+    };
+    minHeight: {
+        type: NumberConstructor;
+        default: number;
+    };
+    aspectRatio: {
+        type: NumberConstructor;
+    };
+}, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    resizable: {
         type: BooleanConstructor;
         default: boolean;
     };
@@ -45,37 +60,63 @@ declare const _sfc_main: import("vue").DefineComponent<{
     };
     disabled: BooleanConstructor;
     width: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     height: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     left: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
         default: number;
     };
     top: {
-        type: (NumberConstructor | StringConstructor)[];
+        type: NumberConstructor;
+        default: number;
+    };
+    angle: {
+        type: NumberConstructor;
         default: number;
     };
     color: {
         type: StringConstructor;
         default: string;
+    };
+    minWidth: {
+        type: NumberConstructor;
+        default: number;
+    };
+    minHeight: {
+        type: NumberConstructor;
+        default: number;
+    };
+    aspectRatio: {
+        type: NumberConstructor;
     };
 }>> & {
-    onMove?: ((...args: any[]) => any) | undefined;
+    onChange?: ((...args: any[]) => any) | undefined;
+    onDrag?: ((...args: any[]) => any) | undefined;
+    "onDrag-start"?: ((...args: any[]) => any) | undefined;
+    "onDrag-end"?: ((...args: any[]) => any) | undefined;
     onResize?: ((...args: any[]) => any) | undefined;
+    "onResize-start"?: ((...args: any[]) => any) | undefined;
+    "onResize-end"?: ((...args: any[]) => any) | undefined;
+    onRotate?: ((...args: any[]) => any) | undefined;
+    "onRotate-start"?: ((...args: any[]) => any) | undefined;
+    "onRotate-end"?: ((...args: any[]) => any) | undefined;
 }, {
-    zoomable: boolean;
+    resizable: boolean;
     rotatable: boolean;
     boundary: boolean;
     disabled: boolean;
-    width: string | number;
-    height: string | number;
-    left: string | number;
-    top: string | number;
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+    angle: number;
     color: string;
+    minWidth: number;
+    minHeight: number;
 }>;
 export default _sfc_main;

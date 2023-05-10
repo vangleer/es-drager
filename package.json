@@ -1,11 +1,11 @@
 {
   "name": "es-drager",
   "version": "0.2.0",
-  "description": "A drag and zoomable component based on vue3",
+  "description": "A drag、resizable、rotatable component based on vue3",
   "keywords": [
     "drag",
-    "zoom",
     "resize",
+    "rotate",
     "vue-drager",
     "es-drager"
   ],
