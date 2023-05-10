@@ -112,7 +112,7 @@ export const Drager: Directive = {
       })
     }
 
-    if (props.zoomable) {
+    if (props.resizable) {
       // createDot(el)
     }
   },

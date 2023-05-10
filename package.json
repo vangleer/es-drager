@@ -4,6 +4,8 @@
   "description": "A drag and zoomable component based on vue3",
   "keywords": [
     "drag",
+    "zoom",
+    "resize",
     "vue-drager",
     "es-drager"
   ],

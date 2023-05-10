@@ -2,7 +2,7 @@
   <div ref="dragRef" :class="['es-drager', { disabled, dragging: isMousedown }]" :style="dragStyle" @click.stop>
     <slot />
     
-    <template v-if="!disabled && zoomable">
+    <template v-if="!disabled && resizable">
       <div v-show="selected">
         <div
           v-for="item, index in dotList"

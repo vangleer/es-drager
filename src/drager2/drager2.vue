@@ -7,7 +7,7 @@
   >
     <slot />
 
-    <template v-if="zoomable">
+    <template v-if="resizable">
       <div v-show="selected">
         <div
           v-for="item in dotList"
@@ -58,7 +58,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  zoomable: {
+  resizable: {
     type: Boolean,
     default: true
   },

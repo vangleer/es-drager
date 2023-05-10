@@ -16,9 +16,9 @@ import { ref } from 'vue'
 import Drager from '../drager'
 
 const dragList = ref([
-  { text: '移动', zoomable: false },
+  { text: '移动', resizable: false },
   { color: '#00c48f', text: '移动+缩放' },
-  { color: '#ff9f00', text: '旋转', rotatable: true, zoomable: false },
+  { color: '#ff9f00', text: '旋转', rotatable: true, resizable: false },
   { color: '#f44336', text: '旋转+缩放', rotatable: true }
 ])
 

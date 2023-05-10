@@ -74,23 +74,46 @@ import Drager from 'es-drager'
 
 | 属性名                   | 说明           | 类型                                         | 默认    |
 | --------------------- | ------------ | ------------------------------------------ | ----- |
-| width | 宽度       | ^[string] / ^[number]         | 100     |
-| height | 高度       | ^[string] / ^[number]         | 100     |
-| left | 横坐标偏移       | ^[string] / ^[number]         | 0     |
-| top | 纵坐标偏移       | ^[string] / ^[number]         | 0     |
-| color | 颜色       | ^[string]         | 0     |
-| zoomable | 是否可缩放       | ^[boolean]        | true     |
+| width | 宽度       | ^[number]         | 100     |
+| height | 高度       | ^[number]         | 100     |
+| left | 横坐标偏移       | ^[number]         | 0     |
+| top | 纵坐标偏移       | ^[number]         | 0     |
+| angle | 旋转角度       | ^[number]         | 0     |
+| color | 颜色       | ^[string]         |   #3a7afe   |
+| resizable | 是否可缩放       | ^[boolean]        | true     |
 | rotatable | 是否可旋转       | ^[boolean]        | -     |
 | boundary | 是否判断边界(最近定位父节点)     | ^[boolean]        | -     |
 | disabled | 是否禁用     | ^[boolean]        | -     |
+| minWidth | 最小宽度     | ^[number]        | -     |
+| minHeight | 最小高度     | ^[number]        | -     |
 
 ### Drager 事件
 
 | 事件名    | 说明          | 类型                                                             |
 | ------ | ----------- | -------------------------------------------------------------- |
-| move | 移动事件 | ^[Function]`(dragData: { width: number, height: number, left: number, top: number }) => void` |
-| resize | 缩放事件 | ^[Function]`(dragData: { width: number, height: number, left: number, top: number }) => void` |
-| rotate | 旋转事件 | ^[Function]`(dragData: { width: number, height: number, left: number, top: number }) => void` |
+| change | 位置、大小改变 | ^[Function]`(dragData) => void` |
+| drag | 拖拽中 | ^[Function]`(dragData) => void` |
+| drag-start | 拖拽开始 | ^[Function]`(dragData) => void` |
+| drag-end | 拖拽结束 | ^[Function]`(dragData) => void` |
+| resize | 缩放中 | ^[Function]`(dragData) => void` |
+| resize-start | 缩放开始 | ^[Function]`(dragData) => void` |
+| resize-end | 缩放结束 | ^[Function]`(dragData) => void` |
+| rotate | 旋转中 | ^[Function]`(dragData) => void` |
+| rotate-start | 旋转开始 | ^[Function]`(dragData) => void` |
+| rotate-end | 旋转结束 | ^[Function]`(dragData) => void` |
+
+- dragData 类型
+
+```javascript
+export type DragData = {
+  width: number
+  height: number
+  left: number
+  top: number
+  angle: number
+}
+```
+
 
 ### Drager 插槽
 

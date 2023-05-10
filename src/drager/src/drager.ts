@@ -6,7 +6,7 @@ export type IDot = {
 }
 
 export const DragerProps = {
-  zoomable: {
+  resizable: {
     type: Boolean,
     default: true
   },
@@ -67,7 +67,7 @@ export const withUnit = (val: number | string = 0) => {
   return parseInt(val + '') + 'px'
 }
 
-export const zoomableMap = {
+export const resizableMap = {
   'n': 'top',
   's': 'bottom',
   'e': 'right',
@@ -92,11 +92,11 @@ export const getDotList = (angle: number = 0) => {
   for (let index = 0; index < cursorDirectionArray.length; index++) {
     const key = cursorDirectionArray[index]
     
-    const [side, position] = (zoomableMap as any)[key].split('-')
+    const [side, position] = (resizableMap as any)[key].split('-')
 
     const cursor = getCursor(angle, key)
     
-    const style: any = { [side]: '0%', cursor: cursor + '-resize', side: (zoomableMap as any)[key] }
+    const style: any = { [side]: '0%', cursor: cursor + '-resize', side: (resizableMap as any)[key] }
     if (!position) {
       const side2 = ['top', 'bottom'].includes(side) ? 'left' : 'top'
       style[side2] = '50%'
