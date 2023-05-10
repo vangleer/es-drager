@@ -55,7 +55,7 @@ export const DragerProps = {
   }
 }
 
-export type DragData = {
+export interface DragData {
   width: number
   height: number
   left: number

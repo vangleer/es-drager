@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-// import 'es-drager/dist/style.css'
-// import Drager from './drager'
+import 'es-drager/lib/style.css'
+import Drager from 'es-drager'
 
-createApp(App).mount('#app')
+createApp(App).use(Drager).mount('#app')

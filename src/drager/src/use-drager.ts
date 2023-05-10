@@ -31,14 +31,10 @@ export function useDrager(
     if (props.boundary) {
       const parentEl = el.parentElement || document.body
       const parentElRect = parentEl!.getBoundingClientRect()
-      // 最小x
-      minX = parentElRect.left
       // 最大x
-      maxX = parentElRect.left + parentElRect.width - width
-      // 最小y
-      minY = parentElRect.top
+      maxX = parentElRect.width - width
       // 最大y
-      maxY = parentElRect.top + parentElRect.height - height
+      maxY = parentElRect.height - height
     }
 
     // 鼠标在盒子里的位置

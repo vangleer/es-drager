@@ -53,13 +53,13 @@ export declare const DragerProps: {
         type: NumberConstructor;
     };
 };
-export type DragData = {
+export interface DragData {
     width: number;
     height: number;
     left: number;
     top: number;
     angle: number;
-};
+}
 export declare const withUnit: (val?: number | string) => string;
 export declare const resizableMap: {
     n: string;

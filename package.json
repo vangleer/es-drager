@@ -1,6 +1,6 @@
 {
   "name": "es-drager",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "A drag、resizable、rotatable component based on vue3",
   "keywords": [
     "drag",
@@ -39,7 +39,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "es-drager": "^0.1.0",
+    "es-drager": "^0.2.3",
     "vue": ">=3.2.0"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
 
-import { App } from 'vue'
+import { App, Plugin } from 'vue'
 export * from './src/drager'
 export * from './src/drager-directive'
 import Drager from './src/drager.vue'
 
-export const install = (app: App) => {
+Drager.install = (app: App) => {
   app.component('es-drager', Drager)
 }
 
-export default Drager
+export default Drager as Plugin & typeof Drager
