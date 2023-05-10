@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { shallowRef } from 'vue'
 import Basic from './examples/basic.vue'
 import Event from './examples/event.vue'
 import Slot from './examples/slot.vue'
@@ -40,7 +40,7 @@ const components = [
   { name: 'info 数据详情', component: Info }
 ]
 
-const current = ref(components[0])
+const current = shallowRef(components[0])
 
 function handleClick(item: typeof components[0]) {
   current.value = item

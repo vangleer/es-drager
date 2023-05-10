@@ -10,7 +10,6 @@
 
 <script setup lang='ts'>
 import { ref, computed, PropType } from 'vue'
-import { DragData } from './drager'
 import { setupMove } from './use-drager'
 
 const props = defineProps({
@@ -18,8 +17,8 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  dragData: {
-    type: Object as PropType<DragData>,
+  element: {
+    type: Object as PropType<HTMLElement | null>,
     required: true
   }
 })
@@ -39,24 +38,26 @@ const angle = computed({
  * @param e 
  */
 function onRotateMousedown(e: MouseEvent) {
+  if (!props.element) return console.warn('[es-drager] rotate component need drag element property')
   e.stopPropagation()
   e.preventDefault()
-  const { width, height, left, top } = props.dragData
+  
+  const { width, height, left, top } = props.element.getBoundingClientRect()
   // 旋转中心位置
   const centerX = left + width / 2
   const centerY = top + height / 2
-  
+
   emit('rotate-start', angle.value)
   setupMove((e: MouseEvent) => {
 
     const diffX = centerX - e.clientX
     const diffY = centerY - e.clientY
+    
     // Math.atan2(y,x) 返回x轴到(x,y)的角度 // pi值
     const radians = Math.atan2(diffY, diffX)
 
     const deg = radians * 180 / Math.PI - 90
     angle.value = (deg + 360) % 360
-
     emit('rotate', angle.value)
   }, () => {
     emit('rotate-end', angle.value)

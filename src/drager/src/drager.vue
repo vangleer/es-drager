@@ -20,6 +20,7 @@
       v-if="!disabled && selected"
       v-model="dragData.angle"
       :drag-data="dragData"
+      :element="dragRef!"
       @rotate="emitFn('rotate', dragData)"
       @rotate-start="emitFn('rotate-start', dragData)"
       @rotate-end="handleRotateEnd"
