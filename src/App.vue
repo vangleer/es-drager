@@ -3,8 +3,11 @@
     <div class="es-header">
       <h1>ES Drager</h1>
       <div class="es-navbar">
-        <a href="https://github.com/vangleer/es-drager" target="_blank">
+        <a class="es-header-link" href="https://github.com/vangleer/es-drager" target="_blank">
           <img :src="githubIcon" />
+        </a>
+        <a class="es-header-cube" @click.prevent="showCode = !showCode">
+          代码
         </a>
       </div>
     </div>
@@ -22,27 +25,48 @@
       <div class="es-content">
         <Component :is="current.component" />
       </div>
+      <Transition name="es-code">
+        <div v-show="showCode" class="es-code-box">
+          <pre><code v-html="codeHtml"></code></pre>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
 <script setup lang='ts'>
-import { shallowRef } from 'vue'
-import Basic from './examples/basic.vue'
-import Event from './examples/event.vue'
-import Slot from './examples/slot.vue'
-import Info from './examples/info.vue'
+import { shallowRef, computed, ref } from 'vue'
+
 import githubIcon from './assets/github.svg'
-const components = [
-  { name: 'Basic 基本使用', component: Basic },
-  { name: 'Event 事件', component: Event },
-  { name: 'Slot 插槽', component: Slot },
-  { name: 'info 数据详情', component: Info }
-]
+import 'highlight.js/styles/panda-syntax-light.css'
+import hljs from 'highlight.js'
+type CompType = {
+  path: string,
+  name: string,
+  component: any
+}
+const examples = import.meta.glob('./examples/*.vue', { eager: true })
+const examplesSource = import.meta.glob('./examples/*.vue', { eager: true, as: 'raw' })
 
-const current = shallowRef(components[0])
+const components = computed(() => {
+  let arr: CompType[] = []
 
-function handleClick(item: typeof components[0]) {
+  Object.keys(examples).forEach(key => {
+    arr.push({
+      path: key,
+      name: key.replace('./examples/', '').replace('.vue', ''),
+      component: (examples[key] as any).default
+    })
+  })
+
+  return arr
+})
+
+const codeHtml = computed(() => hljs.highlight(examplesSource[current.value.path], { language: 'html' }).value)
+
+const current = shallowRef(components.value[0])
+const showCode = ref(true)
+function handleClick(item: CompType) {
   current.value = item
 }
 
@@ -55,14 +79,26 @@ function handleClick(item: typeof components[0]) {
   box-sizing: border-box;
 }
 html, body {
-  background-color: #f8f8f8;
+  background-color: #eff2f5;
 }
 .es-app {
   --es-doc-color-primary: #4fc08d;
+  --es-doc-border: 1px solid #ddd;
   width: 100vw;
   height: 100vh;
   color: #455a64;
   font-size: 14px;
+  overflow: hidden;
+  .es-code-box {
+    max-width: 500px;
+    height: 100%;
+    background-color: #fff;
+    padding: 24px 14px;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: auto;
+    border-left: var(--es-doc-border);
+  }
   .es-header {
     position: fixed;
     top: 0;
@@ -87,6 +123,22 @@ html, body {
       }
     }
     .es-navbar {
+      display: flex;
+      align-items: center;
+      a {
+        margin-left: 16px;
+      }
+      .es-header-cube {
+        padding: 0 12px;
+        color: #001938;
+        background: #f7f8fa;
+        font-size: 14px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,.7);
+        border-radius: 20px;
+        cursor: pointer;
+      }
       img {
         width: 30px;
         height: 30px;
@@ -110,7 +162,7 @@ html, body {
       background-color: #fff;
     }
     .es-sidebar {
-      border-right: 1px solid #ddd;
+      border-right: var(--es-doc-border);
       padding: 24px 6px;
       .es-sidebar-item {
         display: flex;
@@ -140,4 +192,14 @@ html, body {
     }
   }
 }
+.es-code-enter-active,
+.es-code-leave-active {
+  transition: transform .3s;
+}
+
+.es-code-enter-from,
+.es-code-leave-to {
+  transform: translateX(100%);
+}
+
 </style>
