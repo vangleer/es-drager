@@ -12,6 +12,9 @@
           :style="{ ...item }"
           @mousedown="onDotMousedown(item, $event)"
         >
+          <slot name="resize" v-bind="{ side: item.side }">
+            <div class="es-drager-dot-handle"></div>
+          </slot>
         </div>
       </div>
     </template>
@@ -20,11 +23,13 @@
       v-if="!disabled && selected"
       v-model="dragData.angle"
       :drag-data="dragData"
-      :element="dragRef!"
+      :element="dragRef"
       @rotate="emitFn('rotate', dragData)"
       @rotate-start="emitFn('rotate-start', dragData)"
       @rotate-end="handleRotateEnd"
-    />
+    >
+      <slot name="rotate" />
+    </Rotate>
   </div>
 </template>
 
@@ -145,10 +150,6 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
   }
   &-dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--es-drager-color, #3a7afe);
     transform: translate(-50%, -50%);
     cursor: se-resize;
     &[data-side*="right"] {
@@ -159,6 +160,13 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
     }
     &[data-side="bottom-right"] {
       transform: translate(50%, 50%);
+    }
+
+    &-handle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--es-drager-color, #3a7afe);
     }
   }
 }

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang='ts'>
-import Drager, { type DragData } from '../drager'
+import Drager, { type DragData } from 'es-drager'
 
 // @change="onChange"
 // drag、resize、rotate

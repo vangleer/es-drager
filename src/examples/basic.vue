@@ -13,7 +13,7 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import Drager from '../drager'
+import Drager from 'es-drager'
 
 const dragList = ref([
   { text: '移动', resizable: false },

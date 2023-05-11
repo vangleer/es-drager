@@ -120,4 +120,6 @@ export type DragData = {
 | 插槽名     | 说明      |
 | ------- | ------- |
 | default | 自定义默认内容 |
+| resize | 缩放handle |
+| rotate | 旋转handle |
 

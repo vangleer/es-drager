@@ -19,7 +19,7 @@
           :class="['es-sidebar-item', { active: current.name === item.name }]"
           @click="handleClick(item)"
         >
-          {{ item.name }}
+          {{ item.label }}
         </div>
       </div>
       <div class="es-content">
@@ -41,20 +41,30 @@ import githubIcon from './assets/github.svg'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
 type CompType = {
-  path: string,
-  name: string,
+  path: string
+  name: string
+  label: string
   component: any
 }
 const examples = import.meta.glob('./examples/*.vue', { eager: true })
 const examplesSource = import.meta.glob('./examples/*.vue', { eager: true, as: 'raw' })
 
+const labelMaps = {
+  basic: '基础示例',
+  event: '事件',
+  info: '详情信息',
+  slot: '插槽'
+}
+
 const components = computed(() => {
   let arr: CompType[] = []
-
+  
   Object.keys(examples).forEach(key => {
+    const name = key.replace('./examples/', '').replace('.vue', '') as keyof typeof labelMaps
     arr.push({
       path: key,
-      name: key.replace('./examples/', '').replace('.vue', ''),
+      name,
+      label: `${name} ${labelMaps[name]}`,
       component: (examples[key] as any).default
     })
   })

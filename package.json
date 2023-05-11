@@ -1,11 +1,13 @@
 {
   "name": "es-drager",
-  "version": "0.2.3",
+  "version": "0.2.8",
   "description": "A drag、resizable、rotatable component based on vue3",
   "keywords": [
     "drag",
     "resize",
     "rotate",
+    "vue-drager",
+    "vue-drag-resize",
     "vue-drager",
     "es-drager"
   ],
@@ -36,10 +38,11 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "build:lib": "vite build --config vite.config.lib.ts",
+    "release": "npm run build:lib && npm publish",
     "preview": "vite preview"
   },
   "dependencies": {
-    "es-drager": "^0.2.3",
+    "es-drager": "^0.2.8",
     "highlight.js": "^11.8.0",
     "vue": ">=3.2.0"
   },
