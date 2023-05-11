@@ -43,12 +43,12 @@ import imgUrl from '../assets/demo.png'
 .custom-resize {
   width: 6px;
   height: 6px;
-  border: 1px solid red;
+  border: 1px solid #0ec3b8;
 }
 
 .custom-rotate {
   font-size: 20px;
   font-weight: 700;
-  color: red;
+  color: #0ec3b8;
 }
 </style>
