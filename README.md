@@ -68,6 +68,38 @@ import Drager from 'es-drager'
 
 ```
 
+### 浏览器直接引入
+
+直接通过浏览器的 HTML 标签导入 es-drager，然后就可以使用全局变量 ESDrager 了。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/es-drager/lib/style.css">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <es-drager>drager</es-drager>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/es-drager"></script>
+  <script>
+    const { createApp } = Vue
+    const app = createApp({})
+    app.use(ESDrager)
+    app.mount('#app')
+  </script>
+</body>
+</html>
+
+```
+
 ## Drager API
 
 ### Drager 属性

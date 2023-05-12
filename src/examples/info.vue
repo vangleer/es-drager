@@ -31,7 +31,7 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import Drager, { type DragData } from '../drager'
+import Drager, { type DragData } from 'es-drager'
 
 const info = ref<DragData>({
   width: 120,

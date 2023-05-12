@@ -1,6 +1,8 @@
-import { Plugin } from 'vue';
+import { App, Plugin } from 'vue';
 export * from './src/drager';
-export * from './src/drager-directive';
+import Drager from './src/drager.vue';
+export declare const install: (app: App) => void;
+export { Drager as ESDrager };
 declare const _default: Plugin & {
     new (...args: any[]): {
         $: import("vue").ComponentInternalInstance;
