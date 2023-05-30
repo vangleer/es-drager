@@ -3,7 +3,7 @@
     ref="dragRef"
     :class="['es-drager', { disabled, dragging: isMousedown, selected }]"
     :style="dragStyle"
-    @click.stop
+    @click.self.stop
   >
     <slot />
     
@@ -69,6 +69,26 @@ function handleRotateEnd(angle: number) {
   dotList.value = getDotList(angle)
   emitFn('rotate-end', dragData.value)
 }
+/**
+ * @param diff 缩放移动距离
+ * @param grid 网格大小
+ */
+function calcGridResize(diff: number, grid: number) {
+  // 得到每次缩放的余数
+  const r = Math.abs(diff) % grid
+
+  // 正负grid
+  const mulGrid = diff > 0 ? grid : -grid
+  let result = 0
+  // 余数大于grid的1/2
+  if (r > grid / 2) {
+    result = mulGrid * Math.ceil(Math.abs(diff) / grid)
+  } else {
+    result = mulGrid * Math.floor(Math.abs(diff) / grid)
+  }
+
+  return result
+}
 
 /**
  * 缩放
@@ -97,8 +117,13 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
 
     const { clientX, clientY } = e
     // 距离
-    const deltaX = clientX - downX
-    const deltaY = clientY - downY
+    let deltaX = clientX - downX
+    let deltaY = clientY - downY
+    // 开启网格缩放
+    if (props.snapToGrid) {
+      deltaX = calcGridResize(deltaX, props.gridX)
+      deltaY = calcGridResize(deltaY, props.gridY)
+    }
 
     const alpha = Math.atan2(deltaY, deltaX)
     const deltaL = getLength(deltaX, deltaY)

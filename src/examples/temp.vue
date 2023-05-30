@@ -1,5 +1,6 @@
 <template>
-  <Drager :top="100" :left="100" :selected="selected"></Drager>
+  <Drager :top="100" :left="100" snapToGrid :gridX="100" :gridY="100" boundary></Drager>
+  <Drager :top="220" :left="100" snapToGrid></Drager>
   <button @click="handleChange">{{ selected ? '不选中' : '选中' }}</button>
 </template>
 

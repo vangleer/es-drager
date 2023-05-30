@@ -45,6 +45,19 @@ export function useDrager(
       let moveX = e.clientX - mouseX
       let moveY = e.clientY - mouseY
 
+      // 是否开启网格对齐
+      if (props.snapToGrid) {
+        // 当前位置
+        let { left: curX, top: curY } = dragData.value
+        // 移动距离
+        const diffX = moveX - curX
+        const diffY = moveY - curY
+
+        // 计算网格移动距离
+        moveX = calcGridMove(diffX, props.gridX, curX)
+        moveY = calcGridMove(diffY, props.gridY, curY)
+      }
+
       if (props.boundary) {
         // 判断x最小最大边界
         moveX = moveX < minX ? minX : moveX
@@ -54,7 +67,7 @@ export function useDrager(
         moveY = moveY < minY ? minY : moveY
         moveY = moveY > maxY ? maxY : moveY
       }
-      
+
       dragData.value.left = moveX
       dragData.value.top = moveY
       
@@ -99,4 +112,19 @@ export function setupMove(onMousemove: (e: MouseEvent) => void, onMouseupCb?: (e
   }
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
+}
+
+/**
+ * @param diff 移动的距离
+ * @param grid 网格大小
+ * @param cur 盒子当前的位置left or top
+ */
+function calcGridMove(diff: number, grid: number, cur: number) {
+  let result = cur
+  // 移动距离超过grid的1/2，累加grid，移动距离位负数减掉相应的grid
+  if (Math.abs(diff) > grid / 2) {
+    result = cur + (diff > 0 ? grid : -grid)
+  }
+
+  return result
 }

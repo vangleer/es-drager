@@ -53,7 +53,16 @@ export const DragerProps = {
   aspectRatio: { // 缩放比例
     type: Number
   },
-  selected: Boolean
+  selected: Boolean,
+  snapToGrid: Boolean,
+  gridX: {
+    type: Number,
+    default: 50
+  },
+  gridY: {
+    type: Number,
+    default: 50
+  }
 }
 
 export interface DragData {
