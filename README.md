@@ -1,10 +1,10 @@
 # es-drager 拖拽组件
 
 <p align="center">
-	<a href="https://www.npmjs.com/package/commander" target="_blank">
-		<img src="https://img.shields.io/badge/vuejs-vue3.x-green" alt="commander">
+	<a href="https://www.npmjs.com/package/vue" target="_blank">
+		<img src="https://img.shields.io/badge/vuejs-vue3.x-green" alt="vue">
 	</a>
-	<a href="https://www.npmjs.com/package/inquirer" target="_blank">
+	<a href="https://www.npmjs.com/package/typescript" target="_blank">
 		<img src="https://img.shields.io/badge/typescript-%3E4.0.0-blue" alt="typescript">
 	</a>
 </p>
@@ -19,6 +19,7 @@
 - 拖拽&区域拖拽
 - 支持缩放
 - 旋转
+- 网格拖拽缩放
 
 ## ⚡ 使用说明
 
@@ -118,6 +119,10 @@ import Drager from 'es-drager'
 | disabled | 是否禁用     | ^[boolean]        | -     |
 | minWidth | 最小宽度     | ^[number]        | -     |
 | minHeight | 最小高度     | ^[number]        | -     |
+| selected | 控制是否选中     | ^[boolean]        | -     |
+| snapToGrid | 开启网格     | ^[boolean]        | -     |
+| gridX | 网格X大小     | ^[number]        | 50     |
+| gridY | 网格Y大小     | ^[number]        | 50     |
 
 ### Drager 事件
 

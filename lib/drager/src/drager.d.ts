@@ -52,6 +52,16 @@ export declare const DragerProps: {
     aspectRatio: {
         type: NumberConstructor;
     };
+    selected: BooleanConstructor;
+    snapToGrid: BooleanConstructor;
+    gridX: {
+        type: NumberConstructor;
+        default: number;
+    };
+    gridY: {
+        type: NumberConstructor;
+        default: number;
+    };
 };
 export interface DragData {
     width: number;

@@ -30,7 +30,7 @@
 
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
-import Drager from '../drager'
+import Drager from 'es-drager'
 const snapToGrid = ref(true)
 const gridX = ref(50)
 const gridY = ref(50)
@@ -45,6 +45,7 @@ const gridStyle = computed(() => {
 
 <style lang='scss' scoped>
 .es-grid-box {
+  position: relative;
   width: 100%;
   height: 100%;
   border: 1px solid #ccc;

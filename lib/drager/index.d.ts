@@ -20,6 +20,10 @@ declare const _default: Plugin & {
             color: string;
             minWidth: number;
             minHeight: number;
+            selected: boolean;
+            snapToGrid: boolean;
+            gridX: number;
+            gridY: number;
         }> & Omit<Readonly<import("vue").ExtractPropTypes<{
             resizable: {
                 type: BooleanConstructor;
@@ -68,6 +72,16 @@ declare const _default: Plugin & {
             aspectRatio: {
                 type: NumberConstructor;
             };
+            selected: BooleanConstructor;
+            snapToGrid: BooleanConstructor;
+            gridX: {
+                type: NumberConstructor;
+                default: number;
+            };
+            gridY: {
+                type: NumberConstructor;
+                default: number;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -79,7 +93,7 @@ declare const _default: Plugin & {
             onRotate?: ((...args: any[]) => any) | undefined;
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
-        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "angle" | "color" | "minWidth" | "minHeight">;
+        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY">;
         $attrs: {
             [x: string]: unknown;
         };
@@ -141,6 +155,16 @@ declare const _default: Plugin & {
             aspectRatio: {
                 type: NumberConstructor;
             };
+            selected: BooleanConstructor;
+            snapToGrid: BooleanConstructor;
+            gridX: {
+                type: NumberConstructor;
+                default: number;
+            };
+            gridY: {
+                type: NumberConstructor;
+                default: number;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -165,6 +189,10 @@ declare const _default: Plugin & {
             color: string;
             minWidth: number;
             minHeight: number;
+            selected: boolean;
+            snapToGrid: boolean;
+            gridX: number;
+            gridY: number;
         }, {}, string> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -233,6 +261,16 @@ declare const _default: Plugin & {
         aspectRatio: {
             type: NumberConstructor;
         };
+        selected: BooleanConstructor;
+        snapToGrid: BooleanConstructor;
+        gridX: {
+            type: NumberConstructor;
+            default: number;
+        };
+        gridY: {
+            type: NumberConstructor;
+            default: number;
+        };
     }>> & {
         onChange?: ((...args: any[]) => any) | undefined;
         onDrag?: ((...args: any[]) => any) | undefined;
@@ -296,6 +334,16 @@ declare const _default: Plugin & {
     aspectRatio: {
         type: NumberConstructor;
     };
+    selected: BooleanConstructor;
+    snapToGrid: BooleanConstructor;
+    gridX: {
+        type: NumberConstructor;
+        default: number;
+    };
+    gridY: {
+        type: NumberConstructor;
+        default: number;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -320,5 +368,9 @@ declare const _default: Plugin & {
     color: string;
     minWidth: number;
     minHeight: number;
+    selected: boolean;
+    snapToGrid: boolean;
+    gridX: number;
+    gridY: number;
 }, {}, string> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;
