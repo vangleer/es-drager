@@ -4,6 +4,14 @@
       <span>snapToGrid</span>
       <input type="checkbox" v-model="snapToGrid">
     </div>
+    <div class="es-info-item">
+      <span>gridX</span>
+      <input v-model.number="gridX">
+    </div>
+    <div class="es-info-item">
+      <span>gridY</span>
+      <input v-model.number="gridY">
+    </div>
   </div>
   <div
     class="es-grid-box"
