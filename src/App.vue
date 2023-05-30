@@ -54,7 +54,7 @@ const labelMaps = {
   event: '事件',
   info: '详情信息',
   slot: '插槽',
-  temp: '临时'
+  grid: '网格'
 }
 
 const components = computed(() => {
