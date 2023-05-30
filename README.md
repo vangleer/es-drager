@@ -123,6 +123,7 @@ import Drager from 'es-drager'
 | snapToGrid | 开启网格     | ^[boolean]        | -     |
 | gridX | 网格X大小     | ^[number]        | 50     |
 | gridY | 网格Y大小     | ^[number]        | 50     |
+| scaleRatio | 缩放比     | ^[number]        | 1     |
 
 ### Drager 事件
 
