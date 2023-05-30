@@ -62,6 +62,10 @@ export declare const DragerProps: {
         type: NumberConstructor;
         default: number;
     };
+    scaleRatio: {
+        type: NumberConstructor;
+        default: number;
+    };
 };
 export interface DragData {
     width: number;

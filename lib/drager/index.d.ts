@@ -24,6 +24,7 @@ declare const _default: Plugin & {
             snapToGrid: boolean;
             gridX: number;
             gridY: number;
+            scaleRatio: number;
         }> & Omit<Readonly<import("vue").ExtractPropTypes<{
             resizable: {
                 type: BooleanConstructor;
@@ -82,6 +83,10 @@ declare const _default: Plugin & {
                 type: NumberConstructor;
                 default: number;
             };
+            scaleRatio: {
+                type: NumberConstructor;
+                default: number;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -93,7 +98,7 @@ declare const _default: Plugin & {
             onRotate?: ((...args: any[]) => any) | undefined;
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
-        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY">;
+        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY" | "scaleRatio">;
         $attrs: {
             [x: string]: unknown;
         };
@@ -165,6 +170,10 @@ declare const _default: Plugin & {
                 type: NumberConstructor;
                 default: number;
             };
+            scaleRatio: {
+                type: NumberConstructor;
+                default: number;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -193,6 +202,7 @@ declare const _default: Plugin & {
             snapToGrid: boolean;
             gridX: number;
             gridY: number;
+            scaleRatio: number;
         }, {}, string> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -271,6 +281,10 @@ declare const _default: Plugin & {
             type: NumberConstructor;
             default: number;
         };
+        scaleRatio: {
+            type: NumberConstructor;
+            default: number;
+        };
     }>> & {
         onChange?: ((...args: any[]) => any) | undefined;
         onDrag?: ((...args: any[]) => any) | undefined;
@@ -344,6 +358,10 @@ declare const _default: Plugin & {
         type: NumberConstructor;
         default: number;
     };
+    scaleRatio: {
+        type: NumberConstructor;
+        default: number;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -372,5 +390,6 @@ declare const _default: Plugin & {
     snapToGrid: boolean;
     gridX: number;
     gridY: number;
+    scaleRatio: number;
 }, {}, string> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;
