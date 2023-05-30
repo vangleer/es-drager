@@ -4,14 +4,6 @@
       <span>snapToGrid</span>
       <input type="checkbox" v-model="snapToGrid">
     </div>
-    <div class="es-info-item">
-      <span>gridX</span>
-      <input v-model="gridX">
-    </div>
-    <div class="es-info-item">
-      <span>gridY</span>
-      <input v-model="gridY">
-    </div>
   </div>
   <div
     class="es-grid-box"
@@ -41,6 +33,7 @@ const gridStyle = computed(() => {
     '--es-grid-height': gridY.value + 'px'
   } : {}
 })
+
 </script>
 
 <style lang='scss' scoped>
