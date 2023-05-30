@@ -12,6 +12,10 @@
       <span>gridY</span>
       <input v-model.number="gridY">
     </div>
+    <div class="es-info-item">
+      <span>scaleRatio</span>
+      <input :value="scale" @change="handleScaleChange">
+    </div>
   </div>
   <div
     class="es-grid-box"
@@ -23,6 +27,7 @@
       :gridX="gridX"
       :gridY="gridY"
       :snapToGrid="snapToGrid"
+      :scaleRatio="scale"
       boundary
     />
   </div>
@@ -30,17 +35,24 @@
 
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
-import Drager from 'es-drager'
+import Drager from '../drager'
 const snapToGrid = ref(true)
 const gridX = ref(50)
 const gridY = ref(50)
-
+const scale = ref(1)
 const gridStyle = computed(() => {
   return snapToGrid.value ? {
     '--es-grid-width': gridX.value + 'px',
-    '--es-grid-height': gridY.value + 'px'
+    '--es-grid-height': gridY.value + 'px',
+    transform: `scale(${scale.value})`,
+    transformOrigin: 'left top'
   } : {}
 })
+
+
+function handleScaleChange(e: Event) {
+  scale.value = +(e.target! as HTMLInputElement).value
+}
 
 </script>
 

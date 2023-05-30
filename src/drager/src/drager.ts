@@ -62,6 +62,10 @@ export const DragerProps = {
   gridY: {
     type: Number,
     default: 50
+  },
+  scaleRatio: {
+    type: Number,
+    default: 1
   }
 }
 

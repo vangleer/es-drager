@@ -117,8 +117,8 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
 
     const { clientX, clientY } = e
     // 距离
-    let deltaX = clientX - downX
-    let deltaY = clientY - downY
+    let deltaX = (clientX - downX) / props.scaleRatio
+    let deltaY = (clientY - downY) / props.scaleRatio
     // 开启网格缩放
     if (props.snapToGrid) {
       deltaX = calcGridResize(deltaX, props.gridX)

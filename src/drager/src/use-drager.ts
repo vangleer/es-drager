@@ -32,18 +32,15 @@ export function useDrager(
       const parentEl = el.parentElement || document.body
       const parentElRect = parentEl!.getBoundingClientRect()
       // 最大x
-      maxX = parentElRect.width - width
+      maxX = parentElRect.width / props.scaleRatio - width
       // 最大y
-      maxY = parentElRect.height - height
+      maxY = parentElRect.height / props.scaleRatio - height
     }
-
-    // 鼠标在盒子里的位置
-    const mouseX = downX - left
-    const mouseY = downY - top
+    
     emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseEvent) => {
-      let moveX = e.clientX - mouseX
-      let moveY = e.clientY - mouseY
+      let moveX = (e.clientX - downX) / props.scaleRatio + left
+      let moveY = (e.clientY - downY) / props.scaleRatio + top
 
       // 是否开启网格对齐
       if (props.snapToGrid) {
@@ -57,7 +54,7 @@ export function useDrager(
         moveX = calcGridMove(diffX, props.gridX, curX)
         moveY = calcGridMove(diffY, props.gridY, curY)
       }
-
+      
       if (props.boundary) {
         // 判断x最小最大边界
         moveX = moveX < minX ? minX : moveX
