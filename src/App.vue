@@ -53,7 +53,8 @@ const labelMaps = {
   basic: '基础示例',
   event: '事件',
   info: '详情信息',
-  slot: '插槽'
+  slot: '插槽',
+  temp: '临时'
 }
 
 const components = computed(() => {

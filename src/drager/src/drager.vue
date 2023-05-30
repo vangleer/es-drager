@@ -1,21 +1,24 @@
 <template>
-  <div ref="dragRef" :class="['es-drager', { disabled, dragging: isMousedown }]" :style="dragStyle" @click.stop>
+  <div
+    ref="dragRef"
+    :class="['es-drager', { disabled, dragging: isMousedown, selected }]"
+    :style="dragStyle"
+    @click.stop
+  >
     <slot />
     
     <template v-if="!disabled && resizable">
-      <div v-show="selected">
-        <div
-          v-for="item, index in dotList"
-          :key="index"
-          class="es-drager-dot"
-          :data-side="item.side"
-          :style="{ ...item }"
-          @mousedown="onDotMousedown(item, $event)"
-        >
-          <slot name="resize" v-bind="{ side: item.side }">
-            <div class="es-drager-dot-handle"></div>
-          </slot>
-        </div>
+      <div
+        v-for="item, index in dotList"
+        :key="index"
+        class="es-drager-dot"
+        :data-side="item.side"
+        :style="{ ...item }"
+        @mousedown="onDotMousedown(item, $event)"
+      >
+        <slot name="resize" v-bind="{ side: item.side }">
+          <div class="es-drager-dot-handle"></div>
+        </slot>
       </div>
     </template>
     
@@ -125,6 +128,10 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
   dragData.value = { ...dragData.value, width, height, left, top, angle }
 })
 
+watch(() => props.selected, (val) => {
+  selected.value = val
+}, { immediate: true })
+
 </script>
 
 <style lang='scss'>
@@ -134,6 +141,12 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
   width: 200px;
   height: 120px;
   border: 1px solid var(--es-drager-color, #3a7afe);
+  
+  &.selected {
+    .es-drager-dot {
+      display: block;
+    }
+  }
   > * {
     -webkit-user-drag: none;
     user-select: none;
@@ -149,6 +162,7 @@ watch(() => [props.width, props.height, props.left, props.top, props.angle], ([w
     cursor: move;
   }
   &-dot {
+    display: none;
     position: absolute;
     transform: translate(-50%, -50%);
     cursor: se-resize;

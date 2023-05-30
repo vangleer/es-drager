@@ -52,7 +52,8 @@ export const DragerProps = {
   },
   aspectRatio: { // 缩放比例
     type: Number
-  }
+  },
+  selected: Boolean
 }
 
 export interface DragData {
