@@ -35,15 +35,12 @@
     "url": "https://github.com/vangleer/es-drager.git"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "build:lib": "vite build --config vite.config.lib.ts",
-    "release": "npm run build:lib && npm publish",
-    "preview": "vite preview"
+    "dev": "vite ./docs",
+    "build": "vite build",
+    "build:docs": "vite build ./docs",
+    "release": "npm run build && npm publish"
   },
   "dependencies": {
-    "es-drager": "^0.3.1",
-    "highlight.js": "^11.8.0",
     "vue": ">=3.2.0"
   },
   "devDependencies": {
