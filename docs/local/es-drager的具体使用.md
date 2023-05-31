@@ -1,13 +1,12 @@
-# 可拖拽、缩放、旋转es-drager组件的具体使用
 
 ## 🌈介绍
 
 基于 vue3.x + CompositionAPI + typescript + vite 的可拖拽、缩放、旋转的组件
 
-- 拖拽&区域拖拽
-- 支持缩放
-- 旋转
-- 网格拖拽缩放
+*   拖拽&区域拖拽
+*   支持缩放
+*   旋转
+*   网格拖拽缩放
 
 [在线示例](https://vangleer.github.io/es-drager)
 
@@ -15,14 +14,18 @@
 
 上一篇实现细节的文章遗留下了两个问题
 
-1. 旋转后再缩放会很奇怪
-2. 旋转后鼠标经过缩放圆点上时的样式也不相称
+1.  旋转后再缩放会很奇怪
+2.  旋转后鼠标经过缩放圆点上时的样式也不相称
 
 由于这两个问题代码量较多，建议大家直接去看源代码
 
 这篇文章主要分享一下网格拖拽和缩放比的实现及es-drager组件的具体使用
 
 ## 网格拖拽和缩放比实现
+
+*   效果展示
+
+![05.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6c1167ada1946a28f03e6ed71c9cc78~tplv-k3u1fbpfcp-watermark.image?)
 
 这块功能主要是最近有朋友在github上提过相关需求，就给es-drager加上了
 
@@ -114,7 +117,7 @@ function calcGridMove(diff: number, grid: number, cur: number) {
 
 ```
 
-- 由于父元素或者画布可能会缩放，那么就可以将这个缩放比（scaleRatio）传给es-drager，每次移动需要先将移动的距离和缩放比进行换算一下
+*   由于父元素或者画布可能会缩放，那么就可以将这个缩放比（scaleRatio）传给es-drager，每次移动需要先将移动的距离和缩放比进行换算一下
 
 ```typescript
 // 使用缩放比后的移动距离计算
@@ -122,8 +125,7 @@ let moveX = (e.clientX - downX) / props.scaleRatio + left
 let moveY = (e.clientY - downY) / props.scaleRatio + top
 ```
 
-- 如果传入snapToGrid为true，则计算网格移动，得到这次移动的距离，如果距离大于传入的gridX或gridY的1/2则移动一个网格距离，calcGridMove函数主要就是这个功能
-
+*   如果传入snapToGrid为true，则计算网格移动，得到这次移动的距离，如果距离大于传入的gridX或gridY的1/2则移动一个网格距离，calcGridMove函数主要就是这个功能
 
 ### 网格缩放 resize
 
@@ -182,6 +184,7 @@ const onMousemove = (e: MouseEvent) => {
 ```
 
 其它代码上一篇讲过，主要看这几行新增的代码，前两行同样考虑缩放比（没有这个计算，鼠标可能不会在小圆点按下的位置）
+
 ```typescript
   // 移动的x距离
   let disX = (e.clientX - downX) / props.scaleRatio
@@ -224,9 +227,7 @@ const onMousemove = (e: MouseEvent) => {
 
 ### 安装依赖
 
-```
-npm i es-drager
-```
+    npm i es-drager
 
 ### 全局注册
 
@@ -242,7 +243,7 @@ createApp(App)
   .mount('#app')
 ```
 
-- 使用
+*   使用
 
 ```html
 <template>
@@ -267,6 +268,7 @@ import Drager from 'es-drager'
 </script>
 
 ```
+
 ### 浏览器直接引入
 
 直接通过浏览器的 HTML 标签导入 es-drager，然后就可以使用全局变量 ESDrager 了。
@@ -300,6 +302,9 @@ import Drager from 'es-drager'
 ```
 
 ### 基础使用
+
+
+![06.gif](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b4a2f4b154fe472491fb66ea6beb2301~tplv-k3u1fbpfcp-watermark.image?)
 
 ```html
 <template>
@@ -466,9 +471,12 @@ const gridStyle = computed(() => {
 
 ### 使用插槽
 
-- 默认插槽
-- resize 缩放handle（小圆点）插槽
-- rotate 旋转handle插槽
+
+![07.gif](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/45f1283b7bd74d70be1d769bd2174f9b~tplv-k3u1fbpfcp-watermark.image?)
+
+*   默认插槽
+*   resize 缩放handle（小圆点）插槽
+*   rotate 旋转handle插槽
 
 ```html
 <template>
@@ -529,6 +537,8 @@ import imgUrl from '../assets/demo.png'
 
 ### echarts 图表
 
+![08.gif](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c3ab0af452c4ba7a00b3cf1254b88a2~tplv-k3u1fbpfcp-watermark.image?)
+
 也可以插入echarts图表，注意需要将chart元素的宽高都设置为100%
 
 监听es-drager的resize事件然后调用echarts的resize方法进行缩放
@@ -563,43 +573,43 @@ function handleResize() {
 
 ### Drager 属性
 
-| 属性名                   | 说明           | 类型                                         | 默认    |
-| --------------------- | ------------ | ------------------------------------------ | ----- |
-| width | 宽度       | ^[number]         | 100     |
-| height | 高度       | ^[number]         | 100     |
-| left | 横坐标偏移       | ^[number]         | 0     |
-| top | 纵坐标偏移       | ^[number]         | 0     |
-| angle | 旋转角度       | ^[number]         | 0     |
-| color | 颜色       | ^[string]         |   #3a7afe   |
-| resizable | 是否可缩放       | ^[boolean]        | true     |
-| rotatable | 是否可旋转       | ^[boolean]        | -     |
-| boundary | 是否判断边界(最近定位父节点)     | ^[boolean]        | -     |
-| disabled | 是否禁用     | ^[boolean]        | -     |
-| minWidth | 最小宽度     | ^[number]        | -     |
-| minHeight | 最小高度     | ^[number]        | -     |
-| selected | 控制是否选中     | ^[boolean]        | -     |
-| snapToGrid | 开启网格     | ^[boolean]        | -     |
-| gridX | 网格X大小     | ^[number]        | 50     |
-| gridY | 网格Y大小     | ^[number]        | 50     |
-| scaleRatio | 缩放比     | ^[number]        | 1     |
-| disabledKeyEvent | 禁用方向键移动     | ^[boolean]        | -     |
+| 属性名              | 说明              | 类型           | 默认      |
+| ---------------- | --------------- | ------------ | ------- |
+| width            | 宽度              | \^\[number]  | 100     |
+| height           | 高度              | \^\[number]  | 100     |
+| left             | 横坐标偏移           | \^\[number]  | 0       |
+| top              | 纵坐标偏移           | \^\[number]  | 0       |
+| angle            | 旋转角度            | \^\[number]  | 0       |
+| color            | 颜色              | \^\[string]  | #3a7afe |
+| resizable        | 是否可缩放           | \^\[boolean] | true    |
+| rotatable        | 是否可旋转           | \^\[boolean] | -       |
+| boundary         | 是否判断边界(最近定位父节点) | \^\[boolean] | -       |
+| disabled         | 是否禁用            | \^\[boolean] | -       |
+| minWidth         | 最小宽度            | \^\[number]  | -       |
+| minHeight        | 最小高度            | \^\[number]  | -       |
+| selected         | 控制是否选中          | \^\[boolean] | -       |
+| snapToGrid       | 开启网格            | \^\[boolean] | -       |
+| gridX            | 网格X大小           | \^\[number]  | 50      |
+| gridY            | 网格Y大小           | \^\[number]  | 50      |
+| scaleRatio       | 缩放比             | \^\[number]  | 1       |
+| disabledKeyEvent | 禁用方向键移动         | \^\[boolean] | -       |
 
 ### Drager 事件
 
-| 事件名    | 说明          | 类型                                                             |
-| ------ | ----------- | -------------------------------------------------------------- |
-| change | 位置、大小改变 | ^[Function]`(dragData) => void` |
-| drag | 拖拽中 | ^[Function]`(dragData) => void` |
-| drag-start | 拖拽开始 | ^[Function]`(dragData) => void` |
-| drag-end | 拖拽结束 | ^[Function]`(dragData) => void` |
-| resize | 缩放中 | ^[Function]`(dragData) => void` |
-| resize-start | 缩放开始 | ^[Function]`(dragData) => void` |
-| resize-end | 缩放结束 | ^[Function]`(dragData) => void` |
-| rotate | 旋转中 | ^[Function]`(dragData) => void` |
-| rotate-start | 旋转开始 | ^[Function]`(dragData) => void` |
-| rotate-end | 旋转结束 | ^[Function]`(dragData) => void` |
+| 事件名          | 说明      | 类型                                |
+| ------------ | ------- | --------------------------------- |
+| change       | 位置、大小改变 | \^\[Function]`(dragData) => void` |
+| drag         | 拖拽中     | \^\[Function]`(dragData) => void` |
+| drag-start   | 拖拽开始    | \^\[Function]`(dragData) => void` |
+| drag-end     | 拖拽结束    | \^\[Function]`(dragData) => void` |
+| resize       | 缩放中     | \^\[Function]`(dragData) => void` |
+| resize-start | 缩放开始    | \^\[Function]`(dragData) => void` |
+| resize-end   | 缩放结束    | \^\[Function]`(dragData) => void` |
+| rotate       | 旋转中     | \^\[Function]`(dragData) => void` |
+| rotate-start | 旋转开始    | \^\[Function]`(dragData) => void` |
+| rotate-end   | 旋转结束    | \^\[Function]`(dragData) => void` |
 
-- dragData 类型
+*   dragData 类型
 
 ```javascript
 export type DragData = {
@@ -611,12 +621,10 @@ export type DragData = {
 }
 ```
 
-
 ### Drager 插槽
 
-| 插槽名     | 说明      |
-| ------- | ------- |
-| default | 自定义默认内容 |
-| resize | 缩放handle |
-| rotate | 旋转handle |
-
+| 插槽名     | 说明       |
+| ------- | -------- |
+| default | 自定义默认内容  |
+| resize  | 缩放handle |
+| rotate  | 旋转handle |
