@@ -43,7 +43,14 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'echarts 图表'
     }
-  }
+  },
+  // {
+  //   path: 'temp',
+  //   component: () => import('@/examples/temp.vue'),
+  //   meta: {
+  //     title: 'temp'
+  //   }
+  // }
 ]
 
 const routes: RouteRecordRaw[] = [

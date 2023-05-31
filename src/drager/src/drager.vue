@@ -3,7 +3,7 @@
     ref="dragRef"
     :class="['es-drager', { disabled, dragging: isMousedown, selected }]"
     :style="dragStyle"
-    @click.self.stop
+    @click.stop
   >
     <slot />
     

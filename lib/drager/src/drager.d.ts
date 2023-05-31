@@ -66,6 +66,7 @@ export declare const DragerProps: {
         type: NumberConstructor;
         default: number;
     };
+    disabledKeyEvent: BooleanConstructor;
 };
 export interface DragData {
     width: number;

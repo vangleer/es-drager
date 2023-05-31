@@ -60,6 +60,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
         type: NumberConstructor;
         default: number;
     };
+    disabledKeyEvent: BooleanConstructor;
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     resizable: {
         type: BooleanConstructor;
@@ -122,6 +123,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
         type: NumberConstructor;
         default: number;
     };
+    disabledKeyEvent: BooleanConstructor;
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -151,5 +153,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
     gridX: number;
     gridY: number;
     scaleRatio: number;
+    disabledKeyEvent: boolean;
 }>;
 export default _sfc_main;

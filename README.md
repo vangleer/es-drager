@@ -124,6 +124,7 @@ import Drager from 'es-drager'
 | gridX | 网格X大小     | ^[number]        | 50     |
 | gridY | 网格Y大小     | ^[number]        | 50     |
 | scaleRatio | 缩放比     | ^[number]        | 1     |
+| disabledKeyEvent | 禁用方向键移动     | ^[boolean]        | -     |
 
 ### Drager 事件
 

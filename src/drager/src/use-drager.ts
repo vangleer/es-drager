@@ -1,4 +1,4 @@
-import { Ref, onMounted, ref, ExtractPropTypes, } from 'vue'
+import { Ref, onMounted, ref, ExtractPropTypes, watch, onBeforeUnmount } from 'vue'
 import { DragerProps, DragData } from './drager'
 let zIndex = 1000
 
@@ -25,16 +25,11 @@ export function useDrager(
     const el = targetRef.value!
     let { clientX: downX, clientY: downY } = e
     
-    const { width, height, left, top } = dragData.value
+    const { left, top } = dragData.value
     el.style.zIndex = useZIndex()
-    let minX = 0, maxX = 0, minY = 0, maxY = 0
+    let maxX = 0, maxY = 0
     if (props.boundary) {
-      const parentEl = el.parentElement || document.body
-      const parentElRect = parentEl!.getBoundingClientRect()
-      // 最大x
-      maxX = parentElRect.width / props.scaleRatio - width
-      // 最大y
-      maxY = parentElRect.height / props.scaleRatio - height
+      [maxX, maxY] = getBoundary()
     }
     
     emit && emit('drag-start', dragData.value)
@@ -56,13 +51,7 @@ export function useDrager(
       }
       
       if (props.boundary) {
-        // 判断x最小最大边界
-        moveX = moveX < minX ? minX : moveX
-        moveX = moveX > maxX ? maxX : moveX
-
-        // 判断y最小最大边界
-        moveY = moveY < minY ? minY : moveY
-        moveY = moveY > maxY ? maxY : moveY
+        [moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
       }
 
       dragData.value.left = moveX
@@ -77,13 +66,75 @@ export function useDrager(
       emit && emit('drag-end', dragData.value)
     })
   }
+  const getBoundary = () => {
+    const { width, height } = dragData.value
+    const parentEl = targetRef.value!.parentElement || document.body
+    const parentElRect = parentEl!.getBoundingClientRect()
+    // 最大x
+    const maxX = parentElRect.width / props.scaleRatio - width
+    // 最大y
+    const maxY = parentElRect.height / props.scaleRatio - height
+    return [maxX, maxY]
+  }
+  const fixBoundary = (moveX: number, moveY: number, maxX: number, maxY: number) => {
+    // 判断x最小最大边界
+    moveX = moveX < 0 ? 0 : moveX
+    moveX = moveX > maxX ? maxX : moveX
 
+    // 判断y最小最大边界
+    moveY = moveY < 0 ? 0 : moveY
+    moveY = moveY > maxY ? maxY : moveY
+    return [moveX, moveY]
+  }
   const clickOutsize = () => {
     selected.value = false
+  }
+  // 键盘事件
+  const onKeydown = (e: KeyboardEvent) => {
+    if (isMousedown.value) return
+    let { left: moveX, top: moveY } = dragData.value
+    if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      const isRight = e.key === 'ArrowRight'
+      let diff = isRight ? 1 : -1
+      if (props.snapToGrid) {
+        diff = isRight ? props.gridX : -props.gridX
+      }
+      moveX = moveX + diff
+      
+    } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      const isDown = e.key === 'ArrowDown'
+      let diff = isDown ? 1 : -1
+      if (props.snapToGrid) {
+        diff = isDown ? props.gridY : -props.gridY
+      }
+
+      moveY = moveY + diff
+    }
+
+    if (props.boundary) {
+      const [maxX, maxY] = getBoundary()
+      ;[moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
+    }
+    dragData.value.left = moveX
+    dragData.value.top = moveY
   }
   onMounted(() => {
     if (!targetRef.value) return
     targetRef.value.addEventListener('mousedown', onMousedown)
+  })
+
+  watch(selected, (val) => {
+    if (props.disabledKeyEvent) return
+    // 每次选中注册键盘事件
+    if (val) {
+      document.addEventListener('keydown', onKeydown)
+    } else { // 不是选中移除
+      document.removeEventListener('keydown', onKeydown)
+    }
+  })
+
+  onBeforeUnmount(() => {
+    document.removeEventListener('keydown', onKeydown)
   })
   return {
     isMousedown,

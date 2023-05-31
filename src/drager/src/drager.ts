@@ -66,7 +66,8 @@ export const DragerProps = {
   scaleRatio: {
     type: Number,
     default: 1
-  }
+  },
+  disabledKeyEvent: Boolean
 }
 
 export interface DragData {
