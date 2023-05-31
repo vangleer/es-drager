@@ -36,20 +36,21 @@
 
 <script setup lang='ts'>
 import { shallowRef, computed, ref } from 'vue'
-import { useRouter, RouteRecordRaw } from 'vue-router'
+import { useRouter, RouteRecordRaw, useRoute } from 'vue-router'
 import { menuRoutes } from '@/router'
 import githubIcon from '@/assets/github.svg'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
 
 const router = useRouter()
+const route = useRoute()
 const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' })
 
 const codeHtml = computed(() => {
   return hljs.highlight(examplesSource[`../examples/${current.value.path}.vue`], { language: 'html' }).value
 })
 
-const current = shallowRef(menuRoutes[0])
+const current = shallowRef(menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0])
 const showCode = ref(true)
 function handleClick(item: RouteRecordRaw) {
   current.value = item

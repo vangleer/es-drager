@@ -20,21 +20,28 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: 'grid',
     component: () => import('@/examples/grid.vue'),
     meta: {
-      title: '详情信息'
+      title: '网格'
     }
   },
   {
     path: 'info',
     component: () => import('@/examples/info.vue'),
     meta: {
-      title: '使用插槽'
+      title: '详情信息'
     }
   },
   {
     path: 'slot',
     component: () => import('@/examples/slot.vue'),
     meta: {
-      title: '网格'
+      title: '使用插槽'
+    }
+  },
+  {
+    path: 'chart',
+    component: () => import('@/examples/chart.vue'),
+    meta: {
+      title: 'echarts 图表'
     }
   }
 ]
