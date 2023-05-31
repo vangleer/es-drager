@@ -35,11 +35,12 @@
     "url": "https://github.com/vangleer/es-drager.git"
   },
   "scripts": {
-    "dev": "vite ./docs",
+    "dev": "npm run dev -w docs",
     "build": "vite build",
-    "build:docs": "vite build ./docs",
+    "build:docs": "npm run build -w docs",
     "release": "npm run build && npm publish"
   },
+  "workspaces": ["docs"],
   "dependencies": {
     "vue": ">=3.2.0"
   },
