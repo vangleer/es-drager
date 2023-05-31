@@ -22,11 +22,10 @@ export function useDrager(
     if (props.disabled) return
     isMousedown.value = true
     selected.value = true
-    const el = targetRef.value!
     let { clientX: downX, clientY: downY } = e
     
     const { left, top } = dragData.value
-    el.style.zIndex = useZIndex()
+    targetRef.value!.style.zIndex = useZIndex()
     let maxX = 0, maxY = 0
     if (props.boundary) {
       [maxX, maxY] = getBoundary()
@@ -76,6 +75,12 @@ export function useDrager(
     const maxY = parentElRect.height / props.scaleRatio - height
     return [maxX, maxY]
   }
+  /**
+   * @param moveX 移动的X
+   * @param moveY 移动的Y
+   * @param maxX 最大移动X距离
+   * @param maxY 最大移动Y距离
+   */
   const fixBoundary = (moveX: number, moveY: number, maxX: number, maxY: number) => {
     // 判断x最小最大边界
     moveX = moveX < 0 ? 0 : moveX
@@ -94,16 +99,22 @@ export function useDrager(
     if (isMousedown.value) return
     let { left: moveX, top: moveY } = dragData.value
     if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+      // 左右键修改left
       const isRight = e.key === 'ArrowRight'
+      // 默认移动1像素距离
       let diff = isRight ? 1 : -1
+      // 如果开启网格，移动gridX距离
       if (props.snapToGrid) {
         diff = isRight ? props.gridX : -props.gridX
       }
       moveX = moveX + diff
       
     } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      // 左右键修改top
       const isDown = e.key === 'ArrowDown'
+      // 默认移动1像素距离
       let diff = isDown ? 1 : -1
+      // 如果开启网格，移动gridY距离
       if (props.snapToGrid) {
         diff = isDown ? props.gridY : -props.gridY
       }
@@ -111,10 +122,12 @@ export function useDrager(
       moveY = moveY + diff
     }
 
+    // 边界判断
     if (props.boundary) {
       const [maxX, maxY] = getBoundary()
       ;[moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
     }
+    // 一次只会有一个会变
     dragData.value.left = moveX
     dragData.value.top = moveY
   }
@@ -169,7 +182,7 @@ export function setupMove(onMousemove: (e: MouseEvent) => void, onMouseupCb?: (e
  */
 function calcGridMove(diff: number, grid: number, cur: number) {
   let result = cur
-  // 移动距离超过grid的1/2，累加grid，移动距离位负数减掉相应的grid
+  // 移动距离超过grid的1/2，累加grid，移动距离为负数减掉相应的grid
   if (Math.abs(diff) > grid / 2) {
     result = cur + (diff > 0 ? grid : -grid)
   }

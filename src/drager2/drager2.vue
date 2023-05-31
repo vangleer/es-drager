@@ -1,23 +1,21 @@
 <template>
   <div
     ref="dragRef"
-    :class="['es-drager']"
+    :class="['es-drager', { selected }]"
     :style="dragStyle"
     @mousedown="onMousedown"
   >
     <slot />
 
     <template v-if="resizable">
-      <div v-show="selected">
-        <div
-          v-for="item in dotList"
-          :key="item.side"
-          class="es-drager-dot"
-          :data-side="item.side"
-          :style="getDotStyle(item)"
-          @mousedown="onDotMousedown(item, $event)"
-        >
-        </div>
+      <div
+        v-for="item in dotList"
+        :key="item.side"
+        class="es-drager-dot"
+        :data-side="item.side"
+        :style="getDotStyle(item)"
+        @mousedown="onDotMousedown(item, $event)"
+      >
       </div>
     </template>
 
@@ -52,7 +50,7 @@ const dotList: IDot[] = [
   { side: 'bottom-left', cursor: 'sw-resize' },
   { side: 'bottom-right', cursor: 'se-resize' }
 ]
-const selected = ref(true)
+const selected = ref(false)
 const props = defineProps({
   rotatable: {
     type: Boolean,
@@ -84,7 +82,20 @@ const props = defineProps({
   color: {
     type: String,
     default: '#3a7afe'
-  }
+  },
+  snapToGrid: Boolean,
+  gridX: {
+    type: Number,
+    default: 50
+  },
+  gridY: {
+    type: Number,
+    default: 50
+  },
+  scaleRatio: {
+    type: Number,
+    default: 1
+  },
 })
 const emit = defineEmits(['move', 'resize', 'rotate'])
 const dragRef = ref<HTMLElement | null>(null)
@@ -126,33 +137,40 @@ function getDotStyle(item: IDot) {
 }
 function onMousedown(e: MouseEvent) {
   isMousedown.value = true
+  selected.value = true
   const el = dragRef.value!
   const downX = e.clientX
   const downY = e.clientY
-  const elRect = el.getBoundingClientRect()
-
   // 鼠标在盒子里的位置
-  const mouseX = downX - elRect.left
-  const mouseY = downY - elRect.top
-
+  
+  const { width, height, left, top } = dragData.value
   let minX = 0, maxX = 0, minY = 0, maxY = 0
 
   if (props.boundary) {
     const parentEl = el.parentElement || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
-    // 最小x
-    minX = parentElRect.left
     // 最大x
-    maxX = parentElRect.left + parentElRect.width - elRect.width
-    // 最小y
-    minY = parentElRect.top
+    maxX = parentElRect.width - width
     // 最大y
-    maxY = parentElRect.top + parentElRect.height - elRect.height
+    maxY = parentElRect.height - height
   }
 
   const onMousemove = (e: MouseEvent) => {
-    let moveX = e.clientX - mouseX
-    let moveY = e.clientY - mouseY
+    let moveX = (e.clientX - downX) / props.scaleRatio + left
+    let moveY = (e.clientY - downY) / props.scaleRatio + top
+
+    // 是否开启网格对齐
+    if (props.snapToGrid) {
+      // 当前位置
+      let { left: curX, top: curY } = dragData.value
+      // 移动距离
+      const diffX = moveX - curX
+      const diffY = moveY - curY
+
+      // 计算网格移动距离
+      moveX = calcGridMove(diffX, props.gridX, curX)
+      moveY = calcGridMove(diffY, props.gridY, curY)
+    }
 
     if (props.boundary) {
       // 判断x最小最大边界
@@ -177,9 +195,20 @@ function onMousedown(e: MouseEvent) {
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
 }
-function twoPointDistance(x: number, y: number, x1: number, y1: number){
-    let dep = Math.sqrt(Math.pow((x - x1), 2) + Math.pow((y - y1), 2))
-    return dep
+
+/**
+ * @param diff 移动的距离
+ * @param grid 网格大小
+ * @param cur 盒子当前的位置left or top
+ */
+ function calcGridMove(diff: number, grid: number, cur: number) {
+  let result = cur
+  // 移动距离超过grid的1/2，累加grid，移动距离为负数减掉相应的grid
+  if (Math.abs(diff) > grid / 2) {
+    result = cur + (diff > 0 ? grid : -grid)
+  }
+
+  return result
 }
 
 /**
@@ -193,37 +222,34 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
   // 获取鼠标按下的坐标
   const downX = e.clientX
   const downY = e.clientY
-  const el = dragRef.value!
-  const elRect = el.getBoundingClientRect()
+  const elRect = { ...dragData.value }
   
   const onMousemove = (e: MouseEvent) => {
-    // 鼠标离小圆点的直线距离
-    let dis = twoPointDistance(downX, downY, e.clientX, e.clientY)
-
-    // if (downX < e.clientX || downY < e.clientY) {
-    //   console.log('放大')
-    // } else {
-    //   console.log('缩小')
-    //   dis = -dis
-    // }
-
     // 移动的x距离
-    const disX = dis
+    let disX = (e.clientX - downX) / props.scaleRatio
     // 移动的y距离
-    const disY = dis
+    let disY = (e.clientY - downY) / props.scaleRatio
 
-    
-    // console.log(dis, disX, disY)
-    // dragData.value.width = elRect.width + dis
+    // 开启网格缩放
+    if (props.snapToGrid) {
+      disX = calcGridResize(disX, props.gridX)
+      disY = calcGridResize(disY, props.gridY)
+    }
 
     const [side, position] = dotInfo.side.split('-')
-    const hasT = side === 'top'
-    const hasL = [side, position].includes('left')
 
+    // 是否是上方缩放圆点
+    const hasT = side === 'top'
+    // 是否是左方缩放圆点
+    const hasL = [side, position].includes('left')
+    
     let width = elRect.width + (hasL ? -disX : disX)
     let height = elRect.height + (hasT ? -disY : disY)
     
+    // 如果是左侧缩放圆点，修改left位置
     let left = elRect.left + (hasL ? disX : 0)
+
+    // 如果是上方缩放圆点，修改top位置
     let top = elRect.top + (hasT ? disY : 0)
 
     if (!position) { // 如果是四个正方位
@@ -236,6 +262,7 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
       }
     }
 
+    // 处理逆向缩放
     if (width < 0) {
       width = -width
       left -= width
@@ -245,10 +272,9 @@ function onDotMousedown(dotInfo: IDot, e: MouseEvent) {
       top -= height
     }
 
-    dragData.value = { left: 0, top: 0, width, height }
+    dragData.value = { left, top, width, height }
     emit('resize', dragData.value)
   }
-
   const onMouseup = (_e: MouseEvent) => {
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
@@ -289,19 +315,43 @@ function onRotateMousedown(e: MouseEvent) {
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
 }
+/**
+ * @param diff 缩放移动距离
+ * @param grid 网格大小
+ */
+ function calcGridResize(diff: number, grid: number) {
+  // 得到每次缩放的余数
+  const r = Math.abs(diff) % grid
 
+  // 正负grid
+  const mulGrid = diff > 0 ? grid : -grid
+  let result = 0
+  // 余数大于grid的1/2
+  if (r > grid / 2) {
+    result = mulGrid * Math.ceil(Math.abs(diff) / grid)
+  } else {
+    result = mulGrid * Math.floor(Math.abs(diff) / grid)
+  }
+
+  return result
+}
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .es-drager {
   position: absolute;
   z-index: 1000;
   width: 200px;
   height: 120px;
   border: 1px solid var(--es-drager-color, #3a7afe);
-
+  &.selected {
+    .es-drager-dot {
+      display: block;
+    }
+  }
   &-dot {
     position: absolute;
+    display: none;
     width: 10px;
     height: 10px;
     border-radius: 50%;
