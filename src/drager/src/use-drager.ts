@@ -170,8 +170,10 @@ export function setupMove(onMousemove: (e: MouseEvent) => void, onMouseupCb?: (e
     onMouseupCb && onMouseupCb(_e)
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
+    document.removeEventListener('mouseleave', onMouseup)
   }
   document.addEventListener('mousemove', onMousemove)
   document.addEventListener('mouseup', onMouseup)
+  document.addEventListener('mouseleave', onMouseup)
 }
 

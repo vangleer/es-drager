@@ -14,7 +14,7 @@
         class="es-drager-dot"
         :data-side="item.side"
         :style="{ ...item }"
-        @mousedown="onDotMousedown(item, $event)"
+        @mousedown.stop.prevent="onDotMousedown(item, $event)"
       >
         <slot name="resize" v-bind="{ side: item.side }">
           <div class="es-drager-dot-handle"></div>
