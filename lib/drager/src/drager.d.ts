@@ -108,3 +108,8 @@ export declare const formatData: (data: DragData, centerX: number, centerY: numb
     left: number;
     top: number;
 };
+/**
+ * @param diff 移动的距离
+ * @param grid 网格大小
+ */
+export declare function calcGrid(diff: number, grid: number): number;

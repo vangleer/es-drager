@@ -323,3 +323,24 @@ export const formatData = (data: DragData, centerX: number, centerY: number) => 
     top: centerY - Math.abs(height) / 2
   }
 }
+
+/**
+ * @param diff 移动的距离
+ * @param grid 网格大小
+ */
+export function calcGrid(diff: number, grid: number) {
+  // 得到每次缩放的余数
+  const r = Math.abs(diff) % grid
+
+  // 正负grid
+  const mulGrid = diff > 0 ? grid : -grid
+  let result = 0
+  // 余数大于grid的1/2
+  if (r > grid / 2) {
+    result = mulGrid * Math.ceil(Math.abs(diff) / grid)
+  } else {
+    result = mulGrid * Math.floor(Math.abs(diff) / grid)
+  }
+
+  return result
+}

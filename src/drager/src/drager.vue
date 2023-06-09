@@ -38,7 +38,18 @@
 
 <script setup lang='ts'>
 import { computed, ref, watch } from 'vue'
-import { DragerProps, formatData, withUnit, getDotList, getLength, degToRadian, getNewStyle, centerToTL, EventType } from './drager'
+import {
+  DragerProps,
+  formatData,
+  withUnit,
+  getDotList,
+  getLength,
+  degToRadian,
+  getNewStyle,
+  centerToTL,
+  EventType,
+  calcGrid
+} from './drager'
 import { useDrager, setupMove } from './use-drager'
 import Rotate from './rotate.vue'
 
@@ -68,26 +79,6 @@ const dragStyle = computed(() => {
 function handleRotateEnd(angle: number) {
   dotList.value = getDotList(angle)
   emitFn('rotate-end', dragData.value)
-}
-/**
- * @param diff 缩放移动距离
- * @param grid 网格大小
- */
-function calcGridResize(diff: number, grid: number) {
-  // 得到每次缩放的余数
-  const r = Math.abs(diff) % grid
-
-  // 正负grid
-  const mulGrid = diff > 0 ? grid : -grid
-  let result = 0
-  // 余数大于grid的1/2
-  if (r > grid / 2) {
-    result = mulGrid * Math.ceil(Math.abs(diff) / grid)
-  } else {
-    result = mulGrid * Math.floor(Math.abs(diff) / grid)
-  }
-
-  return result
 }
 
 /**
@@ -121,8 +112,8 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
     let deltaY = (clientY - downY) / props.scaleRatio
     // 开启网格缩放
     if (props.snapToGrid) {
-      deltaX = calcGridResize(deltaX, props.gridX)
-      deltaY = calcGridResize(deltaY, props.gridY)
+      deltaX = calcGrid(deltaX, props.gridX)
+      deltaY = calcGrid(deltaY, props.gridY)
     }
 
     const alpha = Math.atan2(deltaY, deltaX)
@@ -139,8 +130,18 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
       size: { width, height }
     } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
    
-    const pData = centerToTL({ centerX, centerY, width, height, angle: dragData.value.angle })
-    dragData.value = { ...dragData.value, ...formatData(pData, centerX, centerY) }
+    const pData = centerToTL({
+      centerX,
+      centerY,
+      width,
+      height,
+      angle: dragData.value.angle
+    })
+
+    dragData.value = {
+      ...dragData.value,
+      ...formatData(pData, centerX, centerY)
+    }
     emitFn('resize', dragData.value)
   }
 
@@ -149,8 +150,21 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
   })
 }
 
-watch(() => [props.width, props.height, props.left, props.top, props.angle], ([width, height, left, top, angle]) => {
-  dragData.value = { ...dragData.value, width, height, left, top, angle }
+watch(() => [
+  props.width,
+  props.height,
+  props.left,
+  props.top,
+  props.angle
+], ([width, height, left, top, angle]) => {
+  dragData.value = {
+    ...dragData.value,
+    width,
+    height,
+    left,
+    top,
+    angle
+  }
 })
 
 watch(() => props.selected, (val) => {

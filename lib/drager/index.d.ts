@@ -1,5 +1,5 @@
 import { App, Plugin } from 'vue';
-export * from './src/drager';
+export type { DragData, DragerProps } from './src/drager';
 import Drager from './src/drager.vue';
 export declare const install: (app: App) => void;
 export { Drager as ESDrager };

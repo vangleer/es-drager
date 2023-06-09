@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "echarts": "^5.4.2",
-    "es-drager": "^0.3.2",
+    "es-drager": "^0.3.4",
     "highlight.js": "^11.8.0",
     "vue": "^3.2.47",
     "vue-router": "^4.2.2"

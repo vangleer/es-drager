@@ -1,5 +1,5 @@
 import { Ref, onMounted, ref, ExtractPropTypes, watch, onBeforeUnmount } from 'vue'
-import { DragerProps, DragData } from './drager'
+import { DragerProps, DragData, calcGrid } from './drager'
 let zIndex = 1000
 
 export function useDrager(
@@ -45,8 +45,8 @@ export function useDrager(
         const diffY = moveY - curY
 
         // 计算网格移动距离
-        moveX = calcGridMove(diffX, props.gridX, curX)
-        moveY = calcGridMove(diffY, props.gridY, curY)
+        moveX = curX + calcGrid(diffX, props.gridX)
+        moveY = curY + calcGrid(diffY, props.gridY)
       }
       
       if (props.boundary) {
@@ -175,17 +175,3 @@ export function setupMove(onMousemove: (e: MouseEvent) => void, onMouseupCb?: (e
   document.addEventListener('mouseup', onMouseup)
 }
 
-/**
- * @param diff 移动的距离
- * @param grid 网格大小
- * @param cur 盒子当前的位置left or top
- */
-function calcGridMove(diff: number, grid: number, cur: number) {
-  let result = cur
-  // 移动距离超过grid的1/2，累加grid，移动距离为负数减掉相应的grid
-  if (Math.abs(diff) > grid / 2) {
-    result = cur + (diff > 0 ? grid : -grid)
-  }
-
-  return result
-}
