@@ -35,7 +35,7 @@ npm i es-drager
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import 'es-drager/dist/style.css'
+import 'es-drager/lib/style.css'
 import Drager from 'es-drager'
 
 createApp(App)
