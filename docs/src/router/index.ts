@@ -45,6 +45,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: 'markline',
+    component: () => import('@/examples/markline.vue'),
+    meta: {
+      title: '辅助线'
+    }
+  },
+  {
     path: 'temp',
     component: () => import('@/examples/temp.vue'),
     meta: {
