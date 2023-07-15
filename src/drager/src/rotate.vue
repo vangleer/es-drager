@@ -3,6 +3,7 @@
     ref="rotateRef"
     class="es-drager-rotate"
     @mousedown="onRotateMousedown"
+    @touchstart="onRotateMousedown"
   >
     <slot>
       <div class="es-drager-rotate-handle">
@@ -14,7 +15,7 @@
 
 <script setup lang='ts'>
 import { ref, computed, PropType } from 'vue'
-import { setupMove } from './use-drager'
+import { getXY, setupMove } from './use-drager'
 
 const props = defineProps({
   modelValue: {
@@ -41,7 +42,7 @@ const angle = computed({
  * 旋转
  * @param e 
  */
-function onRotateMousedown(e: MouseEvent) {
+function onRotateMousedown(e: MouseEvent | TouchEvent) {
   if (!props.element) return console.warn('[es-drager] rotate component need drag element property')
   e.stopPropagation()
   e.preventDefault()
@@ -52,10 +53,10 @@ function onRotateMousedown(e: MouseEvent) {
   const centerY = top + height / 2
 
   emit('rotate-start', angle.value)
-  setupMove((e: MouseEvent) => {
-
-    const diffX = centerX - e.clientX
-    const diffY = centerY - e.clientY
+  setupMove((e: MouseEvent | TouchEvent) => {
+    const { clientX, clientY } = getXY(e)
+    const diffX = centerX - clientX
+    const diffY = centerY - clientY
     
     // Math.atan2(y,x) 返回x轴到(x,y)的角度 // pi值
     const radians = Math.atan2(diffY, diffX)

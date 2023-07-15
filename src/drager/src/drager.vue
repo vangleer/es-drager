@@ -15,6 +15,7 @@
         :data-side="item.side"
         :style="{ ...item }"
         @mousedown.stop.prevent="onDotMousedown(item, $event)"
+        @touchstart="onDotMousedown(item, $event)"
       >
         <slot name="resize" v-bind="{ side: item.side }">
           <div class="es-drager-dot-handle"></div>
@@ -50,7 +51,7 @@ import {
   EventType,
   calcGrid
 } from './drager'
-import { useDrager, setupMove } from './use-drager'
+import { useDrager, setupMove, getXY } from './use-drager'
 import Rotate from './rotate.vue'
 
 const props = defineProps(DragerProps)
@@ -86,12 +87,13 @@ function handleRotateEnd(angle: number) {
  * @param dotInfo 
  * @param e 
  */
-function onDotMousedown(dotInfo: any, e: MouseEvent) {
+function onDotMousedown(dotInfo: any, e: MouseEvent | TouchEvent) {
   e.stopPropagation()
   e.preventDefault()
   // 获取鼠标按下的坐标
-  const downX = e.clientX
-  const downY = e.clientY
+  const { clientX, clientY } = getXY(e)
+  const downX = clientX
+  const downY = clientY
   const { width, height, left, top } = dragData.value
 
   // 中心点
@@ -104,9 +106,9 @@ function onDotMousedown(dotInfo: any, e: MouseEvent) {
   const { minWidth, minHeight, aspectRatio } = props
   emitFn('resize-start', dragData.value)
 
-  const onMousemove = (e: MouseEvent) => {
+  const onMousemove = (e: MouseEvent | TouchEvent) => {
 
-    const { clientX, clientY } = e
+    const { clientX, clientY } = getXY(e)
     // 距离
     let deltaX = (clientX - downX) / props.scaleRatio
     let deltaY = (clientY - downY) / props.scaleRatio
