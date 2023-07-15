@@ -1,3 +1,5 @@
+import { Component, PropType } from "vue"
+
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export type EventType = 'change' | 'drag' | 'drag-start' | 'drag-end' | 'resize' | 'resize-start' | 'resize-end' | 'rotate' | 'rotate-start' | 'rotate-end'
 export type IDot = {
@@ -6,6 +8,10 @@ export type IDot = {
 }
 
 export const DragerProps = {
+  tag: {
+    type: [String, Object] as PropType<string | Component>,
+    default: 'div'
+  },
   resizable: {
     type: Boolean,
     default: true
@@ -20,11 +26,11 @@ export const DragerProps = {
   disabled: Boolean,
   width: {
     type: Number,
-    default: 100
+    default: 0
   },
   height: {
     type: Number,
-    default: 100
+    default: 0
   },
   left: {
     type: Number,

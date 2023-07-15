@@ -8,7 +8,6 @@ export function useDrager(
   emit: Function
 ) {
   
-  const dragRef = ref()
   const isMousedown = ref(false)
   const selected = ref(false)
   const dragData = ref<DragData>({
@@ -134,6 +133,9 @@ export function useDrager(
   }
   onMounted(() => {
     if (!targetRef.value) return
+    const { width, height } = targetRef.value.getBoundingClientRect()
+    console.log(width, height, 'width, height')
+    dragData.value = { ...dragData.value, width: width || 100, height: height || 100 }
     targetRef.value.addEventListener('mousedown', onMousedown)
     targetRef.value.addEventListener('touchstart', onMousedown)
   })
@@ -154,7 +156,6 @@ export function useDrager(
   return {
     isMousedown,
     selected,
-    dragRef,
     dragData
   }
 }

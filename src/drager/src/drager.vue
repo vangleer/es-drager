@@ -1,6 +1,7 @@
 <template>
-  <div
-    ref="dragRef"
+  <component
+    :is="tag"
+    :ref="setRef"
     :class="['es-drager', { disabled, dragging: isMousedown, selected }]"
     :style="dragStyle"
     @click.stop
@@ -34,11 +35,11 @@
     >
       <slot name="rotate" />
     </Rotate>
-  </div>
+  </component>
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, ComponentPublicInstance, CSSProperties } from 'vue'
 import {
   DragerProps,
   formatData,
@@ -67,16 +68,21 @@ const dotList = ref(getDotList())
 
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
+  const style: CSSProperties = {}
+  if (width) style.width = withUnit(width)
+  if (height) style.height = withUnit(height)
   return {
-    width: withUnit(width),
-    height: withUnit(height),
+    ...style,
     left: withUnit(left),
     top: withUnit(top),
     transform: `rotate(${angle}deg)`,
     '--es-drager-color': props.color
   }
 })
-
+function setRef(el: ComponentPublicInstance | HTMLElement) {
+  if (dragRef.value) return
+  dragRef.value = (el as ComponentPublicInstance).$el || el
+}
 function handleRotateEnd(angle: number) {
   dotList.value = getDotList(angle)
   emitFn('rotate-end', dragData.value)
@@ -178,12 +184,10 @@ watch(() => props.selected, (val) => {
 <style lang='scss'>
 .es-drager {
   position: absolute;
-  z-index: 1000;
-  width: 200px;
-  height: 120px;
-  border: 1px solid var(--es-drager-color, #3a7afe);
   
   &.selected {
+    border: 1px solid var(--es-drager-color, #3a7afe);
+    transition: none;
     .es-drager-dot {
       display: block;
     }
