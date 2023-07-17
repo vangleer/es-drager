@@ -134,6 +134,8 @@ import Drager from 'es-drager'
 | gridY | 网格Y大小     | ^[number]        | 50     |
 | scaleRatio | 缩放比     | ^[number]        | 1     |
 | disabledKeyEvent | 禁用方向键移动     | ^[boolean]        | -     |
+| border | 是否显示边框     | ^[boolean]        | true     |
+| resizeList |  显示的缩放handle列表，`top`, `bottom`, `left`, `right`, `top-left`, `top-right`, `bottom-left`, `bottom-right`   | ^[string[]]        | -  |
 
 ### Drager 事件
 

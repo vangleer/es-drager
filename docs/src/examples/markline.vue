@@ -121,6 +121,8 @@ function onDrag(dragData: DragData) {
 function onDragend() {
   // 每次拖拽结束记录变化
   command.record()
+  markLine.top = null
+  markLine.left = null
 }
 
 /**

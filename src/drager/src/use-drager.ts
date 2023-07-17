@@ -1,7 +1,6 @@
 import { Ref, onMounted, ref, ExtractPropTypes, watch, onBeforeUnmount } from 'vue'
-import { DragerProps, DragData, calcGrid } from './drager'
-export type EventType = MouseEvent | TouchEvent
-let zIndex = 1000
+import { DragerProps, DragData } from './drager'
+import { setupMove, MouseTouchEvent, calcGrid, getXY } from './utils'
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
   props: ExtractPropTypes<typeof DragerProps>,
@@ -17,21 +16,20 @@ export function useDrager(
     top: props.top,
     angle: props.angle
   })
-  function onMousedown(e: EventType) {
+  function onMousedown(e: MouseTouchEvent) {
     if (props.disabled) return
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
     
     const { left, top } = dragData.value
-    targetRef.value!.style.zIndex = useZIndex()
     let maxX = 0, maxY = 0
     if (props.boundary) {
       [maxX, maxY] = getBoundary()
     }
     
     emit && emit('drag-start', dragData.value)
-    const onMousemove = (e: EventType) => {
+    const onMousemove = (e: MouseTouchEvent) => {
       const { clientX, clientY } = getXY(e)
       let moveX = (clientX - downX) / props.scaleRatio + left
       let moveY = (clientY - downY) / props.scaleRatio + top
@@ -59,7 +57,7 @@ export function useDrager(
       emit && emit('drag', dragData.value)
     }
 
-    setupMove(onMousemove, (e: EventType) => {
+    setupMove(onMousemove, (e: MouseTouchEvent) => {
       isMousedown.value = false
       document.addEventListener('click', clickOutsize, { once: true })
       emit && emit('drag-end', dragData.value)
@@ -158,51 +156,4 @@ export function useDrager(
     selected,
     dragData
   }
-}
-
-export function useZIndex() {
-  return ++zIndex + ''
-}
-
-/**
- * 统一处理拖拽事件
- * @param onMousemove 鼠标移动处理函数
- */
-export function setupMove(onMousemove: (e: EventType) => void, onMouseupCb?: (e: EventType) => void) {
-  const onMouseup = (_e: EventType) => {
-    onMouseupCb && onMouseupCb(_e)
-    document.removeEventListener('mousemove', onMousemove)
-    document.removeEventListener('mouseup', onMouseup)
-    document.removeEventListener('mouseleave', onMouseup)
-
-    // for mobile
-    document.removeEventListener('touchmove', onMousemove)
-    document.removeEventListener('touchend', onMouseup)
-  }
-  document.addEventListener('mousemove', onMousemove)
-  document.addEventListener('mouseup', onMouseup)
-  document.addEventListener('mouseleave', onMouseup)
-
-  // for mobile
-  document.addEventListener('touchmove', onMousemove)
-  document.addEventListener('touchend', onMouseup)
-}
-
-export function getXY(e: EventType) {
-  let clientX = 0, clientY = 0
-  if (isTouchEvent(e)) {
-    const touch = e.targetTouches[0]
-    clientX = touch.pageX
-    clientY = touch.pageY
-  } else {
-    clientX = e.clientX
-    clientY = e.clientY
-  }
-
-  return { clientX, clientY }
-}
-
-function isTouchEvent(val: unknown): val is TouchEvent {
-  const typeStr = Object.prototype.toString.call(val)
-  return typeStr.substring(8, typeStr.length - 1) === 'TouchEvent'
 }

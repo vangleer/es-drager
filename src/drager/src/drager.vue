@@ -2,7 +2,7 @@
   <component
     :is="tag"
     :ref="setRef"
-    :class="['es-drager', { disabled, dragging: isMousedown, selected }]"
+    :class="['es-drager', { disabled, dragging: isMousedown, selected, border }]"
     :style="dragStyle"
     @click.stop
   >
@@ -35,6 +35,7 @@
     >
       <slot name="rotate" />
     </Rotate>
+    <div class="es-drager-mask"></div>
   </component>
 </template>
 
@@ -42,6 +43,10 @@
 import { computed, ref, watch, ComponentPublicInstance, CSSProperties } from 'vue'
 import {
   DragerProps,
+  EventType
+} from './drager'
+import { useDrager } from './use-drager'
+import {
   formatData,
   withUnit,
   getDotList,
@@ -49,10 +54,11 @@ import {
   degToRadian,
   getNewStyle,
   centerToTL,
-  EventType,
-  calcGrid
-} from './drager'
-import { useDrager, setupMove, getXY } from './use-drager'
+  calcGrid,
+  setupMove,
+  getXY,
+  MouseTouchEvent
+} from './utils'
 import Rotate from './rotate.vue'
 
 const props = defineProps(DragerProps)
@@ -64,7 +70,7 @@ const emitFn = (type: EventType, ...args: any) => {
 const dragRef = ref<HTMLElement | null>(null)
 const { selected, dragData, isMousedown } = useDrager(dragRef, props, emitFn)
 
-const dotList = ref(getDotList())
+const dotList = ref(getDotList(0, props.resizeList))
 
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
@@ -75,6 +81,7 @@ const dragStyle = computed(() => {
     ...style,
     left: withUnit(left),
     top: withUnit(top),
+    zIndex: props.zIndex,
     transform: `rotate(${angle}deg)`,
     '--es-drager-color': props.color
   }
@@ -84,7 +91,7 @@ function setRef(el: ComponentPublicInstance | HTMLElement) {
   dragRef.value = (el as ComponentPublicInstance).$el || el
 }
 function handleRotateEnd(angle: number) {
-  dotList.value = getDotList(angle)
+  dotList.value = getDotList(angle, props.resizeList)
   emitFn('rotate-end', dragData.value)
 }
 
@@ -93,7 +100,7 @@ function handleRotateEnd(angle: number) {
  * @param dotInfo 
  * @param e 
  */
-function onDotMousedown(dotInfo: any, e: MouseEvent | TouchEvent) {
+function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   e.stopPropagation()
   e.preventDefault()
   // 获取鼠标按下的坐标
@@ -112,7 +119,7 @@ function onDotMousedown(dotInfo: any, e: MouseEvent | TouchEvent) {
   const { minWidth, minHeight, aspectRatio } = props
   emitFn('resize-start', dragData.value)
 
-  const onMousemove = (e: MouseEvent | TouchEvent) => {
+  const onMousemove = (e: MouseTouchEvent) => {
 
     const { clientX, clientY } = getXY(e)
     // 距离
@@ -183,18 +190,30 @@ watch(() => props.selected, (val) => {
 
 <style lang='scss'>
 .es-drager {
+  --es-drager-color: #3a7afe;
   position: absolute;
-  
   &.selected {
-    border: 1px solid var(--es-drager-color, #3a7afe);
     transition: none;
     .es-drager-dot {
       display: block;
     }
+    > * {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    .es-drager-mask {
+      outline: 1px dashed var(--es-drager-color);
+    }
   }
-  > * {
-    -webkit-user-drag: none;
-    user-select: none;
+  &.border {
+    border: 1px solid var(--es-drager-color);
+  }
+  .es-drager-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
   &.dragging {
     user-select: none;
@@ -209,6 +228,7 @@ watch(() => props.selected, (val) => {
   &-dot {
     display: none;
     position: absolute;
+    z-index: 1;
     transform: translate(-50%, -50%);
     cursor: se-resize;
     &[data-side*="right"] {
@@ -225,7 +245,7 @@ watch(() => props.selected, (val) => {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: var(--es-drager-color, #3a7afe);
+      background-color: var(--es-drager-color);
     }
   }
 }

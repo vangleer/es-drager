@@ -15,7 +15,7 @@
 
 <script setup lang='ts'>
 import { ref, computed, PropType } from 'vue'
-import { getXY, setupMove } from './use-drager'
+import { getXY, MouseTouchEvent, setupMove } from './utils'
 
 const props = defineProps({
   modelValue: {
@@ -42,7 +42,7 @@ const angle = computed({
  * 旋转
  * @param e 
  */
-function onRotateMousedown(e: MouseEvent | TouchEvent) {
+function onRotateMousedown(e: MouseTouchEvent) {
   if (!props.element) return console.warn('[es-drager] rotate component need drag element property')
   e.stopPropagation()
   e.preventDefault()
@@ -53,7 +53,7 @@ function onRotateMousedown(e: MouseEvent | TouchEvent) {
   const centerY = top + height / 2
 
   emit('rotate-start', angle.value)
-  setupMove((e: MouseEvent | TouchEvent) => {
+  setupMove((e: MouseTouchEvent) => {
     const { clientX, clientY } = getXY(e)
     const diffX = centerX - clientX
     const diffY = centerY - clientY
