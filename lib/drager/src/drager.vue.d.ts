@@ -1,4 +1,8 @@
 declare const _sfc_main: import("vue").DefineComponent<{
+    tag: {
+        type: import("vue").PropType<string | import("vue").Component>;
+        default: string;
+    };
     resizable: {
         type: BooleanConstructor;
         default: boolean;
@@ -24,6 +28,10 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: number;
     };
     top: {
+        type: NumberConstructor;
+        default: number;
+    };
+    zIndex: {
         type: NumberConstructor;
         default: number;
     };
@@ -61,7 +69,18 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: number;
     };
     disabledKeyEvent: BooleanConstructor;
+    border: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    resizeList: {
+        type: import("vue").PropType<string[]>;
+    };
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    tag: {
+        type: import("vue").PropType<string | import("vue").Component>;
+        default: string;
+    };
     resizable: {
         type: BooleanConstructor;
         default: boolean;
@@ -87,6 +106,10 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: number;
     };
     top: {
+        type: NumberConstructor;
+        default: number;
+    };
+    zIndex: {
         type: NumberConstructor;
         default: number;
     };
@@ -124,6 +147,13 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: number;
     };
     disabledKeyEvent: BooleanConstructor;
+    border: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    resizeList: {
+        type: import("vue").PropType<string[]>;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -136,6 +166,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     "onRotate-start"?: ((...args: any[]) => any) | undefined;
     "onRotate-end"?: ((...args: any[]) => any) | undefined;
 }, {
+    tag: string | import("vue").Component;
     resizable: boolean;
     rotatable: boolean;
     boundary: boolean;
@@ -144,6 +175,7 @@ declare const _sfc_main: import("vue").DefineComponent<{
     height: number;
     left: number;
     top: number;
+    zIndex: number;
     angle: number;
     color: string;
     minWidth: number;
@@ -154,5 +186,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
     gridY: number;
     scaleRatio: number;
     disabledKeyEvent: boolean;
+    border: boolean;
 }>;
 export default _sfc_main;

@@ -8,6 +8,7 @@ declare const _default: Plugin & {
         $: import("vue").ComponentInternalInstance;
         $data: {};
         $props: Partial<{
+            tag: string | import("vue").Component;
             resizable: boolean;
             rotatable: boolean;
             boundary: boolean;
@@ -16,6 +17,7 @@ declare const _default: Plugin & {
             height: number;
             left: number;
             top: number;
+            zIndex: number;
             angle: number;
             color: string;
             minWidth: number;
@@ -26,7 +28,12 @@ declare const _default: Plugin & {
             gridY: number;
             scaleRatio: number;
             disabledKeyEvent: boolean;
+            border: boolean;
         }> & Omit<Readonly<import("vue").ExtractPropTypes<{
+            tag: {
+                type: import("vue").PropType<string | import("vue").Component>;
+                default: string;
+            };
             resizable: {
                 type: BooleanConstructor;
                 default: boolean;
@@ -52,6 +59,10 @@ declare const _default: Plugin & {
                 default: number;
             };
             top: {
+                type: NumberConstructor;
+                default: number;
+            };
+            zIndex: {
                 type: NumberConstructor;
                 default: number;
             };
@@ -89,6 +100,13 @@ declare const _default: Plugin & {
                 default: number;
             };
             disabledKeyEvent: BooleanConstructor;
+            border: {
+                type: BooleanConstructor;
+                default: boolean;
+            };
+            resizeList: {
+                type: import("vue").PropType<string[]>;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -100,7 +118,7 @@ declare const _default: Plugin & {
             onRotate?: ((...args: any[]) => any) | undefined;
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
-        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY" | "scaleRatio" | "disabledKeyEvent">;
+        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "tag" | "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "zIndex" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY" | "scaleRatio" | "disabledKeyEvent" | "border">;
         $attrs: {
             [x: string]: unknown;
         };
@@ -115,6 +133,10 @@ declare const _default: Plugin & {
         $emit: (event: "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", ...args: any[]) => void;
         $el: any;
         $options: import("vue").ComponentOptionsBase<Readonly<import("vue").ExtractPropTypes<{
+            tag: {
+                type: import("vue").PropType<string | import("vue").Component>;
+                default: string;
+            };
             resizable: {
                 type: BooleanConstructor;
                 default: boolean;
@@ -140,6 +162,10 @@ declare const _default: Plugin & {
                 default: number;
             };
             top: {
+                type: NumberConstructor;
+                default: number;
+            };
+            zIndex: {
                 type: NumberConstructor;
                 default: number;
             };
@@ -177,6 +203,13 @@ declare const _default: Plugin & {
                 default: number;
             };
             disabledKeyEvent: BooleanConstructor;
+            border: {
+                type: BooleanConstructor;
+                default: boolean;
+            };
+            resizeList: {
+                type: import("vue").PropType<string[]>;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -189,6 +222,7 @@ declare const _default: Plugin & {
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
         }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], string, {
+            tag: string | import("vue").Component;
             resizable: boolean;
             rotatable: boolean;
             boundary: boolean;
@@ -197,6 +231,7 @@ declare const _default: Plugin & {
             height: number;
             left: number;
             top: number;
+            zIndex: number;
             angle: number;
             color: string;
             minWidth: number;
@@ -207,6 +242,7 @@ declare const _default: Plugin & {
             gridY: number;
             scaleRatio: number;
             disabledKeyEvent: boolean;
+            border: boolean;
         }, {}, string> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -228,6 +264,10 @@ declare const _default: Plugin & {
         $nextTick: typeof import("vue").nextTick;
         $watch<T extends string | ((...args: any) => any)>(source: T, cb: T extends (...args: any) => infer R ? (args_0: R, args_1: R) => any : (...args: any) => any, options?: import("vue").WatchOptions<boolean> | undefined): import("vue").WatchStopHandle;
     } & Readonly<import("vue").ExtractPropTypes<{
+        tag: {
+            type: import("vue").PropType<string | import("vue").Component>;
+            default: string;
+        };
         resizable: {
             type: BooleanConstructor;
             default: boolean;
@@ -253,6 +293,10 @@ declare const _default: Plugin & {
             default: number;
         };
         top: {
+            type: NumberConstructor;
+            default: number;
+        };
+        zIndex: {
             type: NumberConstructor;
             default: number;
         };
@@ -290,6 +334,13 @@ declare const _default: Plugin & {
             default: number;
         };
         disabledKeyEvent: BooleanConstructor;
+        border: {
+            type: BooleanConstructor;
+            default: boolean;
+        };
+        resizeList: {
+            type: import("vue").PropType<string[]>;
+        };
     }>> & {
         onChange?: ((...args: any[]) => any) | undefined;
         onDrag?: ((...args: any[]) => any) | undefined;
@@ -306,6 +357,10 @@ declare const _default: Plugin & {
     __isTeleport?: undefined;
     __isSuspense?: undefined;
 } & import("vue").ComponentOptionsBase<Readonly<import("vue").ExtractPropTypes<{
+    tag: {
+        type: import("vue").PropType<string | import("vue").Component>;
+        default: string;
+    };
     resizable: {
         type: BooleanConstructor;
         default: boolean;
@@ -331,6 +386,10 @@ declare const _default: Plugin & {
         default: number;
     };
     top: {
+        type: NumberConstructor;
+        default: number;
+    };
+    zIndex: {
         type: NumberConstructor;
         default: number;
     };
@@ -368,6 +427,13 @@ declare const _default: Plugin & {
         default: number;
     };
     disabledKeyEvent: BooleanConstructor;
+    border: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    resizeList: {
+        type: import("vue").PropType<string[]>;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -380,6 +446,7 @@ declare const _default: Plugin & {
     "onRotate-start"?: ((...args: any[]) => any) | undefined;
     "onRotate-end"?: ((...args: any[]) => any) | undefined;
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", {
+    tag: string | import("vue").Component;
     resizable: boolean;
     rotatable: boolean;
     boundary: boolean;
@@ -388,6 +455,7 @@ declare const _default: Plugin & {
     height: number;
     left: number;
     top: number;
+    zIndex: number;
     angle: number;
     color: string;
     minWidth: number;
@@ -398,5 +466,6 @@ declare const _default: Plugin & {
     gridY: number;
     scaleRatio: number;
     disabledKeyEvent: boolean;
+    border: boolean;
 }, {}, string> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;

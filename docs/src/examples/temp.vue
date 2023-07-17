@@ -24,7 +24,7 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import Drager from '../../../src/drager'
+import Drager from 'es-drager'
 import Demo from '@/components/Demo.vue'
 const selected = ref(false)
 </script>

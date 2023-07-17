@@ -22,6 +22,8 @@
     :style="gridStyle"
   >
     <Drager
+      :width="100"
+      :height="100"
       :top="100"
       :left="100"
       :gridX="gridX"

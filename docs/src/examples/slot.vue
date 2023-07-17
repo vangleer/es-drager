@@ -10,6 +10,8 @@
   </Drager>
 
   <Drager
+    :width="100"
+    :height="100"
     :left="100"
     :top="300"
     rotatable
@@ -21,6 +23,8 @@
   </Drager>
 
   <Drager
+    :width="100"
+    :height="100"
     :left="100"
     :top="450"
     rotatable

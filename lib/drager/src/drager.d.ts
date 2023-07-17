@@ -1,3 +1,4 @@
+import { Component, PropType } from "vue";
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 export type EventType = 'change' | 'drag' | 'drag-start' | 'drag-end' | 'resize' | 'resize-start' | 'resize-end' | 'rotate' | 'rotate-start' | 'rotate-end';
 export type IDot = {
@@ -5,6 +6,10 @@ export type IDot = {
     cursor?: string;
 };
 export declare const DragerProps: {
+    tag: {
+        type: PropType<string | Component>;
+        default: string;
+    };
     resizable: {
         type: BooleanConstructor;
         default: boolean;
@@ -30,6 +35,10 @@ export declare const DragerProps: {
         default: number;
     };
     top: {
+        type: NumberConstructor;
+        default: number;
+    };
+    zIndex: {
         type: NumberConstructor;
         default: number;
     };
@@ -67,6 +76,13 @@ export declare const DragerProps: {
         default: number;
     };
     disabledKeyEvent: BooleanConstructor;
+    border: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    resizeList: {
+        type: PropType<string[]>;
+    };
 };
 export interface DragData {
     width: number;
@@ -75,41 +91,3 @@ export interface DragData {
     top: number;
     angle: number;
 }
-export declare const withUnit: (val?: number | string) => string;
-export declare const resizableMap: {
-    n: string;
-    s: string;
-    e: string;
-    w: string;
-    ne: string;
-    nw: string;
-    se: string;
-    sw: string;
-};
-export declare const cursorDirectionArray: string[];
-export declare const getCursor: (rotateAngle: number, d: string) => string;
-export declare const getDotList: (angle?: number) => any[];
-export declare const degToRadian: (deg: number) => number;
-export declare const getLength: (x: number, y: number) => number;
-export declare const getNewStyle: (type: string, rect: any, deltaW: number, deltaH: number, ratio: number | undefined, minWidth: number, minHeight: number) => {
-    position: {
-        centerX: any;
-        centerY: any;
-    };
-    size: {
-        width: number;
-        height: number;
-    };
-};
-export declare const centerToTL: ({ centerX, centerY, width, height, angle }: any) => DragData;
-export declare const formatData: (data: DragData, centerX: number, centerY: number) => {
-    width: number;
-    height: number;
-    left: number;
-    top: number;
-};
-/**
- * @param diff 移动的距离
- * @param grid 网格大小
- */
-export declare function calcGrid(diff: number, grid: number): number;

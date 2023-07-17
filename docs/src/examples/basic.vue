@@ -2,6 +2,8 @@
   <Drager
     v-for="item, index in dragList"
     :key="index"
+    :width="100"
+    :height="100"
     :left="120"
     :top="index * 120 + 30"
     v-bind="item"
