@@ -35,10 +35,10 @@
     "url": "https://github.com/vangleer/es-drager.git"
   },
   "scripts": {
-    "dev": "pnpm --filter ./packages/docs dev",
-    "build": "pnpm --filter ./packages/drager build",
-    "build:docs": "pnpm --filter ./packages/docs build",
-    "release": "pnpm build && npm publish"
+    "dev": "npm run dev -w docs",
+    "build": "vite build",
+    "build:docs": "npm run build -w docs",
+    "release": "npm run build && npm publish"
   },
   "dependencies": {
     "vue": ">=3.2.0"

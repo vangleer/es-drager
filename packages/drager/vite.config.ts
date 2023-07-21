@@ -2,13 +2,12 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
-
 export default defineConfig({
-  plugins: [dts(), vue()],
+  plugins: [dts({ tsConfigFilePath: resolve(__dirname, '../../tsconfig.json') }), vue()],
   build: {
     outDir: 'lib',
     lib: {
-      entry: resolve(__dirname, './src/drager/index.ts'),
+      entry: resolve(__dirname, './index.ts'),
       name: 'ESDrager',
       fileName: format => `index.${format}.js`,
     },
