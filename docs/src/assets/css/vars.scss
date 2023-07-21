@@ -6,11 +6,11 @@ html {
 
 .light {
   --es-color-bg: var(--es-color-white);
-  --es-color: #213547;
+  --es-color: #34495e;
   --es-border: 1px solid rgba(60, 60, 60, .12);
 }
 .dark {
-  --es-color: rgba(255, 255, 255, .87);
+  --es-color: rgba(255, 255, 255, .75);
   --es-color-bg: var(--es-color-dark);
   --es-border: 1px solid #363637;
 }

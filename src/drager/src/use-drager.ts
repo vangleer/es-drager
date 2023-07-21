@@ -132,7 +132,7 @@ export function useDrager(
   onMounted(() => {
     if (!targetRef.value) return
     const { width, height } = targetRef.value.getBoundingClientRect()
-    console.log(width, height, 'width, height')
+    // 获取默认宽高
     dragData.value = { ...dragData.value, width: width || 100, height: height || 100 }
     targetRef.value.addEventListener('mousedown', onMousedown)
     targetRef.value.addEventListener('touchstart', onMousedown)

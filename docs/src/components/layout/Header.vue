@@ -1,6 +1,6 @@
 <template>
   <div class="es-header">
-    <h1>ES Drager Editor</h1>
+    <h1 @click="router.replace('/')">{{ title }}</h1>
     <div class="es-header-toolbar">
       <div v-for="item in tools" class="es-tool-btn" @click="item.handler">
         <el-button>{{ item.label }}</el-button>
@@ -24,14 +24,20 @@ import lightGithubIcon from '@/assets/images/light-github.svg'
 import darkGithubIcon from '@/assets/images/dark-github.svg'
 import lightThemeIcon from '@/assets/images/light-theme.svg'
 import darkThemeIcon from '@/assets/images/dark-theme.svg'
+import { useRouter } from 'vue-router'
 import { PropType, watch } from 'vue'
 import { ToolType } from '@/components/types'
 import { useAppStore } from '@/store/app'
 const store = useAppStore()
+const router = useRouter()
 defineProps({
   tools: {
     type: Array as PropType<ToolType[]>,
     default: () => []
+  },
+  title: {
+    type: String,
+    default: 'ES Drager'
   }
 })
 function handleThemeChange() {

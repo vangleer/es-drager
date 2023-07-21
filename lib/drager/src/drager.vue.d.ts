@@ -187,5 +187,5 @@ declare const _sfc_main: import("vue").DefineComponent<{
     scaleRatio: number;
     disabledKeyEvent: boolean;
     border: boolean;
-}>;
+}, {}>;
 export default _sfc_main;

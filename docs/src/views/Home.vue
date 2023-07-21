@@ -2,6 +2,7 @@
   <div class="es-app">
     <Header>
       <template #navbar-end>
+        <a class="es-header-cube" @click.prevent="router.push('/editor')">编辑器案例</a>
         <a class="es-header-cube" @click.prevent="showCode = !showCode">代码</a>
       </template>
     </Header>
@@ -23,7 +24,6 @@
       <el-drawer
         v-model="showCode"
         title="示例代码"
-        :modal="false"
       >
         <pre><code v-html="codeHtml"></code></pre>
       </el-drawer>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang='ts'>
-import { shallowRef, computed, ref } from 'vue'
+import { shallowRef, computed, ref, watch } from 'vue'
 import { useRouter, RouteRecordRaw, useRoute } from 'vue-router'
 import { menuRoutes } from '@/router'
 import 'highlight.js/styles/panda-syntax-light.css'
@@ -40,21 +40,25 @@ import hljs from 'highlight.js'
 
 import Header from '@/components/layout/Header.vue'
 import Aside from '@/components/layout/Aside.vue'
+const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' })
 
 const router = useRouter()
 const route = useRoute()
-const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' })
 
 const codeHtml = computed(() => {
   return hljs.highlight(examplesSource[`../examples/${current.value.path}.vue`], { language: 'html' }).value
 })
 
-const current = shallowRef(menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0])
+const current = shallowRef()
+
 const showCode = ref(false)
 function handleClick(item: RouteRecordRaw) {
-  current.value = item
   router.push(item.path)
 }
+
+watch(() => route.path, () => {
+  current.value = menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0]
+}, { immediate: true })
 
 </script>
 
@@ -82,15 +86,7 @@ function handleClick(item: RouteRecordRaw) {
   overflow: hidden;
   background-color: var(--es-color-bg);
   transition: border-color .2s, background-color .2s;
-  .es-code-box {
-    max-width: 500px;
-    height: 100%;
-    padding: 24px 14px;
-    overflow: hidden;
-    overflow-y: auto;
-    overflow-x: auto;
-    border-left: var(--es-border);
-  }
+
   .es-main {
     display: flex;
     position: relative;

@@ -7,107 +7,28 @@ declare const _default: Plugin & {
     new (...args: any[]): {
         $: import("vue").ComponentInternalInstance;
         $data: {};
-        $props: Partial<{
-            tag: string | import("vue").Component;
-            resizable: boolean;
-            rotatable: boolean;
-            boundary: boolean;
-            disabled: boolean;
-            width: number;
-            height: number;
-            left: number;
-            top: number;
-            zIndex: number;
-            angle: number;
-            color: string;
-            minWidth: number;
-            minHeight: number;
-            selected: boolean;
-            snapToGrid: boolean;
-            gridX: number;
-            gridY: number;
-            scaleRatio: number;
-            disabledKeyEvent: boolean;
-            border: boolean;
-        }> & Omit<Readonly<import("vue").ExtractPropTypes<{
-            tag: {
-                type: import("vue").PropType<string | import("vue").Component>;
-                default: string;
-            };
-            resizable: {
-                type: BooleanConstructor;
-                default: boolean;
-            };
-            rotatable: {
-                type: BooleanConstructor;
-                default: boolean;
-            };
-            boundary: {
-                type: BooleanConstructor;
-            };
-            disabled: BooleanConstructor;
-            width: {
-                type: NumberConstructor;
-                default: number;
-            };
-            height: {
-                type: NumberConstructor;
-                default: number;
-            };
-            left: {
-                type: NumberConstructor;
-                default: number;
-            };
-            top: {
-                type: NumberConstructor;
-                default: number;
-            };
-            zIndex: {
-                type: NumberConstructor;
-                default: number;
-            };
-            angle: {
-                type: NumberConstructor;
-                default: number;
-            };
-            color: {
-                type: StringConstructor;
-                default: string;
-            };
-            minWidth: {
-                type: NumberConstructor;
-                default: number;
-            };
-            minHeight: {
-                type: NumberConstructor;
-                default: number;
-            };
-            aspectRatio: {
-                type: NumberConstructor;
-            };
-            selected: BooleanConstructor;
-            snapToGrid: BooleanConstructor;
-            gridX: {
-                type: NumberConstructor;
-                default: number;
-            };
-            gridY: {
-                type: NumberConstructor;
-                default: number;
-            };
-            scaleRatio: {
-                type: NumberConstructor;
-                default: number;
-            };
-            disabledKeyEvent: BooleanConstructor;
-            border: {
-                type: BooleanConstructor;
-                default: boolean;
-            };
-            resizeList: {
-                type: import("vue").PropType<string[]>;
-            };
-        }>> & {
+        $props: {
+            tag?: string | import("vue").Component | undefined;
+            resizable?: boolean | undefined;
+            rotatable?: boolean | undefined;
+            boundary?: boolean | undefined;
+            disabled?: boolean | undefined;
+            width?: number | undefined;
+            height?: number | undefined;
+            left?: number | undefined;
+            top?: number | undefined;
+            zIndex?: number | undefined;
+            angle?: number | undefined;
+            color?: string | undefined;
+            minWidth?: number | undefined;
+            minHeight?: number | undefined;
+            selected?: boolean | undefined;
+            snapToGrid?: boolean | undefined;
+            gridX?: number | undefined;
+            gridY?: number | undefined;
+            scaleRatio?: number | undefined;
+            disabledKeyEvent?: boolean | undefined;
+            border?: boolean | undefined;
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
             "onDrag-start"?: ((...args: any[]) => any) | undefined;
@@ -118,7 +39,53 @@ declare const _default: Plugin & {
             onRotate?: ((...args: any[]) => any) | undefined;
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
-        } & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, "tag" | "resizable" | "rotatable" | "boundary" | "disabled" | "width" | "height" | "left" | "top" | "zIndex" | "angle" | "color" | "minWidth" | "minHeight" | "selected" | "snapToGrid" | "gridX" | "gridY" | "scaleRatio" | "disabledKeyEvent" | "border">;
+            readonly aspectRatio?: number | undefined;
+            readonly resizeList?: string[] | undefined;
+            key?: string | number | symbol | undefined;
+            ref?: import("vue").VNodeRef | undefined;
+            ref_for?: boolean | undefined;
+            ref_key?: string | undefined;
+            onVnodeBeforeMount?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            onVnodeMounted?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            onVnodeBeforeUpdate?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>, oldVNode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>, oldVNode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            onVnodeUpdated?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>, oldVNode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>, oldVNode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            onVnodeBeforeUnmount?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            onVnodeUnmounted?: ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void) | ((vnode: import("vue").VNode<import("vue").RendererNode, import("vue").RendererElement, {
+                [key: string]: any;
+            }>) => void)[] | undefined;
+            class?: unknown;
+            style?: unknown;
+        };
         $attrs: {
             [x: string]: unknown;
         };
@@ -126,10 +93,10 @@ declare const _default: Plugin & {
             [x: string]: unknown;
         };
         $slots: Readonly<{
-            [name: string]: import("vue").Slot | undefined;
+            [name: string]: import("vue").Slot<any> | undefined;
         }>;
-        $root: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null;
-        $parent: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null;
+        $root: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}>, {}, {}> | null;
+        $parent: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}>, {}, {}> | null;
         $emit: (event: "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", ...args: any[]) => void;
         $el: any;
         $options: import("vue").ComponentOptionsBase<Readonly<import("vue").ExtractPropTypes<{
@@ -243,7 +210,7 @@ declare const _default: Plugin & {
             scaleRatio: number;
             disabledKeyEvent: boolean;
             border: boolean;
-        }, {}, string> & {
+        }, {}, string, {}> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
             beforeMount?: ((() => void) | (() => void)[]) | undefined;
@@ -258,7 +225,7 @@ declare const _default: Plugin & {
             unmounted?: ((() => void) | (() => void)[]) | undefined;
             renderTracked?: (((e: import("vue").DebuggerEvent) => void) | ((e: import("vue").DebuggerEvent) => void)[]) | undefined;
             renderTriggered?: (((e: import("vue").DebuggerEvent) => void) | ((e: import("vue").DebuggerEvent) => void)[]) | undefined;
-            errorCaptured?: (((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string>, {}> | null, info: string) => boolean | void)[]) | undefined;
+            errorCaptured?: (((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}>, {}, {}> | null, info: string) => boolean | void) | ((err: unknown, instance: import("vue").ComponentPublicInstance<{}, {}, {}, {}, {}, {}, {}, {}, false, import("vue").ComponentOptionsBase<any, any, any, any, any, any, any, any, any, {}, {}, string, {}>, {}, {}> | null, info: string) => boolean | void)[]) | undefined;
         };
         $forceUpdate: () => void;
         $nextTick: typeof import("vue").nextTick;
@@ -467,5 +434,5 @@ declare const _default: Plugin & {
     scaleRatio: number;
     disabledKeyEvent: boolean;
     border: boolean;
-}, {}, string> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
+}, {}, string, {}> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;

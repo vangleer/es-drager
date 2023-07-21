@@ -214,7 +214,7 @@ function documentClick() {
 
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .es-editor {
   position: relative;
   width: 100%;

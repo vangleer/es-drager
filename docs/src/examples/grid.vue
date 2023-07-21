@@ -47,8 +47,8 @@ function handleScaleChange(e: Event) {
 <style lang='scss' scoped>
 .es-grid-box {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 40px);
+  height: calc(100% - 148px);
   margin: 20px;
 }
 .es-grid-info {

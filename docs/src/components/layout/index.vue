@@ -1,6 +1,6 @@
 <template>
   <div class="es-layout">
-    <Header :tools="tools" />
+    <Header :title="title" :tools="tools" />
     <div class="es-layout-container">
       <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
       <div ref="mainRef" class="es-layout-main">
@@ -27,7 +27,7 @@ import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
 import { $dialog } from '../dialog'
 import { EditorType, ToolType } from '../types'
-
+const title = 'ES Drager Editor 开发中...'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,
