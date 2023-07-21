@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "echarts": "^5.4.2",
+    "element-plus": "^2.3.8",
     "es-drager": "^1.0.0",
     "highlight.js": "^11.8.0",
+    "mitt": "^3.0.1",
+    "pinia": "^2.1.4",
     "vue": "^3.2.47",
     "vue-router": "^4.2.2"
   },

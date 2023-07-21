@@ -66,7 +66,11 @@ const routes: RouteRecordRaw[] = [
     component: Home,
     redirect: '/basic',
     children: menuRoutes
-	}
+	},
+  {
+		path: '/editor',
+    component: () => import('@/views/editor/index.vue')
+	},
 ]
 
 const router = createRouter({

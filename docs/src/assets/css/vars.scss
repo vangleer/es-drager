@@ -1,0 +1,15 @@
+html {
+  --v-color-white: #ffffff;
+  --v-color-dark: #1a1a1a;
+}
+
+.light {
+  --v-color-bg: var(--v-color-white);
+  --v-color: #213547;
+  --v-border: 1px solid rgba(60, 60, 60, .12);
+}
+.dark {
+  --v-color: rgba(255, 255, 255, .87);
+  --v-color-bg: var(--v-color-dark);
+  --v-border: 1px solid #363637;
+}
