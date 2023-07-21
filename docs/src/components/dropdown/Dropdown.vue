@@ -6,8 +6,8 @@
     :style="style"
     @click.stop
   >
-    <ul v-if="option.items">
-      <li v-for="item in option.items" @click="handleItemClick(item)">{{ item.label }}</li>
+    <ul v-if="state.option.items">
+      <li v-for="item in state.option.items" @click="handleItemClick(item)">{{ item.label }}</li>
     </ul>
   </div>
 </template>
@@ -46,11 +46,11 @@ const close = () => {
 
 const handleItemClick = (item: DropdownItem) => {
   props.option.onClick && props.option.onClick(item)
+  close()
 }
 
 function onMouseDown(e: Event) {
   if (!menuRef.value.contains(e.target)) {
-    console.log('asdasd')
     close()
   }
 }

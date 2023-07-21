@@ -6,8 +6,10 @@ export type ComponentType = {
   height?: number
   top?: number
   left?: number
+  angle?: number
   selected?: boolean
-  props?: any,
+  group?: boolean
+  props?: any
   style?: CSSProperties
 }
 export type EditorType = {

@@ -40,7 +40,7 @@
 import { computed, reactive, ref, PropType } from 'vue'
 import ESDrager, { DragData } from 'es-drager'
 import 'es-drager/lib/style.css'
-import { calcLines, events } from '@/utils'
+import { calcLines, deepCopy, events } from '@/utils'
 import { CommandStateType } from '@/hooks/useCommand'
 import { $dropdown } from '@/components/dropdown'
 import { ComponentType } from '@/components/types'
@@ -158,7 +158,8 @@ function onChange(dragData: DragData, item: ComponentType) {
 }
 
 function onContextmenu(e: Event, item: ComponentType) {
-  console.log(item)
+  let current = deepCopy(item)
+  console.log(current)
   e.preventDefault()
 
   $dropdown({
@@ -166,13 +167,15 @@ function onContextmenu(e: Event, item: ComponentType) {
     items: [
       { label: '置顶' },
       { label: '置底' },
-      { label: '组合' }
+      { label: item.group ? '取消组合' : '组合' }
     ],
-    onClick(item) {
-      console.log(item)
-      if (item.label === '组合') {
+    onClick: (opt) => {
+      if (opt.label === '组合') {
         // 组合操作
         groupElements()
+      } else if (opt.label === '取消组合') {
+        console.log('取消组合', current)
+        data.value.elements = cancelGroup(data.value.elements)
       }
     }
   })
@@ -226,37 +229,44 @@ function documentClick() {
   areaSelected.value = false
 }
 
+// 组合元素
 function groupElements() {
   const selectedItems = data.value.elements.filter(item => item.selected)
 
   if (!selectedItems.length) return
   // 设第一个元素的位置为最大和最小
-  let { left: minLeft, top: minTop, width: maxWidth, height: maxHeight } = selectedItems[0] as Required<ComponentType>
+  let { left: minLeft, top: minTop } = selectedItems[0] as Required<ComponentType>
+  let maxLeft = minLeft, maxTop = minTop
 
   Math.max(...selectedItems.map(item => item.left!))
   selectedItems.slice(1).forEach(item => {
     const { left, top, width, height } = item as Required<ComponentType>
     // 最小left
     minLeft = Math.min(minLeft, left)
-    // 最大宽度
-    maxWidth = Math.max(maxWidth, left + width - minLeft)
+    // 最大top
+    maxLeft = Math.max(maxLeft, left + width)
    
     // 最小top
     minTop = Math.min(minTop, top)
-    minTop
-    // 最大高度
-    maxHeight = Math.max(maxHeight, top + height - minTop)
+    // 最大top
+    maxTop = Math.max(maxTop, top + height)
   })
 
+  selectedItems.forEach(item => {
+    item.left = item.left! - minLeft
+    item.top = item.top! - minTop
+  })
+  
   const dragData = {
     left: minLeft,
     top: minTop,
-    width: maxWidth,
-    height: maxHeight,
+    width: maxLeft - minLeft, // 宽度 = 最大left - 最小left
+    height: maxTop - minTop, // 高度 = 最大top - 最小top
   }
   console.log(dragData, 'dragData')
   const grouItem: ComponentType = {
     component: 'es-group',
+    group: true,
     ...dragData,
     props: {
       elements: selectedItems,
@@ -268,10 +278,27 @@ function groupElements() {
   }
 
   const newElements = data.value.elements.filter(item => !item.selected)
-  console.log(minLeft, maxWidth)
-  console.log(minTop, maxHeight)
   
   data.value.elements = [...newElements, grouItem]
+}
+
+// 取消组合
+function cancelGroup(elements: ComponentType[]) {
+  const current = elements.find(item => item.component === 'es-group')!
+  const items = current.props.elements as ComponentType[]
+
+  const newElements = items.map(item => {
+    return {
+      ...item,
+      left: item.left! + current.left!,
+      top: item.top! + current.top!,
+      angle: item.angle! + current.angle!,
+    }
+  })
+
+  const list = elements.filter(item => item.component !== current.component)
+
+  return [...list, ...newElements]
 }
 
 </script>

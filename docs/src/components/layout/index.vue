@@ -22,7 +22,7 @@ import { ref } from 'vue'
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 import Editor from '@/components/editor/index.vue'
-import { ComponentType } from '@/utils/editor-config'
+import { ComponentType } from '@/components/types'
 import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
 import { $dialog } from '../dialog'
@@ -36,7 +36,30 @@ const data = ref<EditorType>({
       height: '500px',
     }
   },
-  elements: []
+  elements: [
+    {
+      component: 'div',
+      width: 100,
+      height: 100,
+      left: 100,
+      top: 100,
+      text: 'div1',
+      style: {
+        border: '1px solid red'
+      }
+    },
+    {
+      component: 'div',
+      width: 100,
+      height: 100,
+      left: 300,
+      top: 150,
+      text: 'div2',
+      style: {
+        border: '1px solid red'
+      }
+    }
+  ]
 })
 const { commands } = useCommand(data)
 

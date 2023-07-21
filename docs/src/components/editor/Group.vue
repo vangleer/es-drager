@@ -35,11 +35,7 @@ const props = defineProps({
 
 const list = computed(() => {
   return props.elements.map(item => {
-    const data = {
-      left: item.left! - props.data.left!,
-      top: item.top! - props.data.top!,
-    }
-    return { ...item, ...data }
+    return { ...item }
   })
 })
 
