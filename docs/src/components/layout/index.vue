@@ -1,9 +1,9 @@
 <template>
-  <div class="v-layout">
+  <div class="es-layout">
     <Header :tools="tools" />
-    <div class="v-layout-container">
+    <div class="es-layout-container">
       <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
-      <div ref="mainRef" class="v-layout-main">
+      <div ref="mainRef" class="es-layout-main">
         <Editor
           v-model="data"
           :commands="commands"
@@ -12,7 +12,7 @@
           @dragover.prevent
         />
       </div>
-      <div class="v-layout-info"></div>
+      <div class="es-layout-info"></div>
     </div>
   </div>
 </template>
@@ -85,27 +85,26 @@ function drop(e: DragEvent) {
 </script>
 
 <style lang='scss'>
-.v-layout {
-  --v-header-height: 60px;
+.es-layout {
   width: 100%;
   height: 100%;
-  color: var(--v-color);
-  background-color: var(--v-color-bg);
+  color: var(--es-color);
+  background-color: var(--es-color-bg);
   transition: background-color .2s;
   &-container {
     display: flex;
-    height: calc(100% - var(--v-header-height));
+    height: calc(100% - var(--es-header-height));
   }
-  .v-layout-main {
+  .es-layout-main {
     flex: 1;
     position: relative;
     padding: 20px;
   }
-  .v-layout-info {
+  .es-layout-info {
     flex-shrink: 0;
     width: 200px;
     height: 100%;
-    border-left: var(--v-border);
+    border-left: var(--es-border);
   }
 }
 </style>

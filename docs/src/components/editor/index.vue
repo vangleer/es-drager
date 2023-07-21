@@ -1,5 +1,5 @@
 <template>
-  <div class="v-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
+  <div class="es-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
     <ESDrager
       v-for="(item, index) in data.elements"
       v-bind="item"
@@ -66,7 +66,7 @@ const data = computed({
 const gridSize = computed(() => props.modelValue.container.gridSize || 10)
 const editorStyle = computed(() => {
   return {
-    '--v-editor-grid-size': gridSize.value + 'px',
+    '--es-editor-grid-size': gridSize.value + 'px',
     transformOrigin: 'left top'
   }
 })
@@ -215,7 +215,7 @@ function documentClick() {
 </script>
 
 <style lang='scss'>
-.v-editor {
+.es-editor {
   position: relative;
   width: 100%;
   height: 100%;

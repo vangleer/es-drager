@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="v-editor-area" :style="areaStyle"></div>
+  <div v-show="show" class="es-editor-area" :style="areaStyle"></div>
 </template>
 
 <script setup lang='ts'>
@@ -90,7 +90,7 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.v-editor-area {
+.es-editor-area {
   position: absolute;
   top: 0;
   left: 0;

@@ -1,15 +1,16 @@
 html {
-  --v-color-white: #ffffff;
-  --v-color-dark: #1a1a1a;
+  --es-color-white: #ffffff;
+  --es-color-dark: #1a1a1a;
+  --es-header-height: 60px;
 }
 
 .light {
-  --v-color-bg: var(--v-color-white);
-  --v-color: #213547;
-  --v-border: 1px solid rgba(60, 60, 60, .12);
+  --es-color-bg: var(--es-color-white);
+  --es-color: #213547;
+  --es-border: 1px solid rgba(60, 60, 60, .12);
 }
 .dark {
-  --v-color: rgba(255, 255, 255, .87);
-  --v-color-bg: var(--v-color-dark);
-  --v-border: 1px solid #363637;
+  --es-color: rgba(255, 255, 255, .87);
+  --es-color-bg: var(--es-color-dark);
+  --es-border: 1px solid #363637;
 }

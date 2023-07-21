@@ -1,26 +1,28 @@
 <template>
-  <div class="v-layout-aside">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item title="通用" name="1">
-        <div class="collapse-content">
-          <div
-            class="v-block"
-            v-for="item in config.componentList"
-            draggable="true"
-            @dragstart="dragstart($event, item)"
-            @dragend="dragend"
-          >
-            <component v-if="item.component" :is="item.component">{{ item.text }}</component>
-            <template v-else>{{ item.text }}</template>
+  <div class="es-layout-aside">
+    <slot>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="通用" name="1">
+          <div class="collapse-content">
+            <div
+              class="es-block"
+              v-for="item in config.componentList"
+              draggable="true"
+              @dragstart="dragstart($event, item)"
+              @dragend="dragend"
+            >
+              <component v-if="item.component" :is="item.component">{{ item.text }}</component>
+              <template v-else>{{ item.text }}</template>
+            </div>
           </div>
-        </div>
-      </el-collapse-item>
-      <el-collapse-item title="杂项" name="2">
-      </el-collapse-item>
-      <el-collapse-item title="图标" name="3">
+        </el-collapse-item>
+        <el-collapse-item title="杂项" name="2">
+        </el-collapse-item>
+        <el-collapse-item title="图标" name="3">
 
-      </el-collapse-item>
-    </el-collapse>
+        </el-collapse-item>
+      </el-collapse>
+    </slot>
   </div>
 </template>
 
@@ -46,11 +48,11 @@ function dragend() {
 </script>
 
 <style lang='scss'>
-.v-layout-aside {
+.es-layout-aside {
   flex-shrink: 0;
   width: 200px;
   height: 100%;
-  border-right: var(--v-border);
+  border-right: var(--es-border);
   .el-collapse-item__header {
     padding: 0 10px;
   }
@@ -59,13 +61,13 @@ function dragend() {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    .v-block {
+    .es-block {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 45%;
       height: 40px;
-      border: var(--v-border);
+      border: var(--es-border);
       margin-bottom: 10px;
       cursor: grab;
     }

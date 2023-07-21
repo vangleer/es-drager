@@ -1,18 +1,20 @@
 <template>
-  <div class="v-header">
-    <h1>Vue Visual Editor</h1>
-    <div class="v-header-toolbar">
-      <div v-for="item in tools" class="v-tool-btn" @click="item.handler">
+  <div class="es-header">
+    <h1>ES Drager Editor</h1>
+    <div class="es-header-toolbar">
+      <div v-for="item in tools" class="es-tool-btn" @click="item.handler">
         <el-button>{{ item.label }}</el-button>
       </div>
     </div>
-    <div class="v-navbar">
-      <a :class="['v-header-link', store.theme]" @click.prevent="handleThemeChange">
+    <div class="es-navbar">
+      <slot name="navbar-start" />
+      <a :class="['es-header-link', store.theme]" @click.prevent="handleThemeChange">
         <img :src="store.isLight ? lightThemeIcon : darkThemeIcon" />
       </a>
-      <a class="v-header-link" href="https://github.com/vangleer/vue-visual-editor" target="_blank">
+      <a class="es-header-link" href="https://github.com/vangleer/es-drager" target="_blank">
         <img :src="store.isLight ? lightGithubIcon : darkGithubIcon" />
       </a>
+      <slot name="navbar-end" />
     </div>
   </div>
 </template>
@@ -42,16 +44,16 @@ watch(() => store.theme, (val) => {
 </script>
 
 <style lang='scss' scoped>
-.v-header {
+.es-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: var(--v-header-height);
-  background-color:  var(--v-color-bg);
+  height: var(--es-header-height);
+  background-color:  var(--es-color-bg);
   z-index: 2;
   padding: 0 24px;
-  border-bottom: var(--v-border);
+  border-bottom: var(--es-border);
   transition: border-color .2s, background-color .2s;
   h1 {
     font-size: 20px;
@@ -62,16 +64,16 @@ watch(() => store.theme, (val) => {
       opacity: .8;
     }
   }
-  .v-header-toolbar {
+  .es-header-toolbar {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    .v-tool-btn + .v-tool-btn {
+    .es-tool-btn + .es-tool-btn {
       margin-left: 10px;
     }
   }
-  .v-navbar {
+  .es-navbar {
     display: flex;
     align-items: center;
     a {

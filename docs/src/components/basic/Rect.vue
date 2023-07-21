@@ -1,9 +1,9 @@
 <template>
-  <div class="v-basic-rect"></div>
+  <div class="es-basic-rect"></div>
 </template>
 
 <style>
-.v-basic-rect {
+.es-basic-rect {
   width: 50px;
   height: 30px;
   border: 1px solid red;

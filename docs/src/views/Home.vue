@@ -1,18 +1,12 @@
 <template>
   <div class="es-app">
-    <div class="es-header">
-      <h1>ES Drager</h1>
-      <div class="es-navbar">
-        <a class="es-header-link" href="https://github.com/vangleer/es-drager" target="_blank">
-          <img :src="githubIcon" />
-        </a>
-        <a class="es-header-cube" @click.prevent="showCode = !showCode">
-          代码
-        </a>
-      </div>
-    </div>
+    <Header>
+      <template #navbar-end>
+        <a class="es-header-cube" @click.prevent="showCode = !showCode">代码</a>
+      </template>
+    </Header>
     <div class="es-main">
-      <div class="es-sidebar">
+      <Aside class="es-sidebar">
         <div
           v-for="item in menuRoutes"
           :key="item.path"
@@ -21,15 +15,17 @@
         >
           {{ item.meta?.title }}
         </div>
-      </div>
+      </Aside>
       <div class="es-content">
         <RouterView />
       </div>
-      <Transition name="es-code">
-        <div v-show="showCode" class="es-code-box">
-          <pre><code v-html="codeHtml"></code></pre>
-        </div>
-      </Transition>
+
+      <el-drawer
+        v-model="showCode"
+        title="示例代码"
+      >
+        <pre><code v-html="codeHtml"></code></pre>
+      </el-drawer>
     </div>
   </div>
 </template>
@@ -38,9 +34,11 @@
 import { shallowRef, computed, ref } from 'vue'
 import { useRouter, RouteRecordRaw, useRoute } from 'vue-router'
 import { menuRoutes } from '@/router'
-import githubIcon from '@/assets/github.svg'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
+
+import Header from '@/components/layout/Header.vue'
+import Aside from '@/components/layout/Aside.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -51,7 +49,7 @@ const codeHtml = computed(() => {
 })
 
 const current = shallowRef(menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0])
-const showCode = ref(true)
+const showCode = ref(false)
 function handleClick(item: RouteRecordRaw) {
   current.value = item
   router.push(item.path)
@@ -60,96 +58,44 @@ function handleClick(item: RouteRecordRaw) {
 </script>
 
 <style lang='scss'>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html, body {
-  background-color: #eff2f5;
+.es-header-cube {
+  padding: 0 12px;
+  color: #001938;
+  background: #f7f8fa;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 16px;
+  &:hover {
+    color: var(--el-color-primary);
+  }
 }
 .es-app {
-  --es-doc-color-primary: #4fc08d;
-  --es-doc-border: 1px solid #ddd;
   width: 100vw;
   height: 100vh;
-  color: #455a64;
+  color: var(--es-color);
   font-size: 14px;
   overflow: hidden;
+  background-color: var(--es-color-bg);
+  transition: border-color .2s, background-color .2s;
   .es-code-box {
     max-width: 500px;
     height: 100%;
-    background-color: #fff;
     padding: 24px 14px;
     overflow: hidden;
     overflow-y: auto;
     overflow-x: auto;
-    border-left: var(--es-doc-border);
-  }
-  .es-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 60px;
-    box-shadow: 0 2px 4px #dad7d7;
-    background-color: #001938;
-    z-index: 2;
-    padding: 0 24px;
-    h1 {
-      font-size: 20px;
-      font-weight: 600;
-      color: #fff;
-      transition: opacity .25s;
-      cursor: pointer;
-      &:hover {
-        opacity: .8;
-      }
-    }
-    .es-navbar {
-      display: flex;
-      align-items: center;
-      a {
-        margin-left: 16px;
-      }
-      .es-header-cube {
-        padding: 0 12px;
-        color: #001938;
-        background: #f7f8fa;
-        font-size: 14px;
-        line-height: 30px;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,.7);
-        border-radius: 20px;
-        cursor: pointer;
-      }
-      img {
-        width: 30px;
-        height: 30px;
-        transition: .3s cubic-bezier(.175,.885,.32,1.275);
-        cursor: pointer;
-        &:hover {
-          transform: scale(1.2);
-        }
-      }
-    }
+    border-left: var(--es-border);
   }
   .es-main {
     display: flex;
     position: relative;
     height: calc(100%);
-    padding-top: 60px;
     min-width: 400px;
     .es-sidebar {
-      width: 200px;
-      height: 100%;
-      background-color: #fff;
-    }
-    .es-sidebar {
-      border-right: var(--es-doc-border);
       padding: 24px 6px;
       .es-sidebar-item {
         display: flex;
@@ -159,15 +105,14 @@ html, body {
         height: 36px;
         margin: 8px 0;
         cursor: pointer;
-        color: #455a64;
         transition: color .2s;
         font-size: 15px;
         &:hover {
-          color: var(--es-doc-color-primary);
+          color: var(--el-color-primary);
         }
         &.active {
-          background-color: #ebfff0;
-          color: var(--es-doc-color-primary);
+          background-color: rgba(var(--el-color-primary-rgb), .1);
+          color: var(--el-color-primary);
           border-radius: 36px;
         }
       }
@@ -175,18 +120,7 @@ html, body {
     .es-content {
       position: relative;
       flex: 1;
-      background-color: #f4f4f4;
     }
   }
 }
-.es-code-enter-active,
-.es-code-leave-active {
-  transition: transform .3s;
-}
-
-.es-code-enter-from,
-.es-code-leave-to {
-  transform: translateX(100%);
-}
-
 </style>

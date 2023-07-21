@@ -2,7 +2,7 @@
   <div
     ref="menuRef"
     v-show="state.visible"
-    class="v-contentmenu"
+    class="es-contentmenu"
     :style="style"
     @click.stop
   >
@@ -70,7 +70,7 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.v-contentmenu {
+.es-contentmenu {
   position: absolute;
   top: 0;
   left: 0;
