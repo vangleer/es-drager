@@ -1,4 +1,20 @@
-export type EditorType = { container: { gridSize: number; style: { width: string; height: string } }; elements: { component?: string | undefined; text?: string | undefined; width?: number | undefined; height?: number | undefined; top?: number | undefined; left?: number | undefined; props?: any; style?: any }[] }
+import { CSSProperties } from 'vue'
+export type ComponentType = {
+  component?: string
+  text?: string
+  width?: number
+  height?: number
+  top?: number
+  left?: number
+  selected?: boolean
+  props?: any,
+  style?: CSSProperties
+}
+export type EditorType = {
+  container: { gridSize: number; style: { width: string; height: string } }; 
+  elements: ComponentType[]
+}
+
 export type ToolType = {
   label: string
   handler: Function

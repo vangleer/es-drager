@@ -1,14 +1,4 @@
-export type ComponentType = {
-  component?: string
-  text?: string
-  width?: number
-  height?: number
-  top?: number
-  left?: number
-  selected?: boolean
-  props?: any,
-  style?: any
-}
+import { ComponentType } from '@/components/types'
 function createEditorConfig() {
   const componentList: ComponentType[] = []
   const componentMap = {}

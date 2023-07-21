@@ -9,6 +9,7 @@ import 'element-plus/dist/index.css'
 import './assets/css/index.scss'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import Rect from './components/basic/Rect.vue'
+import Group from './components/editor/Group.vue'
 
 const app = createApp(App)
 app
@@ -18,3 +19,4 @@ app
   .mount('#app')
 
 app.component('v-rect', Rect)
+app.component('es-group', Group)

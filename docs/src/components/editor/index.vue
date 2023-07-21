@@ -1,31 +1,33 @@
 <template>
   <div class="es-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
-    <ESDrager
-      v-for="(item, index) in data.elements"
-      v-bind="item"
-      :grid-x="gridSize"
-      :grid-y="gridSize"
-      boundary
-      @drag-start="onDragstart(index)"
-      @drag-end="onDragend"
-      @drag="onDrag($event)"
-      @change="onChange($event, item)"
-      @contextmenu="onContextmenu($event, item)"
-      @mousedown.stop
-      @click.stop
-    >
-      <component
-        :is="item.component"
-        v-bind="item.props"
-        :style="{
-          ...item.style,
-          width: '100%',
-          height: '100%'
-        }"
+    <template v-for="(item, index) in data.elements">
+      <ESDrager
+        v-bind="item"
+        :grid-x="gridSize"
+        :grid-y="gridSize"
+        boundary
+        @drag-start="onDragstart(index)"
+        @drag-end="onDragend"
+        @drag="onDrag($event)"
+        @change="onChange($event, item)"
+        @contextmenu="onContextmenu($event, item)"
+        @mousedown.stop
+        @click.stop
       >
-        {{ item.text }}
-      </component>
-    </ESDrager>
+        <component
+          :is="item.component!"
+          v-bind="item.props"
+          :style="{
+            ...item.style,
+            width: '100%',
+            height: '100%'
+          }"
+        >
+          {{ item.text }}
+        </component>
+      </ESDrager>
+
+    </template>
 
     <MarkLine v-bind="markLine" />
     <GridRect />
@@ -38,15 +40,18 @@
 import { computed, reactive, ref, PropType } from 'vue'
 import ESDrager, { DragData } from 'es-drager'
 import 'es-drager/lib/style.css'
-import { ComponentType, calcLines, events } from '@/utils'
+import { calcLines, events } from '@/utils'
 import { CommandStateType } from '@/hooks/useCommand'
 import { $dropdown } from '@/components/dropdown'
+import { ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
+import Group from './Group.vue'
+import { EditorType } from '../types'
 const props = defineProps({
   modelValue: {
-    type: Object,
+    type: Object as PropType<EditorType>,
     required: true,
     default: () => ({})
   },
@@ -71,6 +76,7 @@ const editorStyle = computed(() => {
   }
 })
 // 每次拖拽移动的距离
+const areaSelected = ref(false)
 const extraDragData = ref({
   startX: 0,
   startY: 0,
@@ -85,11 +91,11 @@ const markLine = reactive({
 const lines = ref({ x: [], y: [] })
 
 function onDragstart(index: number) {
-
-  if (data.value.elements[currentIndex.value!]) {
+  if (!areaSelected.value) {
     // 将上一次移动元素变为非选
-    data.value.elements[currentIndex.value!].selected = false
+    data.value.elements.forEach((item: ComponentType) => item.selected = false)
   }
+ 
   const current = data.value.elements[index]
   // 选中当前元素
   current.selected = true
@@ -160,9 +166,14 @@ function onContextmenu(e: Event, item: ComponentType) {
     items: [
       { label: '置顶' },
       { label: '置底' },
+      { label: '组合' }
     ],
     onClick(item) {
       console.log(item)
+      if (item.label === '组合') {
+        // 组合操作
+        groupElements()
+      }
     }
   })
 }
@@ -186,7 +197,7 @@ function onEditorMouseDown(e: MouseEvent) {
 
 function onAreaMove(areaData: DragData) {
   for (let i = 0; i < data.value.elements.length; i++) {
-    const item = data.value.elements[i]
+    const item = data.value.elements[i] as Required<ComponentType>
     // 包含left
     const containLeft = areaData.left < item.left && areaData.left + areaData.width > item.left + item.width
     // 包含top
@@ -201,15 +212,66 @@ function onAreaMove(areaData: DragData) {
 
 // 松开区域选择
 function onAreaUp() {
-  document.removeEventListener('click', documentClick)
-  const flag = data.value.elements.some((item: ComponentType) => item.selected)
-  if (flag) {
-    document.addEventListener('click', documentClick, { once: true })
+  areaSelected.value = data.value.elements.some((item: ComponentType) => item.selected)
+
+  // 如果区域有选中元素
+  if (areaSelected.value) {
+    setTimeout(() => {
+      document.addEventListener('click', documentClick, { once: true })
+    })
   }
 }
 
 function documentClick() {
-  console.log(123465)
+  areaSelected.value = false
+}
+
+function groupElements() {
+  const selectedItems = data.value.elements.filter(item => item.selected)
+
+  if (!selectedItems.length) return
+  // 设第一个元素的位置为最大和最小
+  let { left: minLeft, top: minTop, width: maxWidth, height: maxHeight } = selectedItems[0] as Required<ComponentType>
+
+  Math.max(...selectedItems.map(item => item.left!))
+  selectedItems.slice(1).forEach(item => {
+    const { left, top, width, height } = item as Required<ComponentType>
+    // 最小left
+    minLeft = Math.min(minLeft, left)
+    // 最大宽度
+    maxWidth = Math.max(maxWidth, left + width - minLeft)
+   
+    // 最小top
+    minTop = Math.min(minTop, top)
+    minTop
+    // 最大高度
+    maxHeight = Math.max(maxHeight, top + height - minTop)
+  })
+
+  const dragData = {
+    left: minLeft,
+    top: minTop,
+    width: maxWidth,
+    height: maxHeight,
+  }
+  console.log(dragData, 'dragData')
+  const grouItem: ComponentType = {
+    component: 'es-group',
+    ...dragData,
+    props: {
+      elements: selectedItems,
+      data: dragData
+    },
+    style: {
+      background: 'rgba(0, 0, 0, 0.6)'
+    }
+  }
+
+  const newElements = data.value.elements.filter(item => !item.selected)
+  console.log(minLeft, maxWidth)
+  console.log(minTop, maxHeight)
+  
+  data.value.elements = [...newElements, grouItem]
 }
 
 </script>
