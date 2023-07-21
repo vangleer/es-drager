@@ -6,7 +6,6 @@ export function useDrager(
   props: ExtractPropTypes<typeof DragerProps>,
   emit: Function
 ) {
-  
   const isMousedown = ref(false)
   const selected = ref(false)
   const dragData = ref<DragData>({
@@ -21,13 +20,14 @@ export function useDrager(
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
-    
+
     const { left, top } = dragData.value
-    let maxX = 0, maxY = 0
+    let maxX = 0,
+      maxY = 0
     if (props.boundary) {
-      [maxX, maxY] = getBoundary()
+      ;[maxX, maxY] = getBoundary()
     }
-    
+
     emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseTouchEvent) => {
       const { clientX, clientY } = getXY(e)
@@ -46,14 +46,14 @@ export function useDrager(
         moveX = curX + calcGrid(diffX, props.gridX)
         moveY = curY + calcGrid(diffY, props.gridY)
       }
-      
+
       if (props.boundary) {
-        [moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
+        ;[moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
       }
 
       dragData.value.left = moveX
       dragData.value.top = moveY
-      
+
       emit && emit('drag', dragData.value)
     }
 
@@ -106,7 +106,6 @@ export function useDrager(
         diff = isRight ? props.gridX : -props.gridX
       }
       moveX = moveX + diff
-      
     } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
       // 左右键修改top
       const isDown = e.key === 'ArrowDown'
@@ -143,7 +142,8 @@ export function useDrager(
     // 每次选中注册键盘事件
     if (val) {
       document.addEventListener('keydown', onKeydown)
-    } else { // 不是选中移除
+    } else {
+      // 不是选中移除
       document.removeEventListener('keydown', onKeydown)
     }
   })

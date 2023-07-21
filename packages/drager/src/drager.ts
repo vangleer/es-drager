@@ -1,9 +1,27 @@
-import { Component, PropType } from "vue"
+import { Component, PropType } from 'vue'
 
-export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-export type EventType = 'change' | 'drag' | 'drag-start' | 'drag-end' | 'resize' | 'resize-start' | 'resize-end' | 'rotate' | 'rotate-start' | 'rotate-end'
+export type IDotSide =
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
+export type EventType =
+  | 'change'
+  | 'drag'
+  | 'drag-start'
+  | 'drag-end'
+  | 'resize'
+  | 'resize-start'
+  | 'resize-end'
+  | 'rotate'
+  | 'rotate-start'
+  | 'rotate-end'
 export type IDot = {
-  side: IDotSide,
+  side: IDotSide
   cursor?: string
 }
 
@@ -20,7 +38,8 @@ export const DragerProps = {
     type: Boolean,
     default: false
   },
-  boundary: { // 边界
+  boundary: {
+    // 边界
     type: Boolean
   },
   disabled: Boolean,
@@ -60,7 +79,8 @@ export const DragerProps = {
     type: Number,
     default: -Infinity
   },
-  aspectRatio: { // 缩放比例
+  aspectRatio: {
+    // 缩放比例
     type: Number
   },
   selected: Boolean,

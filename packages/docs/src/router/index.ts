@@ -50,7 +50,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: '辅助线'
     }
-  },
+  }
   // {
   //   path: 'temp',
   //   component: () => import('@/examples/temp.vue'),
@@ -61,17 +61,17 @@ export const menuRoutes: RouteRecordRaw[] = [
 ]
 
 const routes: RouteRecordRaw[] = [
-	{
-		path: '/',
+  {
+    path: '/',
     component: Home,
     redirect: '/basic',
     children: menuRoutes
-	}
+  }
 ]
 
 const router = createRouter({
-	history: createWebHashHistory(),
-	routes
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router

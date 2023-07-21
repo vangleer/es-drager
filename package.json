@@ -40,8 +40,8 @@
     "build:docs": "pnpm --filter ./packages/docs build",
     "release": "pnpm build && npm publish",
     "prettier": "prettier --write .",
-    "lint": "eslint packages/**/*{.ts,.tsx,.vue}",
-    "lint:fix": "eslint packages/**/*{.ts,.tsx,.vue} --fix"
+    "lint": "eslint packages/**/*.ts",
+    "lint:fix": "eslint packages/**/*.ts --fix"
   },
   "dependencies": {
     "vue": ">=3.2.0"

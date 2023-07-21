@@ -5,7 +5,10 @@ export type MouseTouchEvent = MouseEvent | TouchEvent
  * 统一处理拖拽事件
  * @param onMousemove 鼠标移动处理函数
  */
-export function setupMove(onMousemove: (e: MouseTouchEvent) => void, onMouseupCb?: (e: MouseTouchEvent) => void) {
+export function setupMove(
+  onMousemove: (e: MouseTouchEvent) => void,
+  onMouseupCb?: (e: MouseTouchEvent) => void
+) {
   const onMouseup = (_e: MouseTouchEvent) => {
     onMouseupCb && onMouseupCb(_e)
     document.removeEventListener('mousemove', onMousemove)
@@ -26,7 +29,8 @@ export function setupMove(onMousemove: (e: MouseTouchEvent) => void, onMouseupCb
 }
 
 export function getXY(e: MouseTouchEvent) {
-  let clientX = 0, clientY = 0
+  let clientX = 0,
+    clientY = 0
   if (isTouchEvent(e)) {
     const touch = e.targetTouches[0]
     clientX = touch.pageX
@@ -49,63 +53,74 @@ export const withUnit = (val: number | string = 0) => {
 }
 
 export const resizableMap = {
-  'n': 'top',
-  's': 'bottom',
-  'e': 'right',
-  'w': 'left',
-  'ne': 'top-right',
-  'nw': 'top-left',
-  'se': 'bottom-right',
-  'sw': 'bottom-left'
+  n: 'top',
+  s: 'bottom',
+  e: 'right',
+  w: 'left',
+  ne: 'top-right',
+  nw: 'top-left',
+  se: 'bottom-right',
+  sw: 'bottom-left'
 }
 
-export const cursorDirectionArray = [ 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw' ]
+export const cursorDirectionArray = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
 const cursorStartMap = { n: 0, ne: 1, e: 2, se: 3, s: 4, sw: 5, w: 6, nw: 7 }
 const cursorMap = { 0: 0, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 8 }
 export const getCursor = (rotateAngle: number, d: string) => {
-  const increment = (cursorMap as any)[ Math.floor(rotateAngle / 30) ]
-  const index = (cursorStartMap as any)[ d ]
+  const increment = (cursorMap as any)[Math.floor(rotateAngle / 30)]
+  const index = (cursorStartMap as any)[d]
   const newIndex = (index + increment) % 8
-  return cursorDirectionArray[ newIndex ]
+  return cursorDirectionArray[newIndex]
 }
 
 export const getDotList = (angle: number = 0, resizeList?: string[]) => {
   let dots = []
   for (let index = 0; index < cursorDirectionArray.length; index++) {
     const key = cursorDirectionArray[index]
-    
+
     const [side, position] = (resizableMap as any)[key].split('-')
 
     const cursor = getCursor(angle, key)
-    
-    const style: any = { [side]: '0%', cursor: cursor + '-resize', side: (resizableMap as any)[key] }
+
+    const style: any = {
+      [side]: '0%',
+      cursor: cursor + '-resize',
+      side: (resizableMap as any)[key]
+    }
     if (!position) {
       const side2 = ['top', 'bottom'].includes(side) ? 'left' : 'top'
       style[side2] = '50%'
     } else {
       style[position] = '0%'
     }
-   
+
     if (!resizeList) {
-       // 没有传入缩放默认都显示
+      // 没有传入缩放默认都显示
       dots.push(style)
     } else {
       if (resizeList.includes((resizableMap as any)[key])) {
         dots.push(style)
       }
     }
-
   }
 
   return dots
 }
 
-export const degToRadian = (deg: number) => deg * Math.PI / 180
+export const degToRadian = (deg: number) => (deg * Math.PI) / 180
 
 export const getLength = (x: number, y: number) => Math.sqrt(x * x + y * y)
 const cos = (deg: number) => Math.cos(degToRadian(deg))
 const sin = (deg: number) => Math.sin(degToRadian(deg))
-export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: number, ratio: number | undefined, minWidth: number, minHeight: number) => {
+export const getNewStyle = (
+  type: string,
+  rect: any,
+  deltaW: number,
+  deltaH: number,
+  ratio: number | undefined,
+  minWidth: number,
+  minHeight: number
+) => {
   let { width, height, centerX, centerY, rotateAngle } = rect
   const widthFlag = width < 0 ? -1 : 1
   const heightFlag = height < 0 ? -1 : 1
@@ -120,12 +135,12 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         deltaH = deltaW / ratio
         height = width / ratio
         // 左上角固定
-        centerX += deltaW / 2 * cos(rotateAngle) - deltaH / 2 * sin(rotateAngle)
-        centerY += deltaW / 2 * sin(rotateAngle) + deltaH / 2 * cos(rotateAngle)
+        centerX += (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
+        centerY += (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
       } else {
         // 左边固定
-        centerX += deltaW / 2 * cos(rotateAngle)
-        centerY += deltaW / 2 * sin(rotateAngle)
+        centerX += (deltaW / 2) * cos(rotateAngle)
+        centerY += (deltaW / 2) * sin(rotateAngle)
       }
       break
     }
@@ -141,8 +156,8 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         deltaW = deltaH * ratio
         width = height * ratio
       }
-      centerX += deltaW / 2 * cos(rotateAngle) + deltaH / 2 * sin(rotateAngle)
-      centerY += deltaW / 2 * sin(rotateAngle) - deltaH / 2 * cos(rotateAngle)
+      centerX += (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
+      centerY += (deltaW / 2) * sin(rotateAngle) - (deltaH / 2) * cos(rotateAngle)
       break
     }
     case 'bottom-right': {
@@ -156,8 +171,8 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         deltaW = deltaH * ratio
         width = height * ratio
       }
-      centerX += deltaW / 2 * cos(rotateAngle) - deltaH / 2 * sin(rotateAngle)
-      centerY += deltaW / 2 * sin(rotateAngle) + deltaH / 2 * cos(rotateAngle)
+      centerX += (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
+      centerY += (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
       break
     }
     case 'bottom': {
@@ -168,12 +183,12 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         deltaW = deltaH * ratio
         width = height * ratio
         // 左上角固定
-        centerX += deltaW / 2 * cos(rotateAngle) - deltaH / 2 * sin(rotateAngle)
-        centerY += deltaW / 2 * sin(rotateAngle) + deltaH / 2 * cos(rotateAngle)
+        centerX += (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
+        centerY += (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
       } else {
         // 上边固定
-        centerX -= deltaH / 2 * sin(rotateAngle)
-        centerY += deltaH / 2 * cos(rotateAngle)
+        centerX -= (deltaH / 2) * sin(rotateAngle)
+        centerY += (deltaH / 2) * cos(rotateAngle)
       }
       break
     }
@@ -189,8 +204,8 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         height = width / ratio
         deltaH = deltaW / ratio
       }
-      centerX -= deltaW / 2 * cos(rotateAngle) + deltaH / 2 * sin(rotateAngle)
-      centerY -= deltaW / 2 * sin(rotateAngle) - deltaH / 2 * cos(rotateAngle)
+      centerX -= (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
+      centerY -= (deltaW / 2) * sin(rotateAngle) - (deltaH / 2) * cos(rotateAngle)
       break
     }
     case 'left': {
@@ -202,12 +217,12 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         height = width / ratio
         deltaH = deltaW / ratio
         // 右上角固定
-        centerX -= deltaW / 2 * cos(rotateAngle) + deltaH / 2 * sin(rotateAngle)
-        centerY -= deltaW / 2 * sin(rotateAngle) - deltaH / 2 * cos(rotateAngle)
+        centerX -= (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
+        centerY -= (deltaW / 2) * sin(rotateAngle) - (deltaH / 2) * cos(rotateAngle)
       } else {
         // 右边固定
-        centerX -= deltaW / 2 * cos(rotateAngle)
-        centerY -= deltaW / 2 * sin(rotateAngle)
+        centerX -= (deltaW / 2) * cos(rotateAngle)
+        centerY -= (deltaW / 2) * sin(rotateAngle)
       }
       break
     }
@@ -224,8 +239,8 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         width = height * ratio
         deltaW = deltaH * ratio
       }
-      centerX -= deltaW / 2 * cos(rotateAngle) - deltaH / 2 * sin(rotateAngle)
-      centerY -= deltaW / 2 * sin(rotateAngle) + deltaH / 2 * cos(rotateAngle)
+      centerX -= (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
+      centerY -= (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
       break
     }
     case 'top': {
@@ -237,11 +252,11 @@ export const getNewStyle = (type: string, rect: any, deltaW: number, deltaH: num
         width = height * ratio
         deltaW = deltaH * ratio
         // 左下角固定
-        centerX += deltaW / 2 * cos(rotateAngle) + deltaH / 2 * sin(rotateAngle)
-        centerY += deltaW / 2 * sin(rotateAngle) - deltaH / 2 * cos(rotateAngle)
+        centerX += (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
+        centerY += (deltaW / 2) * sin(rotateAngle) - (deltaH / 2) * cos(rotateAngle)
       } else {
-        centerX += deltaH / 2 * sin(rotateAngle)
-        centerY -= deltaH / 2 * cos(rotateAngle)
+        centerX += (deltaH / 2) * sin(rotateAngle)
+        centerY -= (deltaH / 2) * cos(rotateAngle)
       }
       break
     }
