@@ -1,4 +1,4 @@
-import { ref as Y, onMounted as be, watch as K, onBeforeUnmount as Me, defineComponent as ae, computed as ce, openBlock as z, createElementBlock as F, renderSlot as C, createElementVNode as R, createBlock as ee, resolveDynamicComponent as De, normalizeClass as Ee, unref as b, normalizeStyle as te, withModifiers as ne, withCtx as oe, Fragment as Ae, renderList as ke, normalizeProps as Le, guardReactiveProps as Xe, createCommentVNode as se } from "vue";
+import { ref as Y, onMounted as be, watch as K, onBeforeUnmount as Me, defineComponent as ae, computed as ce, openBlock as z, createElementBlock as F, renderSlot as S, createElementVNode as C, createBlock as ee, resolveDynamicComponent as De, normalizeClass as Ee, unref as b, normalizeStyle as te, withModifiers as ne, withCtx as oe, Fragment as Ae, renderList as ke, normalizeProps as Le, guardReactiveProps as Xe, createCommentVNode as se } from "vue";
 const Ye = {
   tag: {
     type: [String, Object],
@@ -88,7 +88,7 @@ function U(r, n) {
   };
   document.addEventListener("mousemove", r), document.addEventListener("mouseup", e), document.addEventListener("mouseleave", e), document.addEventListener("touchmove", r), document.addEventListener("touchend", e);
 }
-function _(r) {
+function R(r) {
   let n = 0, e = 0;
   if (ze(r)) {
     const t = r.targetTouches[0];
@@ -101,7 +101,7 @@ function ze(r) {
   const n = Object.prototype.toString.call(r);
   return n.substring(8, n.length - 1) === "TouchEvent";
 }
-const S = (r = 0) => parseInt(r + "") + "px", P = {
+const x = (r = 0) => parseInt(r + "") + "px", P = {
   n: "top",
   s: "bottom",
   e: "right",
@@ -110,13 +110,17 @@ const S = (r = 0) => parseInt(r + "") + "px", P = {
   nw: "top-left",
   se: "bottom-right",
   sw: "bottom-left"
-}, O = ["n", "ne", "e", "se", "s", "sw", "w", "nw"], Re = { n: 0, ne: 1, e: 2, se: 3, s: 4, sw: 5, w: 6, nw: 7 }, _e = { 0: 0, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 8 }, Be = (r, n) => {
-  const e = _e[Math.floor(r / 30)], a = (Re[n] + e) % 8;
+}, O = ["n", "ne", "e", "se", "s", "sw", "w", "nw"], Re = { n: 0, ne: 1, e: 2, se: 3, s: 4, sw: 5, w: 6, nw: 7 }, Be = { 0: 0, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 8 }, _e = (r, n) => {
+  const e = Be[Math.floor(r / 30)], a = (Re[n] + e) % 8;
   return O[a];
 }, re = (r = 0, n) => {
   let e = [];
   for (let t = 0; t < O.length; t++) {
-    const a = O[t], [h, l] = P[a].split("-"), d = Be(r, a), u = { [h]: "0%", cursor: d + "-resize", side: P[a] };
+    const a = O[t], [h, l] = P[a].split("-"), d = _e(r, a), u = {
+      [h]: "0%",
+      cursor: d + "-resize",
+      side: P[a]
+    };
     if (l)
       u[l] = "0%";
     else {
@@ -232,16 +236,16 @@ function Ce(r, n, e) {
     if (n.disabled)
       return;
     t.value = !0, a.value = !0;
-    let { clientX: f, clientY: c } = _(o);
+    let { clientX: f, clientY: c } = R(o);
     const { left: s, top: i } = h.value;
     let m = 0, y = 0;
     n.boundary && ([m, y] = d()), e && e("drag-start", h.value), U((E) => {
-      const { clientX: B, clientY: I } = _(E);
+      const { clientX: B, clientY: I } = R(E);
       let A = (B - f) / n.scaleRatio + s, k = (I - c) / n.scaleRatio + i;
       if (n.snapToGrid) {
-        let { left: N, top: M } = h.value;
-        const V = A - N, G = k - M;
-        A = N + $(V, n.gridX), k = M + $(G, n.gridY);
+        let { left: _, top: M } = h.value;
+        const V = A - _, G = k - M;
+        A = _ + $(V, n.gridX), k = M + $(G, n.gridY);
       }
       n.boundary && ([A, k] = u(A, k, m, y)), h.value.left = A, h.value.top = k, e && e("drag", h.value);
     }, (E) => {
@@ -287,12 +291,12 @@ function Ce(r, n, e) {
     dragData: h
   };
 }
-const $e = /* @__PURE__ */ R("div", { class: "es-drager-rotate-handle" }, [
-  /* @__PURE__ */ R("svg", {
+const $e = /* @__PURE__ */ C("div", { class: "es-drager-rotate-handle" }, [
+  /* @__PURE__ */ C("svg", {
     viewBox: "0 0 1024 1024",
     xmlns: "http://www.w3.org/2000/svg"
   }, [
-    /* @__PURE__ */ R("path", {
+    /* @__PURE__ */ C("path", {
       fill: "currentColor",
       d: "M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"
     })
@@ -323,7 +327,7 @@ const $e = /* @__PURE__ */ R("div", { class: "es-drager-rotate-handle" }, [
       l.stopPropagation(), l.preventDefault();
       const { width: d, height: u, left: g, top: v } = e.element.getBoundingClientRect(), o = g + d / 2, f = v + u / 2;
       n("rotate-start", a.value), U((c) => {
-        const { clientX: s, clientY: i } = _(c), m = o - s, y = f - i, E = Math.atan2(y, m) * 180 / Math.PI - 90;
+        const { clientX: s, clientY: i } = R(c), m = o - s, y = f - i, E = Math.atan2(y, m) * 180 / Math.PI - 90;
         a.value = (E + 360) % 360, n("rotate", a.value);
       }, () => {
         n("rotate-end", a.value);
@@ -336,13 +340,13 @@ const $e = /* @__PURE__ */ R("div", { class: "es-drager-rotate-handle" }, [
       onMousedown: h,
       onTouchstart: h
     }, [
-      C(l.$slots, "default", {}, () => [
+      S(l.$slots, "default", {}, () => [
         $e
       ])
     ], 544));
   }
 });
-const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R("div", { class: "es-drager-dot-handle" }, null, -1), Pe = /* @__PURE__ */ R("div", { class: "es-drager-mask" }, null, -1), ie = /* @__PURE__ */ ae({
+const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ C("div", { class: "es-drager-dot-handle" }, null, -1), ie = /* @__PURE__ */ ae({
   __name: "drager",
   props: Ye,
   emits: ["change", "drag", "drag-start", "drag-end", "resize", "resize-start", "resize-end", "rotate", "rotate-start", "rotate-end"],
@@ -351,10 +355,10 @@ const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R(
       n(c, ...s), n("change", ...s);
     }, a = Y(null), { selected: h, dragData: l, isMousedown: d } = Ce(a, e, t), u = Y(re(0, e.resizeList)), g = ce(() => {
       const { width: c, height: s, left: i, top: m, angle: y } = l.value, D = {};
-      return c && (D.width = S(c)), s && (D.height = S(s)), {
+      return c && (D.width = x(c)), s && (D.height = x(s)), {
         ...D,
-        left: S(i),
-        top: S(m),
+        left: x(i),
+        top: x(m),
         zIndex: e.zIndex,
         transform: `rotate(${y}deg)`,
         "--es-drager-color": e.color
@@ -368,12 +372,12 @@ const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R(
     }
     function f(c, s) {
       s.stopPropagation(), s.preventDefault();
-      const { clientX: i, clientY: m } = _(s), y = i, D = m, { width: E, height: B, left: I, top: A } = l.value, k = I + E / 2, N = A + B / 2, M = { width: E, height: B, centerX: k, centerY: N, rotateAngle: l.value.angle }, V = c.side, { minWidth: G, minHeight: le, aspectRatio: q } = e;
+      const { clientX: i, clientY: m } = R(s), y = i, D = m, { width: E, height: B, left: I, top: A } = l.value, k = I + E / 2, _ = A + B / 2, M = { width: E, height: B, centerX: k, centerY: _, rotateAngle: l.value.angle }, V = c.side, { minWidth: G, minHeight: le, aspectRatio: q } = e;
       t("resize-start", l.value), U((J) => {
-        const { clientX: ue, clientY: de } = _(J);
-        let T = (ue - y) / e.scaleRatio, x = (de - D) / e.scaleRatio;
-        e.snapToGrid && (T = $(T, e.gridX), x = $(x, e.gridY));
-        const he = Math.atan2(x, T), Q = Ne(T, x), fe = J.shiftKey, Z = he - j(M.rotateAngle), ge = Q * Math.cos(Z), ve = Q * Math.sin(Z), we = fe && !q ? M.width / M.height : q, {
+        const { clientX: ue, clientY: de } = R(J);
+        let N = (ue - y) / e.scaleRatio, T = (de - D) / e.scaleRatio;
+        e.snapToGrid && (N = $(N, e.gridX), T = $(T, e.gridY));
+        const he = Math.atan2(T, N), Q = Ne(N, T), fe = J.shiftKey, Z = he - j(M.rotateAngle), ge = Q * Math.cos(Z), ve = Q * Math.sin(Z), we = fe && !q ? M.width / M.height : q, {
           position: { centerX: H, centerY: W },
           size: { width: pe, height: me }
         } = Te(V, { ...M, rotateAngle: M.rotateAngle }, ge, ve, we, G, le), ye = xe({
@@ -416,7 +420,7 @@ const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R(
       }, ["stop"]))
     }, {
       default: oe(() => [
-        C(c.$slots, "default"),
+        S(c.$slots, "default"),
         !c.disabled && c.resizable ? (z(!0), F(Ae, { key: 0 }, ke(u.value, (i, m) => (z(), F("div", {
           key: m,
           class: "es-drager-dot",
@@ -425,7 +429,7 @@ const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R(
           onMousedown: ne((y) => f(i, y), ["stop", "prevent"]),
           onTouchstart: (y) => f(i, y)
         }, [
-          C(c.$slots, "resize", Le(Xe({ side: i.side })), () => [
+          S(c.$slots, "resize", Le(Xe({ side: i.side })), () => [
             Ge
           ])
         ], 44, Ve))), 128)) : se("", !0),
@@ -440,22 +444,21 @@ const Ve = ["data-side", "onMousedown", "onTouchstart"], Ge = /* @__PURE__ */ R(
           onRotateEnd: o
         }, {
           default: oe(() => [
-            C(c.$slots, "rotate")
+            S(c.$slots, "rotate")
           ]),
           _: 3
-        }, 8, ["modelValue", "drag-data", "element"])) : se("", !0),
-        Pe
+        }, 8, ["modelValue", "drag-data", "element"])) : se("", !0)
       ]),
       _: 3
     }, 8, ["class", "style"]));
   }
 });
-const Ke = (r) => {
+const Pe = (r) => {
   r.component("es-drager", ie);
 };
-ie.install = Ke;
+ie.install = Pe;
 export {
   ie as ESDrager,
   ie as default,
-  Ke as install
+  Pe as install
 };

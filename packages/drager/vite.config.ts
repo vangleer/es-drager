@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import dts from 'vite-plugin-dts'
 import { resolve } from 'path'
 export default defineConfig({
-  plugins: [dts({ tsConfigFilePath: resolve(__dirname, '../../tsconfig.json') }), vue()],
+  plugins: [dts({ tsConfigFilePath: resolve(__dirname, '../../tsconfig.json'), outputDir: 'lib/drager' }), vue()],
   build: {
     outDir: 'lib',
     lib: {

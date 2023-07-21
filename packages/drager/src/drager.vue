@@ -35,7 +35,6 @@
     >
       <slot name="rotate" />
     </Rotate>
-    <div class="es-drager-mask"></div>
   </component>
 </template>
 
@@ -192,6 +191,14 @@ watch(() => props.selected, (val) => {
 .es-drager {
   --es-drager-color: #3a7afe;
   position: absolute;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
   &.selected {
     transition: none;
     .es-drager-dot {
@@ -201,19 +208,12 @@ watch(() => props.selected, (val) => {
       -webkit-user-drag: none;
       user-select: none;
     }
-    .es-drager-mask {
+    &::after {
       outline: 1px dashed var(--es-drager-color);
     }
   }
   &.border {
     border: 1px solid var(--es-drager-color);
-  }
-  .es-drager-mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
   &.dragging {
     user-select: none;

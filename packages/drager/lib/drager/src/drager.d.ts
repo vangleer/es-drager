@@ -1,4 +1,4 @@
-import { Component, PropType } from "vue";
+import { Component, PropType } from 'vue';
 export type IDotSide = 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 export type EventType = 'change' | 'drag' | 'drag-start' | 'drag-end' | 'resize' | 'resize-start' | 'resize-end' | 'rotate' | 'rotate-start' | 'rotate-end';
 export type IDot = {

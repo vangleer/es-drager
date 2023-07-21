@@ -12,18 +12,21 @@ jobs:
       - name: Checkout 🛎️ # 将代码拉取到虚拟机
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        run: npm i pnpm -g
+
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install and Build 🔧 # 安装依赖、打包，如果提前已打包好无需这一步
         run: |
-          npm install
-          npm run build:docs
+          pnpm install
+          pnpm run build:docs
 
       - name: Deploy 🚀 # 部署
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # 部署后提交到那个分支
-          folder: docs/dist # 这里填打包好的目录名称
+          folder: packages/docs/dist # 这里填打包好的目录名称
