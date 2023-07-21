@@ -52,10 +52,9 @@ const onChange = (dragData: DragData) => {
   position: absolute;
   top: 0;
   right: 0;
-  border-left: 1px solid #ddd;
+  border-left: var(--es-border);
   width: 200px;
   height: 100%;
-  background-color: #fff;
   .es-info-item {
     display: flex;
     flex-direction: column;

@@ -1,34 +1,33 @@
 <template>
-  <div
-    class="es-container"
-    :style="gridStyle"
-  >
+  <div class="es-container">
     <div class="es-tools">
-      <div class="es-button" @click="command.undo">撤销</div>
-      <div class="es-button" @click="command.redo">重做</div>
+      <el-button type="primary" @click="command.undo">撤销</el-button>
+      <el-button type="primary" @click="command.redo">重做</el-button>
     </div>
-    <Drager
-      v-for="item, index in data.componentList"
-      v-bind="item"
-      :snapToGrid="snapToGrid"
-      :gridX="gridX"
-      :gridY="gridY"
-      @drag-start="onDragstart(index)"
-      @drag="onDrag($event)"
-      @change="onChange($event, item)"
-      @drag-end="onDragend"
-    >
-      <component :is="item.component">{{ item.text }}</component>
-    </Drager>
+    <div class="es-editor">
+      <Drager
+        v-for="item, index in data.componentList"
+        v-bind="item"
+        @drag-start="onDragstart(index)"
+        @drag="onDrag($event)"
+        @change="onChange($event, item)"
+        @drag-end="onDragend"
+      >
+        <component :is="item.component">{{ item.text }}</component>
+      </Drager>
 
-    <div v-show="markLine.left" class="es-markline-left" :style="{ left: markLine.left + 'px' }"></div>
-    <div v-show="markLine.top" class="es-markline-top" :style="{ top: markLine.top + 'px' }"></div>
+      <MarkLine v-bind="markLine" />
+      <GridRect class="grid-rect" />
+    </div>
   </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, reactive, CSSProperties, Ref, onBeforeUnmount } from 'vue'
+import { ref, reactive, CSSProperties, Ref, onBeforeUnmount } from 'vue'
+import GridRect from '@/components/editor/GridRect.vue'
 import Drager, { DragData } from 'es-drager'
+import MarkLine from '@/components/editor/MarkLine.vue'
+import { calcLines } from '@/utils'
 // 组件类型
 type ComponentType = {
   component: string // 内部组件名称，自定义组件需要提前全局注册
@@ -44,15 +43,7 @@ type ComponentType = {
 interface EditorState {
   componentList: ComponentType[]
 }
-const snapToGrid = ref(true)
-const gridX = ref(20)
-const gridY = ref(20)
-const gridStyle = computed(() => {
-  return snapToGrid.value ? {
-    '--es-grid-width': gridX.value + 'px',
-    '--es-grid-height': gridY.value + 'px'
-  } : {}
-})
+
 const currentIndex = ref(-1)
 
 const data = ref<EditorState>({
@@ -89,7 +80,7 @@ const command = useCommand(data)
  */
 function onDragstart(index: number) {
   currentIndex.value = index
-  lines.value = calcLines()
+  lines.value = calcLines(data.value.componentList, currentIndex.value)
 }
 
 /**
@@ -123,35 +114,6 @@ function onDragend() {
   command.record()
   markLine.top = null
   markLine.left = null
-}
-
-/**
- * 计算辅助线的位置
- */
-function calcLines() {
-  const lines: any = { x: [], y: [] }
-  // 当前拖拽元素大小
-  const { width, height } = data.value.componentList[currentIndex.value!] as any
-
-  // 循环遍历画布所有元素，将除当前拖拽元素外所有其它元素生成辅助线的位置保存，每个元素x和y都会有5种
-  data.value.componentList.forEach((block, i: number) => {
-    if (currentIndex.value! === i) return
-    const { top: ATop, left: ALeft, width: AWidth, height: AHeight } = block as any
-
-    lines.x.push({ showLeft: ALeft, left: ALeft })
-    lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth })
-    lines.x.push({ showLeft: ALeft + AWidth / 2, left: ALeft + AWidth / 2 - width / 2 })
-    lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth - width })
-    lines.x.push({ showLeft: ALeft, left: ALeft - width })
-
-    lines.y.push({ showTop: ATop, top: ATop })
-    lines.y.push({ showTop: ATop, top: ATop - height })
-    lines.y.push({ showTop: ATop + AHeight / 2, top: ATop + AHeight / 2 - height / 2 })
-    lines.y.push({ showTop: ATop + AHeight, top: ATop + AHeight })
-    lines.y.push({ showTop: ATop + AHeight, top: ATop + AHeight - height })
-  })
-
-  return lines
 }
 
 function onChange(dragData: DragData, item: any) {
@@ -217,63 +179,23 @@ function deepCopy(obj: any) {
 
 <style lang='scss' scoped>
 .es-container {
-  border: 1px solid #ccc;
-  background:
-        -webkit-linear-gradient(top, transparent calc(var(--es-grid-height) - 1px), #ccc var(--es-grid-height)),
-        -webkit-linear-gradient(left, transparent calc(var(--es-grid-width) - 1px), #ccc var(--es-grid-width))
-        ;
-    background-size: var(--es-grid-width) var(--es-grid-height);
   width: 800px;
   height: 600px;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 40%;
   transform: translate(-50%, -50%);
-
-  [class^=es-markline] {
-    position: absolute;
-    z-index: 9999;
-    background-color: #3a7afe;
-  }
-  .es-markline-left {
-    height: 100%;
-    width: 1px;
-    top: 0;
-  }
-  .es-markline-top {
-    width: 100%;
-    height: 1px;
-    left: 0;
+  .es-editor {
+    position: relative;
+    width: 800px;
+    height: 600px;
   }
 }
 
 .es-tools {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .es-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1;
-    height: 32px;
-    white-space: nowrap;
-    cursor: pointer;
-    text-align: center;
-    box-sizing: border-box;
-    outline: none;
-    transition: .1s;
-    user-select: none;
-    vertical-align: middle;
-    background-color: #fff;
-    border: 1px solid #dcdfe6;
-    padding: 8px 15px;
-    border-radius: 4px;
-    margin-left: 10px;
-    &:hover {
-      border-color: #3a7afe;
-    }
-  }
 }
 </style>

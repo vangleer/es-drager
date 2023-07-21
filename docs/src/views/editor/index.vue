@@ -6,6 +6,3 @@
 import Layout from '@/components/layout/index.vue'
 </script>
 
-<style lang='scss' scoped>
-
-</style>

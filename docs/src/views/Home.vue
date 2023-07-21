@@ -13,7 +13,7 @@
           :class="['es-sidebar-item', { active: current.path === item.path }]"
           @click="handleClick(item)"
         >
-          {{ item.meta?.title }}
+          {{  item.meta?.title }}
         </div>
       </Aside>
       <div class="es-content">
@@ -23,6 +23,7 @@
       <el-drawer
         v-model="showCode"
         title="示例代码"
+        :modal="false"
       >
         <pre><code v-html="codeHtml"></code></pre>
       </el-drawer>

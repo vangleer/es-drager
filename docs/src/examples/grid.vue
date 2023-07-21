@@ -5,52 +5,38 @@
       <input type="checkbox" v-model="snapToGrid">
     </div>
     <div class="es-info-item">
-      <span>gridX</span>
-      <input v-model.number="gridX">
-    </div>
-    <div class="es-info-item">
-      <span>gridY</span>
-      <input v-model.number="gridY">
+      <span>gridSize</span>
+      <input v-model.number="gridSize">
     </div>
     <div class="es-info-item">
       <span>scaleRatio</span>
       <input :value="scale" @change="handleScaleChange">
     </div>
   </div>
-  <div
-    class="es-grid-box"
-    :style="gridStyle"
-  >
+  <div class="es-grid-box">
     <Drager
       :width="100"
       :height="100"
       :top="100"
       :left="100"
-      :gridX="gridX"
-      :gridY="gridY"
+      :gridX="gridSize"
+      :gridY="gridSize"
       :snapToGrid="snapToGrid"
       :scaleRatio="scale"
       boundary
     />
+
+    <GridRect :showSmall="false" :grid="gridSize / 5" />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import Drager from 'es-drager'
+import GridRect from '@/components/editor/GridRect.vue'
 const snapToGrid = ref(true)
-const gridX = ref(50)
-const gridY = ref(50)
+const gridSize = ref(50)
 const scale = ref(1)
-const gridStyle = computed(() => {
-  return snapToGrid.value ? {
-    '--es-grid-width': gridX.value + 'px',
-    '--es-grid-height': gridY.value + 'px',
-    transform: `scale(${scale.value})`,
-    transformOrigin: 'left top'
-  } : {}
-})
-
 
 function handleScaleChange(e: Event) {
   scale.value = +(e.target! as HTMLInputElement).value
@@ -63,12 +49,7 @@ function handleScaleChange(e: Event) {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid #ccc;
-  background:
-        -webkit-linear-gradient(top, transparent calc(var(--es-grid-height) - 1px), #ccc var(--es-grid-height)),
-        -webkit-linear-gradient(left, transparent calc(var(--es-grid-width) - 1px), #ccc var(--es-grid-width))
-        ;
-    background-size: var(--es-grid-width) var(--es-grid-height);
+  margin: 20px;
 }
 .es-grid-info {
   display: flex;
