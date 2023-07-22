@@ -28,7 +28,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { registerConfig as config, ComponentType } from '@/utils/editor-config'
+import { registerConfig as config } from '@/utils/editor-config'
+import { ComponentType } from '../types'
 
 const emit = defineEmits(['dragstart', 'dragend'])
 
