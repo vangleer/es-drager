@@ -97,7 +97,7 @@ defineExpose({
   z-index: 1000;
   width: 100px;
   height: 100px;
-  border: 1px dashed red;
-  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px dashed var(--el-color-primary);
+  background-color: rgba(var(--el-color-primary-rgb), .1);
 }
 </style>

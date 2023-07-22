@@ -10,6 +10,7 @@
         height: item.height + 'px',
         left: item.left + 'px',
         top: item.top + 'px',
+        transform: `rotate(${item.angle || 0}deg)`,
         position: 'absolute'
       }"
     >
@@ -20,7 +21,7 @@
 
 <script setup lang='ts'>
 import { ComponentType } from '@/components/types'
-import { PropType, onMounted, computed } from 'vue'
+import { PropType, computed } from 'vue'
 
 const props = defineProps({
   elements: {
@@ -39,8 +40,5 @@ const list = computed(() => {
   })
 })
 
-onMounted(() => {
-  console.log(props.elements, 'elementselementselements')
-})
 </script>
 
