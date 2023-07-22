@@ -58,13 +58,13 @@ export const menuRoutes: RouteRecordRaw[] = [
       title: '组合与拆分'
     }
   },
-  {
-    path: 'temp',
-    component: () => import('@/examples/temp.vue'),
-    meta: {
-      title: 'temp'
-    }
-  }
+  // {
+  //   path: 'temp',
+  //   component: () => import('@/examples/temp.vue'),
+  //   meta: {
+  //     title: 'temp'
+  //   }
+  // }
 ]
 
 const routes: RouteRecordRaw[] = [
