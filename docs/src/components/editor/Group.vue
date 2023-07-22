@@ -1,7 +1,7 @@
 <template>
   <div class="es-group">
     <component
-      v-for="item in list"
+      v-for="item in elements"
       :is="item.component!"
       v-bind="item.props"
       :style="{
@@ -21,23 +21,13 @@
 
 <script setup lang='ts'>
 import { ComponentType } from '@/components/types'
-import { PropType, computed } from 'vue'
+import { PropType } from 'vue'
 
-const props = defineProps({
+defineProps({
   elements: {
     type: Array as PropType<ComponentType[]>,
     default: () => []
-  },
-  data: {
-    type: Object as PropType<ComponentType>,
-    default: () => ({})
   }
-})
-
-const list = computed(() => {
-  return props.elements.map(item => {
-    return { ...item }
-  })
 })
 
 </script>

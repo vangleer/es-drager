@@ -30,7 +30,6 @@ function onMouseDown(e: MouseEvent) {
   const { pageX: downX, pageY: downY } = e;
   const elRect = (e.target as HTMLElement)!.getBoundingClientRect()
 
-  console.log(downX, downY, elRect, 'elRectelRect')
   // 鼠标在编辑器中的偏移量
   const offsetX = downX - elRect.left
   const offsetY = downY - elRect.top

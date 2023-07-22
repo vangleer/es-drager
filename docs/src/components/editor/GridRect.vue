@@ -21,22 +21,24 @@ import { useAppStore } from '@/store'
 const store = useAppStore()
 
 const props = defineProps({
-  grid: {
+  grid: { // 小网格的大小
     type: Number,
     default: 10
   },
-  gridCount: {
+  gridCount: { // 小网格的数量，默认为5个
     type: Number,
     default: 5
   },
-  showSmall: {
+  showSmall: { // 是否显示小网格
     type: Boolean,
     default: true
   }
 })
 
+// 计算大网格的大小
 const bigGrid = computed(() => props.grid * props.gridCount)
 
+// 处理网站皮肤，可忽略
 const color = computed(() => {
   const colors = [['#e4e7ed', '#ebeef5'], ['#414243', '#363637']]
   const [bigGrid, grid] = colors[store.isLight ? 0 : 1]

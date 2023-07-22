@@ -220,7 +220,9 @@ function onAreaUp() {
   // 如果区域有选中元素
   if (areaSelected.value) {
     setTimeout(() => {
-      document.addEventListener('click', documentClick, { once: true })
+      document.addEventListener('click', () => {
+        areaSelected.value = false
+      }, { once: true })
     })
   }
 }
@@ -263,7 +265,6 @@ function groupElements() {
     width: maxLeft - minLeft, // 宽度 = 最大left - 最小left
     height: maxTop - minTop, // 高度 = 最大top - 最小top
   }
-  console.log(dragData, selectedItems, 'dragData')
   const grouItem: ComponentType = {
     component: 'es-group',
     group: true,
