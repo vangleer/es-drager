@@ -1,16 +1,28 @@
 # es-drager 拖拽组件
 
-<p align="center">
-	<a href="https://www.npmjs.com/package/vue" target="_blank">
-		<img src="https://img.shields.io/badge/vuejs-vue3.x-green" alt="vue">
-	</a>
-	<a href="https://www.npmjs.com/package/typescript" target="_blank">
-		<img src="https://img.shields.io/badge/typescript-%3E4.0.0-blue" alt="typescript">
-	</a>
-</p>
-<p>&nbsp;</p>
+<p align="middle" ><img src="https://vangleer.github.io/es-drager/static/logo.png"/></p>
 
-[examples 在线示例](https://vangleer.github.io/es-drager)
+<table width="100%" align="center">
+<tr>
+<th colspan="4">ES Drager</th>
+</tr>
+<tr>
+<td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Draggable</strong></a></td>
+<td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Resizable</strong></a></td>
+<td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Rotatable</strong></a></td>
+</tr>
+<tr>
+<td align="center">
+<img src="https://vangleer.github.io/es-drager/static/draggable.gif" />
+</td>
+<td align="center">
+<img src="https://vangleer.github.io/es-drager/static/resizable.gif" />
+</td>
+<td align="center">
+<img src="https://vangleer.github.io/es-drager/static/rotatable.gif" />
+</td>
+</tr>
+</table>
 
 ## 🌈介绍
 
