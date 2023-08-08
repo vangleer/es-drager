@@ -1,4 +1,4 @@
-# es-drager 拖拽组件
+# ES Drager 拖拽组件
 
 <p align="middle" ><img src="https://vangleer.github.io/es-drager/static/logo.png"/></p>
 
