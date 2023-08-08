@@ -1,4 +1,4 @@
-import { ComponentType } from "./editor-config"
+import { ComponentType } from '@/components/types'
 
 export function deepCopy(obj: any) {
   return JSON.parse(JSON.stringify(obj))
