@@ -8,7 +8,7 @@
   >
     <slot />
     
-    <template v-if="!disabled && resizable">
+    <template v-if="showResize">
       <div
         v-for="item, index in dotList"
         :key="index"
@@ -25,7 +25,7 @@
     </template>
     
     <Rotate
-      v-if="!disabled && selected"
+      v-if="showRotate"
       v-model="dragData.angle"
       :drag-data="dragData"
       :element="dragRef"
@@ -70,6 +70,8 @@ const dragRef = ref<HTMLElement | null>(null)
 const { selected, dragData, isMousedown } = useDrager(dragRef, props, emitFn)
 
 const dotList = ref(getDotList(0, props.resizeList))
+const showResize = computed(() => props.resizable && !props.disabled)
+const showRotate = computed(() => props.rotatable && !props.disabled && selected.value)
 
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
@@ -198,18 +200,16 @@ watch(() => props.selected, (val) => {
     left: 0;
     width: 100%;
     height: 100%;
+    display: none;
   }
   &.selected {
     transition: none;
+    &::after {
+      display: block;
+      outline: 1px dashed var(--es-drager-color);
+    }
     .es-drager-dot {
       display: block;
-    }
-    > * {
-      -webkit-user-drag: none;
-      user-select: none;
-    }
-    &::after {
-      outline: 1px dashed var(--es-drager-color);
     }
   }
   &.border {

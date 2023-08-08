@@ -13,7 +13,7 @@
       <input :value="scale" @change="handleScaleChange">
     </div>
   </div>
-  <div class="es-grid-box">
+  <div class="es-grid-box" :style="boxStyle">
     <Drager
       :width="100"
       :height="100"
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import Drager from 'es-drager'
 import GridRect from '@/components/editor/GridRect.vue'
 const snapToGrid = ref(true)
@@ -42,14 +42,20 @@ function handleScaleChange(e: Event) {
   scale.value = +(e.target! as HTMLInputElement).value
 }
 
+const boxStyle = computed(() => {
+  return {
+    transform: `scale(${scale.value})`
+  }
+})
+
 </script>
 
 <style lang='scss' scoped>
 .es-grid-box {
   position: relative;
-  width: calc(100% - 40px);
-  height: calc(100% - 148px);
-  margin: 20px;
+  width: calc(80% - 40px);
+  height: calc(80% - 148px);
+  margin: 20px auto;
 }
 .es-grid-info {
   display: flex;
