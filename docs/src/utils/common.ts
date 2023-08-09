@@ -84,6 +84,7 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
   
   // 组合组件信息
   const grouItem: ComponentType = {
+    id: useId(),
     component: 'es-group',
     group: true,
     ...dragData,
@@ -108,7 +109,6 @@ export function cancelGroup(elements: ComponentType[], editorRect: DOMRect) {
 
   // 获取组合元素的子元素列表
   const items = current.props.elements as ComponentType[]
-
   const newElements = items.map(item => {
     // 子组件相对于浏览器视口位置大小
     const componentRect = document.querySelector(`#${item.id}`)!.getBoundingClientRect()

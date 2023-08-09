@@ -99,9 +99,10 @@ function drop(e: DragEvent) {
   const elements = [
     ...data.value.elements,
     {
-    ...currentComponent,
+      ...currentComponent,
       left: e.offsetX - currentComponent.width! / 2,
-      top: e.offsetY - currentComponent.height! / 2
+      top: e.offsetY - currentComponent.height! / 2,
+      id: useId()
     }
   ]
   data.value.elements = elements

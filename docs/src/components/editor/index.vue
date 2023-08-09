@@ -1,5 +1,10 @@
 <template>
-  <div ref="editorRef" class="es-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
+  <div
+    ref="editorRef"
+    class="es-editor"
+    :style="editorStyle"
+    @mousedown="onEditorMouseDown"
+  >
     <template v-for="(item, index) in data.elements">
       <ESDrager
         v-bind="item"
@@ -28,10 +33,10 @@
           {{ item.text }}
         </component>
       </ESDrager>
-
     </template>
 
     <MarkLine v-bind="markLine" />
+
     <GridRect />
 
     <Area ref="areaRef" @move="onAreaMove" @up="onAreaUp" />
@@ -69,6 +74,9 @@ const data = computed({
   set() {
 
   }
+})
+const editorRect = computed(() => {
+  return editorRef.value?.getBoundingClientRect() || {} as DOMRect
 })
 const gridSize = computed(() => props.modelValue.container.gridSize || 10)
 const editorStyle = computed(() => {
@@ -179,9 +187,9 @@ function onContextmenu(e: Event, item: ComponentType) {
     onClick: (opt) => {
       if (opt.label === '组合') {
         // 组合操作
-        data.value.elements = makeGroup(data.value.elements, editorRef.value!.getBoundingClientRect())
+        data.value.elements = makeGroup(data.value.elements, editorRect.value)
       } else if (opt.label === '取消组合') {
-        data.value.elements = cancelGroup(data.value.elements, editorRef.value!.getBoundingClientRect())
+        data.value.elements = cancelGroup(data.value.elements, editorRect.value)
       }
     }
   })
