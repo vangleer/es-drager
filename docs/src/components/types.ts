@@ -1,5 +1,6 @@
 import { CSSProperties } from 'vue'
 export type ComponentType = {
+  id?: string
   component?: string
   text?: string
   width?: number
@@ -9,6 +10,7 @@ export type ComponentType = {
   angle?: number
   selected?: boolean
   group?: boolean
+  groupStyle?: any
   props?: any
   style?: CSSProperties
 }

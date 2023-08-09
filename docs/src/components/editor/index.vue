@@ -1,14 +1,16 @@
 <template>
-  <div class="es-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
+  <div ref="editorRef" class="es-editor" :style="editorStyle" @mousedown="onEditorMouseDown">
     <template v-for="(item, index) in data.elements">
       <ESDrager
         v-bind="item"
         :grid-x="gridSize"
         :grid-y="gridSize"
         boundary
+        rotatable
         @drag-start="onDragstart(index)"
         @drag-end="onDragend"
         @drag="onDrag($event)"
+        @resize-end="onResizeEnd($event, item)"
         @change="onChange($event, item)"
         @contextmenu="onContextmenu($event, item)"
         @mousedown.stop
@@ -37,17 +39,16 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, reactive, ref, PropType } from 'vue'
-import ESDrager, { DragData } from 'es-drager'
+import { computed, reactive, ref, PropType, nextTick } from 'vue'
+import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { calcLines, deepCopy, events } from '@/utils'
+import { calcLines, cancelGroup, deepCopy, events, makeGroup } from '@/utils'
 import { CommandStateType } from '@/hooks/useCommand'
 import { $dropdown } from '@/components/dropdown'
 import { ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
-import Group from './Group.vue'
 import { EditorType } from '../types'
 const props = defineProps({
   modelValue: {
@@ -59,7 +60,7 @@ const props = defineProps({
     type: Object as PropType<CommandStateType['commands']>
   }
 })
-
+const editorRef = ref<HTMLElement | null>(null)
 const data = computed({
   get() {
     return props.modelValue
@@ -83,7 +84,7 @@ const extraDragData = ref({
   disX: 0,
   disY: 0
 })
-const currentIndex = ref<number>()
+const currentIndex = ref<number>(-1)
 const markLine = reactive({
   left: null,
   top: null
@@ -157,9 +158,13 @@ function onChange(dragData: DragData, item: ComponentType) {
   })
 }
 
+function onResizeEnd(dragData: DragData, item: ComponentType) {
+  if (item.component === 'es-group') {
+    item.props.data = dragData
+  }
+}
+
 function onContextmenu(e: Event, item: ComponentType) {
-  let current = deepCopy(item)
-  console.log(current)
   e.preventDefault()
 
   $dropdown({
@@ -172,10 +177,9 @@ function onContextmenu(e: Event, item: ComponentType) {
     onClick: (opt) => {
       if (opt.label === '组合') {
         // 组合操作
-        groupElements()
+        data.value.elements = makeGroup(data.value.elements, editorRef.value!.getBoundingClientRect())
       } else if (opt.label === '取消组合') {
-        console.log('取消组合', current)
-        data.value.elements = cancelGroup(data.value.elements)
+        data.value.elements = cancelGroup(data.value.elements, editorRef.value!.getBoundingClientRect())
       }
     }
   })
@@ -225,78 +229,6 @@ function onAreaUp() {
       }, { once: true })
     })
   }
-}
-
-function documentClick() {
-  areaSelected.value = false
-}
-
-// 组合元素
-function groupElements() {
-  const selectedItems = data.value.elements.filter(item => item.selected)
-
-  if (!selectedItems.length) return
-  // 设第一个元素的位置为最大和最小
-  let { left: minLeft, top: minTop } = selectedItems[0] as Required<ComponentType>
-  let maxLeft = minLeft, maxTop = minTop
-
-  Math.max(...selectedItems.map(item => item.left!))
-  selectedItems.slice(1).forEach(item => {
-    const { left, top, width, height } = item as Required<ComponentType>
-    // 最小left
-    minLeft = Math.min(minLeft, left)
-    // 最大top
-    maxLeft = Math.max(maxLeft, left + width)
-   
-    // 最小top
-    minTop = Math.min(minTop, top)
-    // 最大top
-    maxTop = Math.max(maxTop, top + height)
-  })
-
-  selectedItems.forEach(item => {
-    item.left = item.left! - minLeft
-    item.top = item.top! - minTop
-  })
-  
-  const dragData = {
-    left: minLeft,
-    top: minTop,
-    width: maxLeft - minLeft, // 宽度 = 最大left - 最小left
-    height: maxTop - minTop, // 高度 = 最大top - 最小top
-  }
-  const grouItem: ComponentType = {
-    component: 'es-group',
-    group: true,
-    ...dragData,
-    props: {
-      elements: selectedItems,
-      data: dragData
-    }
-  }
-
-  const newElements = data.value.elements.filter(item => !item.selected)
-  
-  data.value.elements = [...newElements, grouItem]
-}
-
-// 取消组合
-function cancelGroup(elements: ComponentType[]) {
-  const current = elements.find(item => item.component === 'es-group')!
-  const items = current.props.elements as ComponentType[]
-
-  const newElements = items.map(item => {
-    return {
-      ...item,
-      left: item.left! + current.left!,
-      top: item.top! + current.top!,
-      angle: item.angle! + current.angle!,
-    }
-  })
-
-  const list = elements.filter(item => item.component !== current.component)
-
-  return [...list, ...newElements]
 }
 
 </script>

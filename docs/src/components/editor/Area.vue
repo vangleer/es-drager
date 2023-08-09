@@ -6,7 +6,6 @@
 import { computed, ref } from 'vue'
 
 const emit = defineEmits(['move', 'up'])
-
 const show = ref(false)
 const areaData = ref({
   width: 0,
@@ -25,7 +24,7 @@ const areaStyle = computed(()=> {
 })
 
 function onMouseDown(e: MouseEvent) {
-  show.value = true
+  
   // 鼠标按下的位置
   const { pageX: downX, pageY: downY } = e;
   const elRect = (e.target as HTMLElement)!.getBoundingClientRect()
@@ -43,6 +42,10 @@ function onMouseDown(e: MouseEvent) {
     let left = offsetX, top = offsetY
     // 宽高取鼠标移动距离的绝对值
     let width = Math.abs(disX), height = Math.abs(disY)
+    // 避免点击显示
+    if (width > 2 || height > 2) {
+      show.value = true
+    }
 
     // 如果往左，将left减去增加的宽度
     if (disX < 0) {

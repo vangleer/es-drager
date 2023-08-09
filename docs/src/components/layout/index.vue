@@ -27,6 +27,7 @@ import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
 import { $dialog } from '../dialog'
 import { EditorType, ToolType } from '../types'
+import { useId } from '@/utils/common'
 const title = 'ES Drager Editor 开发中...'
 const data = ref<EditorType>({
   container: {
@@ -38,6 +39,7 @@ const data = ref<EditorType>({
   },
   elements: [
     {
+      id: useId(),
       component: 'div',
       width: 100,
       height: 100,
@@ -49,6 +51,7 @@ const data = ref<EditorType>({
       }
     },
     {
+      id: useId(),
       component: 'div',
       width: 100,
       height: 100,
