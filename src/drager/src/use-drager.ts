@@ -131,9 +131,15 @@ export function useDrager(
   }
   onMounted(() => {
     if (!targetRef.value) return
-    const { width, height } = targetRef.value.getBoundingClientRect()
-    // 获取默认宽高
-    dragData.value = { ...dragData.value, width: width || 100, height: height || 100 }
+
+    // 没传宽高使用元素默认
+    if (!dragData.value.width && !dragData.value.height) {
+      const { width, height } = targetRef.value.getBoundingClientRect()
+      // 获取默认宽高
+      dragData.value = { ...dragData.value, width: width || 100, height: height || 100 }
+      emit('change', { ...dragData.value })
+    }
+    
     targetRef.value.addEventListener('mousedown', onMousedown)
     targetRef.value.addEventListener('touchstart', onMousedown)
   })
