@@ -7,10 +7,10 @@
         :grid-y="gridSize"
         boundary
         rotatable
+        :equalProportion="item.component === 'es-group'"
         @drag-start="onDragstart(index)"
         @drag-end="onDragend"
         @drag="onDrag($event)"
-        @resize-end="onResizeEnd($event, item)"
         @change="onChange($event, item)"
         @contextmenu="onContextmenu($event, item)"
         @mousedown.stop
@@ -39,10 +39,10 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, reactive, ref, PropType, nextTick } from 'vue'
+import { computed, reactive, ref, PropType } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { calcLines, cancelGroup, deepCopy, events, makeGroup } from '@/utils'
+import { calcLines, cancelGroup, events, makeGroup } from '@/utils'
 import { CommandStateType } from '@/hooks/useCommand'
 import { $dropdown } from '@/components/dropdown'
 import { ComponentType } from '@/components/types'
@@ -50,6 +50,7 @@ import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
 import { EditorType } from '../types'
+import { useArea } from '@/hooks/useArea'
 const props = defineProps({
   modelValue: {
     type: Object as PropType<EditorType>,
@@ -76,8 +77,8 @@ const editorStyle = computed(() => {
     transformOrigin: 'left top'
   }
 })
+
 // 每次拖拽移动的距离
-const areaSelected = ref(false)
 const extraDragData = ref({
   startX: 0,
   startY: 0,
@@ -90,6 +91,13 @@ const markLine = reactive({
   top: null
 })
 const lines = ref({ x: [], y: [] })
+const areaRef = ref()
+const {
+  areaSelected,
+  onEditorMouseDown,
+  onAreaMove,
+  onAreaUp
+} = useArea(data, areaRef)
 
 function onDragstart(index: number) {
   if (!areaSelected.value) {
@@ -158,12 +166,6 @@ function onChange(dragData: DragData, item: ComponentType) {
   })
 }
 
-function onResizeEnd(dragData: DragData, item: ComponentType) {
-  if (item.component === 'es-group') {
-    item.props.data = dragData
-  }
-}
-
 function onContextmenu(e: Event, item: ComponentType) {
   e.preventDefault()
 
@@ -184,53 +186,6 @@ function onContextmenu(e: Event, item: ComponentType) {
     }
   })
 }
-
-const areaRef = ref()
-
-// 编辑器鼠标按下事件
-function onEditorMouseDown(e: MouseEvent) {
-  let flag = false
-  data.value.elements.forEach((item: ComponentType) => {
-    // 如果有选中的元素，取消选中
-    if (item.selected) {
-      item.selected = false
-      flag = true
-    }
-  })
-  if (!flag) {
-    areaRef.value.onMouseDown(e)
-  }
-}
-
-function onAreaMove(areaData: DragData) {
-  for (let i = 0; i < data.value.elements.length; i++) {
-    const item = data.value.elements[i] as Required<ComponentType>
-    // 包含left
-    const containLeft = areaData.left < item.left && areaData.left + areaData.width > item.left + item.width
-    // 包含top
-    const containTop = areaData.top < item.top && areaData.top + areaData.height > item.top + item.height
-    if (containLeft && containTop) {
-      item.selected = true
-    } else {
-      item.selected = false
-    }
-  }
-}
-
-// 松开区域选择
-function onAreaUp() {
-  areaSelected.value = data.value.elements.some((item: ComponentType) => item.selected)
-
-  // 如果区域有选中元素
-  if (areaSelected.value) {
-    setTimeout(() => {
-      document.addEventListener('click', () => {
-        areaSelected.value = false
-      }, { once: true })
-    })
-  }
-}
-
 </script>
 
 <style lang='scss' scoped>
