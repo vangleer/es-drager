@@ -117,7 +117,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   const rect = { width, height, centerX, centerY, rotateAngle: dragData.value.angle }
   const type = dotInfo.side
 
-  const { minWidth, minHeight, aspectRatio } = props
+  const { minWidth, minHeight, aspectRatio, equalProportion } = props
   emitFn('resize-start', dragData.value)
 
   const onMousemove = (e: MouseTouchEvent) => {
@@ -139,7 +139,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     const beta = alpha - degToRadian(rect.rotateAngle)
     const deltaW = deltaL * Math.cos(beta)
     const deltaH = deltaL * Math.sin(beta)
-    const ratio = isShiftKey && !aspectRatio ? rect.width / rect.height : aspectRatio
+    const ratio = (equalProportion || isShiftKey) && !aspectRatio ? rect.width / rect.height : aspectRatio
     
     const {
       position: { centerX, centerY },

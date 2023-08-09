@@ -84,6 +84,9 @@ export const DragerProps = {
   },
   resizeList: {
     type: Array as PropType<string[]> // 要显示的缩放handle列表，默认显示全部
+  },
+  equalProportion: { // 是否等比例缩放
+    type: Boolean
   }
 }
 
