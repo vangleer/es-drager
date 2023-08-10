@@ -12,7 +12,6 @@
         :grid-y="gridSize"
         boundary
         rotatable
-        :equalProportion="item.component === 'es-group'"
         @drag-start="onDragstart(index)"
         @drag-end="onDragend"
         @drag="onDrag($event)"
@@ -78,7 +77,7 @@ const data = computed({
 const editorRect = computed(() => {
   return editorRef.value?.getBoundingClientRect() || {} as DOMRect
 })
-const gridSize = computed(() => props.modelValue.container.gridSize || 10)
+const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
 const editorStyle = computed(() => {
   return {
     '--es-editor-grid-size': gridSize.value + 'px',

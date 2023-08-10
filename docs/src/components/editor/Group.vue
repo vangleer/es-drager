@@ -15,16 +15,11 @@
 <script setup lang='ts'>
 import { ComponentType } from '@/components/types'
 import { PropType } from 'vue'
-import { DragData } from 'es-drager'
 
 defineProps({
   elements: {
     type: Array as PropType<Required<ComponentType>[]>,
     default: () => []
-  },
-  data: {
-    type: Object as PropType<DragData>,
-    required: true
   }
 })
 </script>

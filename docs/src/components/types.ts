@@ -9,13 +9,14 @@ export type ComponentType = {
   left?: number
   angle?: number
   selected?: boolean
+  equalProportion?: boolean
   group?: boolean
   groupStyle?: any
   props?: any
   style?: CSSProperties
 }
 export type EditorType = {
-  container: { gridSize: number; style: { width: string; height: string } }; 
+  container?: { gridSize: number; style: { width: string; height: string } }; 
   elements: ComponentType[]
 }
 

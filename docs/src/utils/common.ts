@@ -37,7 +37,12 @@ export function calcLines(list: ComponentType[], currentIndex: number) {
   return lines
 }
 
-// 组合元素
+/**
+ * 组合元素
+ * @param elements 元素列表
+ * @param editorRect 画布react信息
+ * @returns 组合后的列表
+ */
 export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
   const selectedItems = elements.filter(item => item.selected)
 
@@ -47,8 +52,8 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
 
   Math.max(...selectedItems.map(item => item.left!))
   selectedItems.forEach(item => {
-    // 获取拖拽元素的位置信息
-    const itemRect = document.querySelector(`#${item.id}`)!.getBoundingClientRect()
+    // 获取拖拽元素的位置信息，使用rect只是为了处理旋转后位置的边界
+    const itemRect = document.getElementById(item.id!)!.getBoundingClientRect()
     // 最小left
     minLeft = Math.min(minLeft, itemRect.left - editorRect.left)
     // 最大left
@@ -66,7 +71,7 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
     width: maxLeft - minLeft, // 宽度 = 最大left - 最小left
     height: maxTop - minTop, // 高度 = 最大top - 最小top
   }
-
+  let hasRotate = false
   // 子元素相对父元素的位置
   selectedItems.forEach(item => {
     item.left = item.left! - minLeft
@@ -80,25 +85,34 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
       transform: `rotate(${item.angle || 0}deg)`,
       position: 'absolute'
     }
+    if (item.angle) {
+      hasRotate = true
+    }
   })
   
   // 组合组件信息
-  const grouItem: ComponentType = {
+  const groupElement: ComponentType = {
     id: useId(),
     component: 'es-group',
     group: true,
     ...dragData,
+    equalProportion: hasRotate,
     props: { // 组合组件的props，参见Group.vue
-      elements: selectedItems,
-      data: dragData
+      elements: selectedItems
     }
   }
 
   const newElements = elements.filter(item => !item.selected)
   
-  return [...newElements, grouItem]
+  return [...newElements, groupElement]
 }
-// 取消组合
+
+/**
+ * 取消组合
+ * @param elements 元素列表
+ * @param editorRect 画布react信息
+ * @returns 拆分后的列表
+ */
 export function cancelGroup(elements: ComponentType[], editorRect: DOMRect) {
   // 得到当前选中元素
   const current = elements.find(item => item.selected) as Required<ComponentType>
@@ -111,7 +125,7 @@ export function cancelGroup(elements: ComponentType[], editorRect: DOMRect) {
   const items = current.props.elements as ComponentType[]
   const newElements = items.map(item => {
     // 子组件相对于浏览器视口位置大小
-    const componentRect = document.querySelector(`#${item.id}`)!.getBoundingClientRect()
+    const componentRect = document.getElementById(item.id!)!.getBoundingClientRect()
     // 获取元素的中心点坐标
     const center = {
       x: componentRect.left - editorRect.left + componentRect.width / 2,
