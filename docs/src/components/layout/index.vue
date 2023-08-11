@@ -5,7 +5,7 @@
       <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
       <div ref="mainRef" class="es-layout-main">
         <Editor
-          v-model="data"
+          v-model="store.data"
           :commands="commands"
           @dragenter="dragenter"
           @drop="drop"
@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 import Editor from '@/components/editor/index.vue'
@@ -26,47 +25,13 @@ import { ComponentType } from '@/components/types'
 import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
 import { $dialog } from '../dialog'
-import { EditorType, ToolType } from '../types'
+import { ToolType } from '../types'
 import { useId } from '@/utils/common'
+import { useEditorStore } from '@/store'
+const store = useEditorStore()
 const title = 'ES Drager Editor 开发中...'
-const data = ref<EditorType>({
-  container: {
-    gridSize: 10,
-    style: {
-      width: '500px',
-      height: '500px',
-    }
-  },
-  elements: [
-    {
-      id: useId(),
-      component: 'div',
-      width: 100,
-      height: 100,
-      left: 100,
-      top: 100,
-      text: 'div1',
-      style: {
-        border: '1px solid red',
-        background: 'blue'
-      }
-    },
-    {
-      id: useId(),
-      component: 'div',
-      width: 100,
-      height: 100,
-      left: 300,
-      top: 150,
-      text: 'div2',
-      style: {
-        border: '1px solid red',
-        background: 'pink'
-      }
-    }
-  ]
-})
-const { commands } = useCommand(data)
+
+const { commands } = useCommand()
 
 const tools: ToolType[] = [
   { label: '撤销', handler: commands.undo },
@@ -74,10 +39,9 @@ const tools: ToolType[] = [
   { label: '导出', handler: () => {
     $dialog({
       title: '导出',
-      content: JSON.stringify(data.value),
+      content: JSON.stringify(store.data),
       confirm(text: string) {
-        console.log(text)
-        commands.updateContainer(JSON.parse(text, null, 0))
+        commands.updateContainer(JSON.parse(text))
       }
     })
   }},
@@ -100,7 +64,7 @@ function dragenter(e: DragEvent) {
 function drop(e: DragEvent) {
   if (!currentComponent) return
   const elements = [
-    ...data.value.elements,
+    ...store.data.elements,
     {
       ...currentComponent,
       left: e.offsetX - currentComponent.width! / 2,
@@ -108,7 +72,7 @@ function drop(e: DragEvent) {
       id: useId()
     }
   ]
-  data.value.elements = elements
+  store.data.elements = elements
   currentComponent = null
 }
 

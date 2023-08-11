@@ -1,3 +1,4 @@
+import { useEditorStore } from "@/store"
 import { deepCopy, events } from "@/utils"
 import { onUnmounted, onMounted } from "vue"
 
@@ -19,7 +20,8 @@ type QueueType = {
   redo?: Function
   undo?: Function
 }
-export function useCommand(data: any) {
+export function useCommand() {
+  const store = useEditorStore()
   const state: CommandStateType = {
     current: -1, // 前进后退指针
     queue: [], // 存放所有的操作命令
@@ -85,7 +87,7 @@ export function useCommand(data: any) {
     init() { // 初始化操作 默认就会执行
       // 监控拖拽开始事件，保持状态
       const dragstart = () => {
-        (this as any).before = deepCopy(data.value.elements)
+        (this as any).before = deepCopy(store.data.elements)
       }
       const dragend = () => state.commands.drag()
       events.on('dragstart', dragstart)
@@ -98,13 +100,13 @@ export function useCommand(data: any) {
     },
     execute() {
       const before = (this as any).before
-      const after = data.value.elements
+      const after = store.data.elements
       return {
         redo() {
-          data.value = { ...data.value, elements: after }
+          store.data = { ...store.data, elements: after }
         },
         undo() {
-          data.value = { ...data.value, elements: before }
+          store.data = { ...store.data, elements: before }
         }
       }
     }
@@ -116,15 +118,15 @@ export function useCommand(data: any) {
     pushQueue: true,
     execute(newValue) {
       const state = {
-        before: data.value,
+        before: store.data,
         after: newValue
       }
       return {
         redo() {
-          data.value = state.after
+          store.data = state.after
         },
         undo() {
-          data.value = state.before
+          store.data = state.before
         }
       }
     }
