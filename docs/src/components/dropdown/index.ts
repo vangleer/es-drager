@@ -2,11 +2,14 @@ import { VNode, createVNode, render } from 'vue'
 import Dropdown from './Dropdown.vue'
 
 export type DropdownItem = {
-  label?: string
+  label?: string,
+  action?: string
 }
 
 export type DropdownOption = {
   el?: HTMLElement | null
+  clientX?: number
+  clientY?: number
   items?: DropdownItem[]
   onClick?: (item: DropdownItem) => void
 }
@@ -21,9 +24,8 @@ export function $dropdown(option: DropdownOption) {
     vm = createVNode(Dropdown, { option })
 
     // 将组件渲染成真实节点
-    const a = render(vm, container)
+    render(vm, container)
 
-    console.log(a, container.firstElementChild, 'containercontainer')
     document.body.appendChild(container.firstElementChild!)
   }
 

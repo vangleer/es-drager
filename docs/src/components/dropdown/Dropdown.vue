@@ -1,19 +1,23 @@
 <template>
-  <div
-    ref="menuRef"
-    v-show="state.visible"
-    class="es-contentmenu"
-    :style="style"
-    @click.stop
-  >
-    <ul v-if="state.option.items">
-      <li v-for="item in state.option.items" @click="handleItemClick(item)">{{ item.label }}</li>
-    </ul>
+  <div>
+    <div ref="triggerRef" class="es-trigger"></div>
+    <div
+      ref="menuRef"
+      v-show="state.visible"
+      class="es-contentmenu"
+      :style="style"
+      @click.stop
+    >
+      <ul v-if="state.option.items">
+        <li v-for="item in state.option.items" @click="handleItemClick(item)">{{ item.label }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup lang='ts'>
 import { ref, computed, onMounted, reactive, onBeforeUnmount, PropType } from 'vue'
+import { computePosition, flip, shift, offset } from '@floating-ui/dom'
 import { DropdownOption, DropdownItem } from './index'
 const props = defineProps({
   option: {
@@ -21,7 +25,7 @@ const props = defineProps({
     default: () => ({})
   }
 })
-
+const triggerRef = ref()
 const menuRef = ref()
 
 const state = reactive({
@@ -32,13 +36,18 @@ const state = reactive({
 })
 
 const style = computed(() => ({ left: state.left + 'px', top: state.top + 'px' }))
-
+const middleware = [shift(), flip(), offset(10)]
 const open = (option: Record<string, any>) => {
   state.option = option
-  const { top, left, height } = (option.el as HTMLElement).getBoundingClientRect()
-  state.top = top + height
-  state.left = left
   state.visible = true
+  console.log()
+  triggerRef.value!.style.left = option.clientX + 'px'
+  triggerRef.value!.style.top = option.clientY + 'px'
+  computePosition(triggerRef.value, menuRef.value, { middleware }).then(data => {
+    console.log(data)
+    state.left = data.x
+    state.top = data.y
+  })
 }
 const close = () => {
   state.visible = false
@@ -74,8 +83,6 @@ defineExpose({
   position: absolute;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 200px;
   z-index: 9999;
   box-shadow: var(--el-dropdown-menu-box-shadow);
   ul {
@@ -100,5 +107,9 @@ defineExpose({
       }
     }
   }
+}
+
+.es-trigger {
+  position: absolute;
 }
 </style>

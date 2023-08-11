@@ -5,16 +5,16 @@
     :style="editorStyle"
     @mousedown="onEditorMouseDown"
   >
-    <template v-for="(item, index) in data.elements">
+    <template v-for="item in data.elements">
       <ESDrager
         v-bind="item"
         :grid-x="gridSize"
         :grid-y="gridSize"
         boundary
         rotatable
-        @drag-start="onDragstart(index)"
+        @drag-start="onDragstart(item)"
         @drag-end="onDragend"
-        @drag="onDrag($event)"
+        @drag="onDrag"
         @change="onChange($event, item)"
         @contextmenu="onContextmenu($event, item)"
         @mousedown.stop
@@ -43,18 +43,16 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, reactive, ref, PropType } from 'vue'
+import { computed, ref, PropType } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { calcLines, cancelGroup, events, makeGroup } from '@/utils'
-import { CommandStateType } from '@/hooks/useCommand'
+import { cancelGroup, events, makeGroup } from '@/utils'
 import { $dropdown } from '@/components/dropdown'
-import { ComponentType } from '@/components/types'
+import { EditorType, ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
-import { EditorType } from '../types'
-import { useArea } from '@/hooks/useArea'
+import { useMarkline, useArea, CommandStateType } from '@/hooks'
 const props = defineProps({
   modelValue: {
     type: Object as PropType<EditorType>,
@@ -67,12 +65,8 @@ const props = defineProps({
 })
 const editorRef = ref<HTMLElement | null>(null)
 const data = computed({
-  get() {
-    return props.modelValue
-  },
-  set() {
-
-  }
+  get: () => props.modelValue,
+  set: () => {}
 })
 const editorRect = computed(() => {
   return editorRef.value?.getBoundingClientRect() || {} as DOMRect
@@ -92,12 +86,12 @@ const extraDragData = ref({
   disX: 0,
   disY: 0
 })
-const currentIndex = ref<number>(-1)
-const markLine = reactive({
-  left: null,
-  top: null
-})
-const lines = ref({ x: [], y: [] })
+const current = ref<ComponentType | null>(null)
+const {
+  markLine,
+  updateLines,
+  updateMarkline
+} = useMarkline(data, current)
 const areaRef = ref()
 const {
   areaSelected,
@@ -106,22 +100,21 @@ const {
   onAreaUp
 } = useArea(data, areaRef)
 
-function onDragstart(index: number) {
+function onDragstart(element: ComponentType) {
+  current.value = element
   if (!areaSelected.value) {
     // 将上一次移动元素变为非选
-    data.value.elements.forEach((item: ComponentType) => item.selected = false)
+    data.value.elements.forEach(item => item.selected = false)
   }
  
-  const current = data.value.elements[index]
   // 选中当前元素
-  current.selected = true
+  current.value.selected = true
   // 记录按下的数据，为了计算多个选中时移动的距离
-  extraDragData.value.startX = current.left!
-  extraDragData.value.startY = current.top!
+  extraDragData.value.startX = current.value.left!
+  extraDragData.value.startY = current.value.top!
 
-  currentIndex.value = index
-  // 计算辅助线的可能性
-  lines.value = calcLines(data.value.elements, currentIndex.value)
+  // 更新辅助线的可能性
+  updateLines()
   events.emit('dragstart')
 }
 
@@ -134,30 +127,12 @@ function onDrag(dragData: DragData) {
   const disX = dragData.left - extraDragData.value.startX
   const disY = dragData.top - extraDragData.value.startY
 
-  markLine.top = null
-  markLine.left = null
-
-  for (let i = 0; i < lines.value.y.length; i++) {
-    const { top, showTop } = lines.value.y[i]
-
-    if (Math.abs(top - dragData.top) < 5) {
-      markLine.top = showTop
-      break
-    }
-  }
-
-  for (let i = 0; i < lines.value.x.length; i++) {
-    const { left, showLeft } = lines.value.x[i]
-
-    if (Math.abs(left - dragData.left) < 5) {
-      markLine.left = showLeft
-      break
-    }
-  }
+  // 更新是否显示markeline
+  updateMarkline(dragData)
 
   // 如果选中了多个
   data.value.elements.forEach((item: ComponentType, index: number) => {
-    if (item.selected && currentIndex.value !== index) {
+    if (item.selected && current.value?.id !== item.id) {
       item.left! += disX
       item.top! += disY
     }
@@ -173,22 +148,31 @@ function onChange(dragData: DragData, item: ComponentType) {
   })
 }
 
-function onContextmenu(e: Event, item: ComponentType) {
+function onContextmenu(e: MouseEvent, item: ComponentType) {
   e.preventDefault()
-
+  console.log(e)
+  const { clientX, clientY }  = e
   $dropdown({
     el: e.target as HTMLElement,
+    clientX,
+    clientY,
     items: [
-      { label: '置顶' },
-      { label: '置底' },
-      { label: item.group ? '取消组合' : '组合' }
+      { action: 'top', label: '置顶' },
+      { action: 'bottom', label: '置底' },
+      { action: item.group ? 'ungroup' : 'group', label: item.group ? '取消组合' : '组合' }
     ],
-    onClick: (opt) => {
-      if (opt.label === '组合') {
-        // 组合操作
-        data.value.elements = makeGroup(data.value.elements, editorRect.value)
-      } else if (opt.label === '取消组合') {
-        data.value.elements = cancelGroup(data.value.elements, editorRect.value)
+    onClick: ({ action }) => {
+      console.log(action, 'action')
+      switch(action) {
+        case 'group': {
+          // 组合操作
+          data.value.elements = makeGroup(data.value.elements, editorRect.value)
+          break
+        }
+        case 'ungroup': {
+          data.value.elements = cancelGroup(data.value.elements, editorRect.value)
+          break
+        }
       }
     }
   })

@@ -11,11 +11,11 @@ export function deepCopy(obj: any) {
 }
 
 // 计算辅助线
-export function calcLines(list: ComponentType[], currentIndex: number) {
+export function calcLines(list: ComponentType[], current: ComponentType) {
   const lines: any = { x: [], y: [] }
-  const { width = 0, height = 0 } = list[currentIndex]
-  list.forEach((block: ComponentType, i: number) => {
-    if (currentIndex === i) return
+  const { width = 0, height = 0 } = current
+  list.forEach(block => {
+    if (current.id === block.id) return
     const { top: ATop, left: ALeft, width: AWidth, height: AHeight } = block as any
     lines.y.push({ showTop: ATop, top: ATop }) // 顶对顶
     lines.y.push({ showTop: ATop, top: ATop - height }) // 顶对底
@@ -95,6 +95,7 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
     id: useId(),
     component: 'es-group',
     group: true,
+    selected: true,
     ...dragData,
     equalProportion: hasRotate,
     props: { // 组合组件的props，参见Group.vue
