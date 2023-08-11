@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="triggerRef" class="es-trigger"></div>
+    <div ref="triggerRef" class="es-trigger" :style="triggerStyle"></div>
     <div
       ref="menuRef"
       v-show="state.visible"
@@ -36,15 +36,13 @@ const state = reactive({
 })
 
 const style = computed(() => ({ left: state.left + 'px', top: state.top + 'px' }))
+const triggerStyle = computed(() => ({ left: state.option.clientX + 'px', top: state.option.clientY + 'px' }))
 const middleware = [shift(), flip(), offset(10)]
 const open = (option: Record<string, any>) => {
   state.option = option
   state.visible = true
-  console.log()
-  triggerRef.value!.style.left = option.clientX + 'px'
-  triggerRef.value!.style.top = option.clientY + 'px'
+  
   computePosition(triggerRef.value, menuRef.value, { middleware }).then(data => {
-    console.log(data)
     state.left = data.x
     state.top = data.y
   })
@@ -84,11 +82,13 @@ defineExpose({
   top: 0;
   left: 0;
   z-index: 9999;
-  box-shadow: var(--el-dropdown-menu-box-shadow);
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: 4px;
   ul {
     padding: 5px 0;
     background-color: var(--el-bg-color-overlay);
     border-radius: var(--el-border-radius-base);
+    padding: 5px 0;
     li {
       display: flex;
       align-items: center;

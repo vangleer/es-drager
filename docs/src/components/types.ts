@@ -1,15 +1,12 @@
-import { CSSProperties } from 'vue'
-export type ComponentType = {
+import { CSSProperties, ExtractPropTypes } from 'vue'
+import { DragerProps } from '../../../src/drager/src/drager'
+
+type DragerType = Partial<ExtractPropTypes<typeof DragerProps>>
+
+export type ComponentType = DragerType & {
   id?: string
   component?: string
   text?: string
-  width?: number
-  height?: number
-  top?: number
-  left?: number
-  angle?: number
-  selected?: boolean
-  equalProportion?: boolean
   group?: boolean
   groupStyle?: any
   props?: any

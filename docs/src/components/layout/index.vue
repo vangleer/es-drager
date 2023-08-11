@@ -47,7 +47,8 @@ const data = ref<EditorType>({
       top: 100,
       text: 'div1',
       style: {
-        border: '1px solid red'
+        border: '1px solid red',
+        background: 'blue'
       }
     },
     {
@@ -59,7 +60,8 @@ const data = ref<EditorType>({
       top: 150,
       text: 'div2',
       style: {
-        border: '1px solid red'
+        border: '1px solid red',
+        background: 'pink'
       }
     }
   ]
@@ -74,7 +76,8 @@ const tools: ToolType[] = [
       title: '导出',
       content: JSON.stringify(data.value),
       confirm(text: string) {
-        commands.updateContainer(JSON.parse(text))
+        console.log(text)
+        commands.updateContainer(JSON.parse(text, null, 0))
       }
     })
   }},

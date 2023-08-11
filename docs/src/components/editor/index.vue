@@ -150,7 +150,6 @@ function onChange(dragData: DragData, item: ComponentType) {
 
 function onContextmenu(e: MouseEvent, item: ComponentType) {
   e.preventDefault()
-  console.log(e)
   const { clientX, clientY }  = e
   $dropdown({
     el: e.target as HTMLElement,
@@ -162,16 +161,29 @@ function onContextmenu(e: MouseEvent, item: ComponentType) {
       { action: item.group ? 'ungroup' : 'group', label: item.group ? '取消组合' : '组合' }
     ],
     onClick: ({ action }) => {
-      console.log(action, 'action')
       switch(action) {
+        case 'top': {
+          return current.value!.zIndex = data.value.elements.reduce((max, item) => Math.max(max, item.zIndex || 1), 0)
+        }
+        case 'bottom': {
+          let zIndex = current.value!.zIndex
+          // 如果当前存在zIndex，取列表最小的
+          if (zIndex) {
+            zIndex = data.value.elements.reduce((min, item) => Math.min(min, item.zIndex || -1), Infinity)
+          } else {
+            zIndex = 0
+            data.value.elements.forEach(item => {
+              item.zIndex = (item.zIndex || 0) + 1
+            })
+          }
+          return current.value!.zIndex = zIndex
+        }
         case 'group': {
           // 组合操作
-          data.value.elements = makeGroup(data.value.elements, editorRect.value)
-          break
+          return data.value.elements = makeGroup(data.value.elements, editorRect.value)
         }
         case 'ungroup': {
-          data.value.elements = cancelGroup(data.value.elements, editorRect.value)
-          break
+          return data.value.elements = cancelGroup(data.value.elements, editorRect.value)
         }
       }
     }

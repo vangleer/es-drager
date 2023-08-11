@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.5.1",
+    "ace-builds": "^1.24.0",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.8",
     "es-drager": "^1.1.3",
