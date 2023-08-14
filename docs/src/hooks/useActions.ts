@@ -75,6 +75,13 @@ export function useActions(
       element.top = clientY - editorRect.value!.top
   
       addElement(element)
+    },
+    selectAll() {
+      data.value.elements.forEach(item => item.selected = true)
+    },
+    lock(element) {
+      const index = getIndex(element)
+      data.value.elements[index].disabled = !data.value.elements[index].disabled
     }
   }
 
@@ -85,7 +92,13 @@ export function useActions(
     currentMenudownElement = deepCopy(item)
     
     const selectedElements = data.value.elements.filter(item => item.selected)
-    const actionItems: DropdownItem[] = []
+    const actionItems: DropdownItem[] = [
+      { action: 'remove', label: '删除' },
+      { action: 'copy', label: '复制' },
+      { action: 'duplicate', label: '创建副本' },
+      { action: 'top', label: '置顶' },
+      { action: 'bottom', label: '置底' },
+    ]
     if (!item.group && selectedElements.length > 1) {
       // 如果不是组合元素并且有多个选中元素，则显示组合操作
       actionItems.push({ action: 'group', label: '组合' })
@@ -93,19 +106,17 @@ export function useActions(
       // 如果只有一个选中元素无需组合并且该元素是组合元素，则显示取消组合操作
       item.group && actionItems.push({ action: 'ungroup', label: '取消组合' })
     }
-    
+
+    const isLocked = currentMenudownElement!.disabled
+    const lockAction: DropdownItem = { action: 'lock', label: '锁定 / 解锁' }
+    if (!isLocked) {
+      actionItems.push(lockAction)
+    }
     $dropdown({
       el: e.target as HTMLElement,
       clientX,
       clientY,
-      items: [
-        { action: 'remove', label: '删除' },
-        { action: 'copy', label: '复制' },
-        { action: 'duplicate', label: '创建副本' },
-        { action: 'top', label: '置顶' },
-        { action: 'bottom', label: '置底' },
-        ...actionItems
-      ],
+      items: !isLocked ? actionItems : [lockAction],
       onClick: ({ action }) => {
         if (actions[action]) {
           actions[action](currentMenudownElement)
@@ -123,10 +134,13 @@ export function useActions(
       clientY,
       items: [
         { action: 'paste', label: '在这粘贴' },
+        { action: 'selectAll', label: '全选' },
       ],
       onClick({ action }) {
         if (action === 'paste') {
           actions.paste(clientX, clientY)
+        } else {
+          actions[action] && actions[action]()
         }
       }
     })

@@ -23,8 +23,7 @@ const props = defineProps({
     default: 0
   },
   element: {
-    type: Object as PropType<HTMLElement | null>,
-    required: true
+    type: Object as PropType<HTMLElement | null>
   }
 })
 

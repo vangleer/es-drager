@@ -107,8 +107,11 @@ const {
 function onDragstart(element: ComponentType) {
   current.value = element
   if (!areaSelected.value) {
-    // 将上一次移动元素变为非选
-    data.value.elements.forEach(item => item.selected = false)
+    const seletedItems = data.value.elements.filter(item => item.selected)
+    if (seletedItems.length === 1) {
+      // 将上一次移动元素变为非选
+      data.value.elements.forEach(item => item.selected = false)
+    }
   }
  
   // 选中当前元素
