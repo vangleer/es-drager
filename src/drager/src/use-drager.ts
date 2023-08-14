@@ -141,7 +141,7 @@ export function useDrager(
     }
     
     targetRef.value.addEventListener('mousedown', onMousedown)
-    targetRef.value.addEventListener('touchstart', onMousedown)
+    targetRef.value.addEventListener('touchstart', onMousedown, { passive: true })
   })
 
   watch(selected, (val) => {

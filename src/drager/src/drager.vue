@@ -16,7 +16,7 @@
         :data-side="item.side"
         :style="{ ...item }"
         @mousedown.stop.prevent="onDotMousedown(item, $event)"
-        @touchstart="onDotMousedown(item, $event)"
+        @touchstart.passive="onDotMousedown(item, $event)"
       >
         <slot name="resize" v-bind="{ side: item.side }">
           <div class="es-drager-dot-handle"></div>
@@ -27,7 +27,6 @@
     <Rotate
       v-if="showRotate"
       v-model="dragData.angle"
-      :drag-data="dragData"
       :element="dragRef"
       @rotate="emitFn('rotate', dragData)"
       @rotate-start="emitFn('rotate-start', dragData)"

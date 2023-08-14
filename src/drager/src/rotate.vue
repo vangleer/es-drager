@@ -3,7 +3,7 @@
     ref="rotateRef"
     class="es-drager-rotate"
     @mousedown="onRotateMousedown"
-    @touchstart="onRotateMousedown"
+    @touchstart.passive="onRotateMousedown"
   >
     <slot>
       <div class="es-drager-rotate-handle">
