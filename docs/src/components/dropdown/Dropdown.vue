@@ -52,7 +52,7 @@ const close = () => {
 }
 
 const handleItemClick = (item: DropdownItem) => {
-  props.option.onClick && props.option.onClick(item)
+  state.option.onClick && state.option.onClick(item)
   close()
 }
 

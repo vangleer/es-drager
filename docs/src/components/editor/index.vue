@@ -4,6 +4,7 @@
     class="es-editor"
     :style="editorStyle"
     @mousedown="onEditorMouseDown"
+    @contextmenu.prevent="onEditorContextMenu"
   >
     <template v-for="item in data.elements">
       <ESDrager
@@ -16,7 +17,7 @@
         @drag-end="onDragend"
         @drag="onDrag"
         @change="onChange($event, item)"
-        @contextmenu="onContextmenu($event, item)"
+        @contextmenu.stop="onContextmenu($event, item)"
         @mousedown.stop
         @click.stop
       >
@@ -46,13 +47,12 @@
 import { computed, ref, PropType } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { cancelGroup, events, makeGroup } from '@/utils'
-import { $dropdown } from '@/components/dropdown'
+import { events} from '@/utils'
 import { EditorType, ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
-import { useMarkline, useArea, CommandStateType } from '@/hooks'
+import { useMarkline, useArea, CommandStateType, useActions } from '@/hooks'
 const props = defineProps({
   modelValue: {
     type: Object as PropType<EditorType>,
@@ -64,13 +64,12 @@ const props = defineProps({
   }
 })
 const editorRef = ref<HTMLElement | null>(null)
+
 const data = computed({
   get: () => props.modelValue,
   set: () => {}
 })
-const editorRect = computed(() => {
-  return editorRef.value?.getBoundingClientRect() || {} as DOMRect
-})
+
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
 const editorStyle = computed(() => {
   return {
@@ -99,6 +98,11 @@ const {
   onAreaMove,
   onAreaUp
 } = useArea(data, areaRef)
+
+const {
+  onContextmenu,
+  onEditorContextMenu
+} = useActions(data, current, editorRef)
 
 function onDragstart(element: ComponentType) {
   current.value = element
@@ -148,47 +152,6 @@ function onChange(dragData: DragData, item: ComponentType) {
   })
 }
 
-function onContextmenu(e: MouseEvent, item: ComponentType) {
-  e.preventDefault()
-  const { clientX, clientY }  = e
-  $dropdown({
-    el: e.target as HTMLElement,
-    clientX,
-    clientY,
-    items: [
-      { action: 'top', label: '置顶' },
-      { action: 'bottom', label: '置底' },
-      { action: item.group ? 'ungroup' : 'group', label: item.group ? '取消组合' : '组合' }
-    ],
-    onClick: ({ action }) => {
-      switch(action) {
-        case 'top': {
-          return current.value!.zIndex = data.value.elements.reduce((max, item) => Math.max(max, item.zIndex || 1), 0)
-        }
-        case 'bottom': {
-          let zIndex = current.value!.zIndex
-          // 如果当前存在zIndex，取列表最小的
-          if (zIndex) {
-            zIndex = data.value.elements.reduce((min, item) => Math.min(min, item.zIndex || -1), Infinity)
-          } else {
-            zIndex = 0
-            data.value.elements.forEach(item => {
-              item.zIndex = (item.zIndex || 0) + 1
-            })
-          }
-          return current.value!.zIndex = zIndex
-        }
-        case 'group': {
-          // 组合操作
-          return data.value.elements = makeGroup(data.value.elements, editorRect.value)
-        }
-        case 'ungroup': {
-          return data.value.elements = cancelGroup(data.value.elements, editorRect.value)
-        }
-      }
-    }
-  })
-}
 </script>
 
 <style lang='scss' scoped>

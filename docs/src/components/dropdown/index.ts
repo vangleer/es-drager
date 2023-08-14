@@ -1,9 +1,11 @@
 import { VNode, createVNode, render } from 'vue'
 import Dropdown from './Dropdown.vue'
 
+export type ActionType = 'remove' | 'copy' | 'paste' | 'duplicate' | 'top' | 'bottom' | 'bottom' | 'group' | 'ungroup'
+
 export type DropdownItem = {
-  label?: string,
-  action?: string
+  label: string,
+  action: ActionType
 }
 
 export type DropdownOption = {
