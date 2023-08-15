@@ -1,9 +1,10 @@
 import { useEditorContainer } from '@/hooks'
 import { VNode, createVNode, render } from 'vue'
 import Upload from './Upload.vue'
-type ResultType = 'text' | 'url' | 'custom'
+type ResultType = 'text' | 'json' | 'image' | 'custom'
 export type UploadOption = {
   resultType: ResultType
+  accept?: string
   onChange?: (e: any) => void
 }
 let vm: VNode | null = null

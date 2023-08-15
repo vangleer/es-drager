@@ -29,7 +29,6 @@ import { $upload } from '../common/upload'
 import { ToolType } from '../types'
 import { useId } from '@/utils/common'
 import { useEditorStore } from '@/store'
-import { ElMessage } from 'element-plus'
 const store = useEditorStore()
 const title = 'ES Drager Editor 开发中...'
 
@@ -49,9 +48,30 @@ const tools: ToolType[] = [
   }},
   { label: '导入', handler: () => {
     $upload({
-      resultType: 'text',
+      resultType: 'json',
+      onChange(text: string) {
+        commands.updateContainer(JSON.parse(text))
+      }
+    })
+  }},
+  { label: '插入图片', handler: () => {
+    $upload({
+      resultType: 'image',
       onChange(e: string) {
-        store.data = JSON.parse(e)
+        const newElement: ComponentType = {
+          id: useId(),
+          component: 'img',
+          props: { src: e, width: 160, onLoad(e: Event) {
+            // 图片加载完毕，得到原始宽高
+            const { naturalHeight, naturalWidth } = e.target as any
+            const cur = store.data.elements.find(item => item.id === newElement.id)!
+
+            cur.width = naturalWidth
+            cur.height = naturalHeight
+          }}
+        }
+
+        store.data.elements.push(newElement)
       }
     })
   }}
@@ -84,7 +104,6 @@ function drop(e: DragEvent) {
   store.data.elements = elements
   currentComponent = null
 }
-
 </script>
 
 <style lang='scss'>
