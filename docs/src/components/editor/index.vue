@@ -102,7 +102,7 @@ const {
 const {
   onContextmenu,
   onEditorContextMenu
-} = useActions(data, current, editorRef)
+} = useActions(data, editorRef)
 
 function onDragstart(element: ComponentType) {
   current.value = element
