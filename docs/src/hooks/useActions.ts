@@ -103,7 +103,7 @@ export function useActions(
       // 如果不是组合元素并且有多个选中元素，则显示组合操作
       actionItems.push({ action: 'group', label: '组合' })
     } else {
-      // 如果只有一个选中元素无需组合并且该元素是组合元素，则显示取消组合操作
+      // 显示取消组合操作
       item.group && actionItems.push({ action: 'ungroup', label: '取消组合' })
     }
 

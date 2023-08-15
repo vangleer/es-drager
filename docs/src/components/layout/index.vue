@@ -25,9 +25,11 @@ import { ComponentType } from '@/components/types'
 import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
 import { $dialog } from '../dialog'
+import { $upload } from '../common/upload'
 import { ToolType } from '../types'
 import { useId } from '@/utils/common'
 import { useEditorStore } from '@/store'
+import { ElMessage } from 'element-plus'
 const store = useEditorStore()
 const title = 'ES Drager Editor 开发中...'
 
@@ -45,7 +47,14 @@ const tools: ToolType[] = [
       }
     })
   }},
-  { label: '导入', handler: () => console.log('导入') }
+  { label: '导入', handler: () => {
+    $upload({
+      resultType: 'text',
+      onChange(e: string) {
+        store.data = JSON.parse(e)
+      }
+    })
+  }}
 ]
 
 let currentComponent: ComponentType | null = null

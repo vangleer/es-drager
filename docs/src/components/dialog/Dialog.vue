@@ -8,13 +8,14 @@
 
     <template #footer>
       <ElButton @click="close">取消</ElButton>
-      <ElButton type="primary" @click="handleConfirm">确定</ElButton>
+      <ElButton type="primary" @click="handleConfirm">保存编辑</ElButton>
+      <ElButton type="primary" @click="handleExport">导出JSON</ElButton>
     </template>
   </ElDialog>
 </template>
 
 <script setup lang='ts'>
-import { ElButton, ElDialog } from 'element-plus'
+import { ElButton, ElDialog, dayjs} from 'element-plus'
 import { nextTick, reactive } from 'vue'
 import ace from 'ace-builds'
 import 'ace-builds/src-min-noconflict/theme-one_dark'
@@ -56,6 +57,15 @@ const close = () => {
 const handleConfirm = () => {
   const { confirm } = state.option
   confirm && confirm(editor && editor.getValue())
+}
+
+const handleExport = () => {
+  if (!editor) return
+  const link = document.createElement('a')
+  const filename = dayjs().format('YYYY-MM-DD') + '-es-drager.json'
+  link.download = filename
+  link.href = 'data:text/plain,' + editor.getValue()
+  link.click()
 }
 
 defineExpose({
