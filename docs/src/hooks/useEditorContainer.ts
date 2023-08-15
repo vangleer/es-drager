@@ -1,5 +1,5 @@
 let cachedContainer: HTMLElement
-const selector = `van-editor-container-1996`
+const selector = `es-editor-container-1996`
 
 type PopperContainerType = {
   container: HTMLElement
