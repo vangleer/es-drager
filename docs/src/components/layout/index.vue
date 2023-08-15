@@ -24,8 +24,7 @@ import Editor from '@/components/editor/index.vue'
 import { ComponentType } from '@/components/types'
 import { events } from '@/utils/events'
 import { useCommand } from '@/hooks/useCommand'
-import { $dialog } from '../dialog'
-import { $upload } from '../common/upload'
+import { $dialog, $upload } from '@/components/common'
 import { ToolType } from '../types'
 import { useId } from '@/utils/common'
 import { useEditorStore } from '@/store'
@@ -130,3 +129,4 @@ function drop(e: DragEvent) {
   }
 }
 </style>
+../common/dialog

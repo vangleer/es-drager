@@ -1,4 +1,4 @@
-import { $dropdown, ActionType, DropdownItem } from '@/components/dropdown'
+import { $dropdown, ActionType, DropdownItem } from '@/components/common'
 import { ComponentType, EditorType } from '@/components/types'
 import { cancelGroup, deepCopy, makeGroup, useId } from '@/utils'
 import { computed, Ref } from 'vue'
