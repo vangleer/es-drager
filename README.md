@@ -33,6 +33,12 @@
 - 旋转
 - 网格拖拽缩放
 
+## 综合案例
+
+下面是基于 `es-drager` 实现的一个简单可视化拖拽编辑器
+
+[ES Drager Editor](https://vangleer.github.io/es-drager/#/editor)
+
 ### 相关文章
 
 [可拖拽、缩放、旋转组件实现细节](https://juejin.cn/post/7225152932675993655)
@@ -40,6 +46,8 @@
 [网格效果及使用方法](https://juejin.cn/post/7239895206081806373)
 
 [辅助线和撤销回退](https://juejin.cn/post/7254812719349383225)
+
+[元素组合与拆分](https://juejin.cn/post/7258337246024843319)
 
 ## ⚡ 使用说明
 
