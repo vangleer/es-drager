@@ -30,6 +30,7 @@ import MarkLine from '@/components/editor/MarkLine.vue'
 import { calcLines } from '@/utils'
 // 组件类型
 type ComponentType = {
+  id?: string
   component: string // 内部组件名称，自定义组件需要提前全局注册
   text?: string // 文本
   width?: number
@@ -49,6 +50,7 @@ const currentIndex = ref(-1)
 const data = ref<EditorState>({
   componentList: [
     {
+      id: 'div1',
       component: 'div',
       text: 'div1',
       width: 100,
@@ -57,6 +59,7 @@ const data = ref<EditorState>({
       top: 0
     },
     {
+      id: 'div2',
       component: 'div',
       text: 'div2',
       width: 100,
@@ -80,7 +83,7 @@ const command = useCommand(data)
  */
 function onDragstart(index: number) {
   currentIndex.value = index
-  lines.value = calcLines(data.value.componentList, currentIndex.value)
+  lines.value = calcLines(data.value.componentList, data.value.componentList[index])
 }
 
 /**

@@ -20,27 +20,28 @@ const state = {
 }
 const inpurRef = ref()
 
-const open = (option) => {
+const open = (option: UploadOption) => {
   state.option = option
-  let accept = acceptMap[option.resultType]
+  let accept = (acceptMap as any)[option.resultType]
   if (option.accept) {
     accept = option.accept
   }
-  inpurRef.value.setAttribute('accept', option.accept)
+  inpurRef.value.setAttribute('accept', accept)
   inpurRef.value.click()
 }
 
-const handleChange = async (e: InputEvent) => {
+const handleChange = async (e: Event) => {
   if (!state.option || !state.option.onChange) return
 
   const { resultType, onChange } = state.option
-  let result = e
+  let result: any = e
+  const file: File = (e.target as any).files[0]
   // 如果是json或text使用readAsText读取
   if (['json', 'text'].includes(resultType)) {
-    result = await readFile(e.target.files[0])
+    result = await readFile(file)
   } else if (resultType === 'image') {
     // 按照base64读取
-    result = await readFile(e.target.files[0], resultType)
+    result = await readFile(file, resultType)
   }
 
   // 调用onChange回调并把数据传递过去
