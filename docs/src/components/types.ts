@@ -11,6 +11,7 @@ export type ComponentType = DragerType & {
   groupStyle?: any
   props?: any
   style?: CSSProperties
+  editable?: boolean
 }
 export type EditorType = {
   container?: { gridSize: number; style: { width: string; height: string } }; 

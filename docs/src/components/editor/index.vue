@@ -30,8 +30,8 @@
             height: '100%'
           }"
         >
-          {{ item.text }}
         </component>
+        <TextEditor v-if="item.text" :editable="item.editable" :text="item.text" />
       </ESDrager>
     </template>
 
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, PropType } from 'vue'
+import { computed, ref, PropType, onMounted, onBeforeMount } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
 import { events} from '@/utils'
@@ -52,6 +52,7 @@ import { EditorType, ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
+import TextEditor from './TextEditor.vue'
 import { useMarkline, useArea, CommandStateType, useActions } from '@/hooks'
 const props = defineProps({
   modelValue: {
@@ -154,6 +155,36 @@ function onChange(dragData: DragData, item: ComponentType) {
     (item as any)[key] = dragData[key as keyof DragData]
   })
 }
+
+const globalEventMap = {
+  dblclick: () => {
+    if (!current.value || !current.value.selected) return
+    current.value.editable = true
+  },
+  click: () => {
+    if (!current.value) return
+    current.value.editable = false
+  }
+}
+
+function setGlobalEvents(flag: 'on' | 'off' = 'on') {
+  const eventTypes = ['dblclick', 'click']
+  eventTypes.forEach(type => {
+    if (flag === 'on') {
+      document.addEventListener(type, (globalEventMap as any)[type])
+    } else {
+      document.removeEventListener(type, (globalEventMap as any)[type])
+    }
+  })
+}
+
+onMounted(() => {
+  setGlobalEvents()
+})
+
+onBeforeMount(() => {
+  setGlobalEvents('off')
+})
 
 </script>
 
