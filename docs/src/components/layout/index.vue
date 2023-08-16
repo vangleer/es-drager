@@ -12,7 +12,7 @@
           @dragover.prevent
         />
       </div>
-      <div class="es-layout-info"></div>
+      <Info v-model="store.current" />
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
 <script setup lang='ts'>
 import Aside from './Aside.vue'
 import Header from './Header.vue'
+import Info from './info/Info.vue'
 import Editor from '@/components/editor/index.vue'
 import { ComponentType } from '@/components/types'
 import { events } from '@/utils/events'
@@ -121,12 +122,5 @@ function drop(e: DragEvent) {
     position: relative;
     padding: 20px;
   }
-  .es-layout-info {
-    flex-shrink: 0;
-    width: 200px;
-    height: 100%;
-    border-left: var(--es-border);
-  }
 }
 </style>
-../common/dialog

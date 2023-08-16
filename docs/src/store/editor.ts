@@ -1,9 +1,10 @@
-import { EditorType } from '@/components/types'
+import { ComponentType, EditorType } from '@/components/types'
 import { useId } from '@/utils'
 import { defineStore } from 'pinia'
 
 interface EditorState {
-  data: EditorType
+  data: EditorType,
+  current: ComponentType
 }
 
 const defaultData = {
@@ -46,7 +47,8 @@ const defaultData = {
 export const  useEditorStore = defineStore('editor', {
   state: (): EditorState => {
     return {
-      data: defaultData
+      data: defaultData,
+      current: {}
     }
   },
   actions: {

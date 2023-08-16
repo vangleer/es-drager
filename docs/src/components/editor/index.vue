@@ -54,6 +54,8 @@ import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
 import TextEditor from './TextEditor.vue'
 import { useMarkline, useArea, CommandStateType, useActions } from '@/hooks'
+import { useEditorStore } from '@/store'
+const store = useEditorStore()
 const props = defineProps({
   modelValue: {
     type: Object as PropType<EditorType>,
@@ -86,7 +88,12 @@ const extraDragData = ref({
   disX: 0,
   disY: 0
 })
-const current = ref<ComponentType | null>(null)
+const current = computed<ComponentType>({
+  get: () => store.current,
+  set: (val) => {
+    store.current = val
+  }
+})
 const {
   markLine,
   updateLines,
