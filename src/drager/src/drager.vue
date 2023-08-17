@@ -202,6 +202,7 @@ watch(() => props.selected, (val) => {
   }
   &.selected {
     transition: none;
+    user-select: none;
     &::after {
       display: block;
       outline: 1px dashed var(--es-drager-color);
@@ -212,9 +213,6 @@ watch(() => props.selected, (val) => {
   }
   &.border {
     border: 1px solid var(--es-drager-color);
-  }
-  &.dragging {
-    user-select: none;
   }
   &.disabled {
     opacity: 0.4;

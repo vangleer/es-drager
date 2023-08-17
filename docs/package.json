@@ -13,7 +13,7 @@
     "ace-builds": "^1.24.0",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.8",
-    "es-drager": "^1.1.4",
+    "es-drager": "^1.1.5",
     "highlight.js": "^11.8.0",
     "mitt": "^3.0.1",
     "pinia": "^2.1.4",
