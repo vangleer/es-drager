@@ -16,8 +16,12 @@ export function useDrager(
     top: props.top,
     angle: props.angle
   })
+  // 限制多个鼠标键按下的情况
+  const mouseSet = new Set()
   function onMousedown(e: MouseTouchEvent) {
-    if (props.disabled) return
+    mouseSet.add((e as MouseEvent).button)
+    if (props.disabled) return 
+    
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
@@ -30,6 +34,8 @@ export function useDrager(
     
     emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseTouchEvent) => {
+      // 不是一个按键不执行移动
+      if (mouseSet.size > 1) return
       const { clientX, clientY } = getXY(e)
       let moveX = (clientX - downX) / props.scaleRatio + left
       let moveY = (clientY - downY) / props.scaleRatio + top
@@ -58,6 +64,7 @@ export function useDrager(
     }
 
     setupMove(onMousemove, (e: MouseTouchEvent) => {
+      mouseSet.clear()
       isMousedown.value = false
       document.addEventListener('click', clickOutsize, { once: true })
       emit && emit('drag-end', dragData.value)

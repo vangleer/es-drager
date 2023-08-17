@@ -15,7 +15,7 @@
         class="es-drager-dot"
         :data-side="item.side"
         :style="{ ...item }"
-        @mousedown.stop.prevent="onDotMousedown(item, $event)"
+        @mousedown="onDotMousedown(item, $event)"
         @touchstart.passive="onDotMousedown(item, $event)"
       >
         <slot name="resize" v-bind="{ side: item.side }">
@@ -102,7 +102,6 @@ function handleRotateEnd(angle: number) {
  */
 function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   e.stopPropagation()
-  e.preventDefault()
   // 获取鼠标按下的坐标
   const { clientX, clientY } = getXY(e)
   const downX = clientX
