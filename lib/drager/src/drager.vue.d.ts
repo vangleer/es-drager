@@ -76,6 +76,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
     resizeList: {
         type: import("vue").PropType<string[]>;
     };
+    equalProportion: {
+        type: BooleanConstructor;
+    };
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
     tag: {
         type: import("vue").PropType<string | import("vue").Component>;
@@ -154,6 +157,9 @@ declare const _sfc_main: import("vue").DefineComponent<{
     resizeList: {
         type: import("vue").PropType<string[]>;
     };
+    equalProportion: {
+        type: BooleanConstructor;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -187,5 +193,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
     scaleRatio: number;
     disabledKeyEvent: boolean;
     border: boolean;
+    equalProportion: boolean;
 }, {}>;
 export default _sfc_main;

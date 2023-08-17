@@ -29,6 +29,7 @@ declare const _default: Plugin & {
             scaleRatio?: number | undefined;
             disabledKeyEvent?: boolean | undefined;
             border?: boolean | undefined;
+            equalProportion?: boolean | undefined;
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
             "onDrag-start"?: ((...args: any[]) => any) | undefined;
@@ -177,6 +178,9 @@ declare const _default: Plugin & {
             resizeList: {
                 type: import("vue").PropType<string[]>;
             };
+            equalProportion: {
+                type: BooleanConstructor;
+            };
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -210,6 +214,7 @@ declare const _default: Plugin & {
             scaleRatio: number;
             disabledKeyEvent: boolean;
             border: boolean;
+            equalProportion: boolean;
         }, {}, string, {}> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -308,6 +313,9 @@ declare const _default: Plugin & {
         resizeList: {
             type: import("vue").PropType<string[]>;
         };
+        equalProportion: {
+            type: BooleanConstructor;
+        };
     }>> & {
         onChange?: ((...args: any[]) => any) | undefined;
         onDrag?: ((...args: any[]) => any) | undefined;
@@ -401,6 +409,9 @@ declare const _default: Plugin & {
     resizeList: {
         type: import("vue").PropType<string[]>;
     };
+    equalProportion: {
+        type: BooleanConstructor;
+    };
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -434,5 +445,6 @@ declare const _default: Plugin & {
     scaleRatio: number;
     disabledKeyEvent: boolean;
     border: boolean;
+    equalProportion: boolean;
 }, {}, string, {}> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;

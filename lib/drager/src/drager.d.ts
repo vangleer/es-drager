@@ -83,6 +83,9 @@ export declare const DragerProps: {
     resizeList: {
         type: PropType<string[]>;
     };
+    equalProportion: {
+        type: BooleanConstructor;
+    };
 };
 export interface DragData {
     width: number;
