@@ -7,6 +7,7 @@
       class="es-contentmenu"
       :style="style"
       @click.stop
+      @mousedown.stop
     >
       <ul v-if="state.option.items">
         <li v-for="item in state.option.items" @click="handleItemClick(item)">{{ item.label }}</li>
@@ -18,10 +19,10 @@
 <script setup lang='ts'>
 import { ref, computed, onMounted, reactive, onBeforeUnmount, PropType } from 'vue'
 import { computePosition, flip, shift, offset } from '@floating-ui/dom'
-import { DropdownOption, DropdownItem } from './index'
+import { MenuItem, MenuOption } from './index'
 const props = defineProps({
   option: {
-    type: Object as PropType<DropdownOption>,
+    type: Object as PropType<MenuOption>,
     default: () => ({})
   }
 })
@@ -35,13 +36,18 @@ const state = reactive({
   left: 0
 })
 
+// 菜单的位置
 const style = computed(() => ({ left: state.left + 'px', top: state.top + 'px' }))
+// 触发器的位置
 const triggerStyle = computed(() => ({ left: state.option.clientX + 'px', top: state.option.clientY + 'px' }))
+
+// floating-ui 中间件
 const middleware = [shift(), flip(), offset(10)]
+
 const open = (option: Record<string, any>) => {
   state.option = option
   state.visible = true
-  
+  // 每次打开计算最新位置
   computePosition(triggerRef.value, menuRef.value, { middleware }).then(data => {
     state.left = data.x
     state.top = data.y
@@ -51,23 +57,18 @@ const close = () => {
   state.visible = false
 }
 
-const handleItemClick = (item: DropdownItem) => {
+// 点击菜单项
+const handleItemClick = (item: MenuItem) => {
   state.option.onClick && state.option.onClick(item)
   close()
 }
 
-function onMouseDown(e: Event) {
-  if (!menuRef.value.contains(e.target)) {
-    close()
-  }
-}
-
 onMounted(() => {
-  document.addEventListener('mousedown', onMouseDown, true)
+  document.addEventListener('mousedown', close)
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', onMouseDown)
+  document.removeEventListener('mousedown', close)
 })
 
 defineExpose({

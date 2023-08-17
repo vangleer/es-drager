@@ -32,6 +32,7 @@ const state = reactive({
   visible: false
 })
 let editor: ace.Ace.Editor
+
 const open = (option: Record<string, any>) => {
   state.option = option
   state.visible = true
@@ -50,6 +51,7 @@ const open = (option: Record<string, any>) => {
     editor.setValue(JSON.stringify(JSON.parse(state.option.content), null, 4))
   })
 }
+// 关闭弹窗
 const close = () => {
   state.visible = false
 }
@@ -59,6 +61,7 @@ const handleConfirm = () => {
   confirm && confirm(editor && editor.getValue())
 }
 
+// 点击导出json
 const handleExport = () => {
   if (!editor) return
   const link = document.createElement('a')
@@ -74,6 +77,3 @@ defineExpose({
 })
 </script>
 
-<style lang='scss' scoped>
-
-</style>
