@@ -7,10 +7,12 @@ type ActionMethods = {
 }
 // 键盘映射表
 const keyboardMap = {
+  ['ctrl+x']: 'cut',
   ['ctrl+c']: 'copy',
   ['ctrl+v']: 'paste',
   ['Delete']: 'remove',
-  ['ctrl+a']: 'selectAll'
+  ['ctrl+a']: 'selectAll',
+  ['ctrl+d']: 'duplicate'
 }
 export function useActions(
   data: Ref<EditorType>,
@@ -48,6 +50,10 @@ export function useActions(
     remove() { // 删除
       const index = getIndex(currentMenudownElement)
       if (index > -1) data.value.elements.splice(index, 1)
+    },
+    cut(element) { // 剪切
+      copySnapshot = element
+      actions.remove!(element)
     },
     copy(element) { // 拷贝
       copySnapshot = element
@@ -128,6 +134,7 @@ export function useActions(
     const selectedElements = data.value.elements.filter(item => item.selected)
     const actionItems: MenuItem[] = [
       { action: 'remove', label: '删除' },
+      { action: 'cut', label: '剪切' },
       { action: 'copy', label: '复制' },
       { action: 'duplicate', label: '创建副本' },
       { action: 'top', label: '置顶' },
