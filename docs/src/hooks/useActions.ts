@@ -1,9 +1,16 @@
 import { $contextmenu, ActionType, MenuItem } from '@/components/common'
 import { ComponentType, EditorType } from '@/components/types'
 import { cancelGroup, deepCopy, makeGroup, useId } from '@/utils'
-import { computed, Ref } from 'vue'
+import { computed, onBeforeMount, onMounted, Ref } from 'vue'
 type ActionMethods = {
   [key in ActionType]?: (element: ComponentType, ...args: any[]) => void
+}
+// 键盘映射表
+const keyboardMap = {
+  ['ctrl+c']: 'copy',
+  ['ctrl+v']: 'paste',
+  ['Delete']: 'remove',
+  ['ctrl+a']: 'selectAll'
 }
 export function useActions(
   data: Ref<EditorType>,
@@ -172,6 +179,33 @@ export function useActions(
       }
     })
   }
+
+  // 监听键盘事件
+  const onKeydown = (e: KeyboardEvent) => {
+    e.preventDefault()
+    const { ctrlKey, key } = e
+    // 拼凑按下的键
+    const keyArr = []
+    if (ctrlKey) keyArr.push('ctrl')
+    keyArr.push(key)
+    const keyStr = keyArr.join('+')
+    // 获取操作
+    const action = (keyboardMap as any)[keyStr]! as ActionType
+    // 如果actions中有具体的操作则执行
+    if (actions[action]) {
+      // 找到当前选中的元素
+      currentMenudownElement = data.value.elements.find(item => item.selected) || null
+      actions[action]!(currentMenudownElement!)
+    }
+  }
+  
+  onMounted(() => {
+    window.addEventListener('keydown', onKeydown)
+  })
+
+  onBeforeMount(() => {
+    window.removeEventListener('keydown', onKeydown)
+  })
 
   return {
     onContextmenu,

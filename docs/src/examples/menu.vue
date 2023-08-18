@@ -12,6 +12,8 @@
         v-for="item in data.elements"
         v-bind="item"
         rotatable
+        @drag-start="onDragstart(item)"
+        @change="onChange($event, item)"
         @contextmenu.stop="onContextmenu($event, item)"
         @click.stop
         @mousedown.stop
@@ -36,7 +38,7 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import GridRect from '@/components/editor/GridRect.vue'
-import Drager from 'es-drager'
+import Drager, { DragData } from 'es-drager'
 import { ComponentType, EditorType, ToolType } from '@/components/types'
 import { useId } from '@/utils'
 import { useActions } from '@/hooks'
@@ -109,6 +111,21 @@ const tools: ToolType[] = [
     })
   }}
 ]
+
+function onDragstart(item: ComponentType) {
+  // 将上一次移动元素变为非选
+  data.value.elements.forEach((item: ComponentType) => item.selected = false)
+  
+  const current = item
+  // 选中当前元素
+  current.selected = true
+}
+
+function onChange(dragData: DragData, item: ComponentType) {
+  Object.keys(dragData).forEach((key) => {
+    item[key as keyof DragData] = dragData[key as keyof DragData]
+  })
+}
 </script>
 
 <style lang='scss' scoped>
