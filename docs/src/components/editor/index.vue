@@ -8,11 +8,11 @@
   >
     <template v-for="item in data.elements">
       <ESDrager
+        rotatable
         v-bind="item"
         :grid-x="gridSize"
         :grid-y="gridSize"
         boundary
-        rotatable
         @drag-start="onDragstart(item)"
         @drag-end="onDragend"
         @drag="onDrag"
@@ -37,7 +37,7 @@
 
     <MarkLine v-bind="markLine" />
 
-    <GridRect />
+    <GridRect v-if="data.container.snapToGrid" :grid="data.container.gridSize" />
 
     <Area ref="areaRef" @move="onAreaMove" @up="onAreaUp" />
   </div>
@@ -74,10 +74,13 @@ const data = computed({
 })
 
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
+
 const editorStyle = computed(() => {
+  const { width, height } =  data.value.container.style
   return {
-    '--es-editor-grid-size': gridSize.value + 'px',
-    transformOrigin: 'left top'
+    ...data.value.container.style,
+    // width: width + 'px',
+    // height: height + 'px',
   }
 })
 

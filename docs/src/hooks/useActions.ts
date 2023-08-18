@@ -189,7 +189,6 @@ export function useActions(
 
   // 监听键盘事件
   const onKeydown = (e: KeyboardEvent) => {
-    e.preventDefault()
     const { ctrlKey, key } = e
     // 拼凑按下的键
     const keyArr = []
@@ -200,6 +199,7 @@ export function useActions(
     const action = (keyboardMap as any)[keyStr]! as ActionType
     // 如果actions中有具体的操作则执行
     if (actions[action]) {
+      e.preventDefault()
       // 找到当前选中的元素
       currentMenudownElement = data.value.elements.find(item => item.selected) || null
       actions[action]!(currentMenudownElement!)

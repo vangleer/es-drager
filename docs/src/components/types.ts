@@ -14,7 +14,11 @@ export type ComponentType = DragerType & {
   editable?: boolean
 }
 export type EditorType = {
-  container?: { gridSize: number; style: { width: string; height: string } }; 
+  container: {
+    snapToGrid: boolean
+    gridSize: number
+    style: CSSProperties
+  }
   elements: ComponentType[]
 }
 
