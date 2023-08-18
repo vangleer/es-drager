@@ -44,6 +44,11 @@ import { useId } from '@/utils'
 import { useActions } from '@/hooks'
 import { $dialog, $upload } from '@/components/common'
 const data = ref<EditorType>({
+  container: {
+    gridSize: 10,
+    snapToGrid: true,
+    style: {}
+  },
   elements: [{
     id: useId(),
     component: 'div',
