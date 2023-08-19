@@ -64,11 +64,20 @@ const handleConfirm = () => {
 // 点击导出json
 const handleExport = () => {
   if (!editor) return
+  // 创建a标签
   const link = document.createElement('a')
+  // 生成文件名称
   const filename = dayjs().format('YYYY-MM-DD') + '-es-drager.json'
   link.download = filename
-  link.href = 'data:text/plain,' + editor.getValue()
+  // 创建blob
+  const blob = new Blob([editor.getValue()])
+  // 创建临时url
+  const href = URL.createObjectURL(blob)
+  link.href = href
+  // 调用click
   link.click()
+  // 销毁
+  URL.revokeObjectURL(href)
 }
 
 defineExpose({
