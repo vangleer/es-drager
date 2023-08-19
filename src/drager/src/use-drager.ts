@@ -21,15 +21,14 @@ export function useDrager(
   function onMousedown(e: MouseTouchEvent) {
     mouseSet.add((e as MouseEvent).button)
     if (props.disabled) return 
-    
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
     
     const { left, top } = dragData.value
-    let maxX = 0, maxY = 0
+    let minX = 0, maxX = 0, minY = 0, maxY = 0
     if (props.boundary) {
-      [maxX, maxY] = getBoundary()
+      [minX, maxX, minY, maxY] = getBoundary()
     }
     
     emit && emit('drag-start', dragData.value)
@@ -54,7 +53,7 @@ export function useDrager(
       }
       
       if (props.boundary) {
-        [moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
+        [moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
       }
 
       dragData.value.left = moveX
@@ -70,15 +69,34 @@ export function useDrager(
       emit && emit('drag-end', dragData.value)
     })
   }
-  const getBoundary = () => {
+  const getBoundary2 = () => {
+    let minX = 0, minY = 0
     const { width, height } = dragData.value
     const parentEl = targetRef.value!.parentElement || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
+
     // 最大x
     const maxX = parentElRect.width / props.scaleRatio - width
     // 最大y
     const maxY = parentElRect.height / props.scaleRatio - height
-    return [maxX, maxY]
+    return [minX, maxX - minX, minY, maxY - minY]
+  }
+  const getBoundary = () => {
+    let minX = 0, minY = 0
+    const { left, top, height, width, angle } = dragData.value
+    const parentEl = targetRef.value!.parentElement || document.body
+    const parentElRect = parentEl!.getBoundingClientRect()
+    if (angle) {
+      const rect = targetRef.value!.getBoundingClientRect()
+      minX = Math.abs(rect.left - (left + parentElRect.left))
+      minY = Math.abs(rect.top - (top + parentElRect.top))
+    }
+    
+    // 最大x
+    const maxX = parentElRect.width / props.scaleRatio - width
+    // 最大y
+    const maxY = parentElRect.height / props.scaleRatio - height
+    return [minX, maxX - minX, minY, maxY - minY]
   }
   /**
    * @param moveX 移动的X
@@ -86,13 +104,13 @@ export function useDrager(
    * @param maxX 最大移动X距离
    * @param maxY 最大移动Y距离
    */
-  const fixBoundary = (moveX: number, moveY: number, maxX: number, maxY: number) => {
+  const fixBoundary = (moveX: number, moveY: number, minX: number, maxX: number, minY: number, maxY: number) => {
     // 判断x最小最大边界
-    moveX = moveX < 0 ? 0 : moveX
+    moveX = moveX < minX ? minX : moveX
     moveX = moveX > maxX ? maxX : moveX
 
     // 判断y最小最大边界
-    moveY = moveY < 0 ? 0 : moveY
+    moveY = moveY < minY ? minY : moveY
     moveY = moveY > maxY ? maxY : moveY
     return [moveX, moveY]
   }
@@ -129,8 +147,8 @@ export function useDrager(
 
     // 边界判断
     if (props.boundary) {
-      const [maxX, maxY] = getBoundary()
-      ;[moveX, moveY] = fixBoundary(moveX, moveY, maxX, maxY)
+      const [minX, maxX, minY, maxY] = getBoundary()
+      ;[moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
     }
     // 一次只会有一个会变
     dragData.value.left = moveX
