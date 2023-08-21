@@ -66,7 +66,11 @@ const emitFn = (type: EventType, ...args: any) => {
   emit('change', ...args)
 }
 const dragRef = ref<HTMLElement | null>(null)
-const { selected, dragData, isMousedown } = useDrager(dragRef, props, emitFn)
+const {
+  selected,
+  dragData,
+  isMousedown
+} = useDrager(dragRef, props, emitFn)
 
 const dotList = ref(getDotList(0, props.resizeList))
 const showResize = computed(() => props.resizable && !props.disabled)

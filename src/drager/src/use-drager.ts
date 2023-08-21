@@ -86,7 +86,7 @@ export function useDrager(
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.parentElement || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
-    if (angle) {
+    if (angle && props.scaleRatio === 1) {
       const rect = targetRef.value!.getBoundingClientRect()
       minX = Math.abs(rect.left - (left + parentElRect.left))
       minY = Math.abs(rect.top - (top + parentElRect.top))
@@ -185,6 +185,7 @@ export function useDrager(
   return {
     isMousedown,
     selected,
-    dragData
+    dragData,
+    getBoundary
   }
 }
