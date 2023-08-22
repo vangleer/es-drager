@@ -30,5 +30,6 @@ export type EditorType = {
 
 export type ToolType = {
   label: string
+  icon?: any
   handler: Function
 }

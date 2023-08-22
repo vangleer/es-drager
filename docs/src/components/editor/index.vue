@@ -208,6 +208,7 @@ onBeforeMount(() => {
 
 <style lang='scss' scoped>
 .es-editor {
+  box-sizing: border-box;
   position: relative;
   width: 100%;
   height: 100%;

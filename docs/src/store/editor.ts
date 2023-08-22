@@ -3,8 +3,9 @@ import { useId } from '@/utils'
 import { defineStore } from 'pinia'
 
 interface EditorState {
-  data: EditorType,
+  data: EditorType
   current: ComponentType
+  preview: Boolean
 }
 
 const defaultData = {
@@ -52,7 +53,8 @@ export const  useEditorStore = defineStore('editor', {
   state: (): EditorState => {
     return {
       data: defaultData,
-      current: {}
+      current: {},
+      preview: false
     }
   },
   actions: {
