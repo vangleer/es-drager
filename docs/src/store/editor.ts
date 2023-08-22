@@ -16,7 +16,8 @@ const defaultData = {
     snapToGrid: true,
     gridSize: 10,
     gridColor: '',
-    style: {}
+    style: {},
+    scaleRatio: 1
   },
   elements: [
     {

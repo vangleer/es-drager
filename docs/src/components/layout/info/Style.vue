@@ -2,7 +2,7 @@
   <div class="es-info-style" @click.stop>
     <el-form
       :model="store.current"
-      label-width="80px"
+      label-width="100px"
       label-position="left"
       v-if="store.current && store.current.selected"
     >
@@ -63,10 +63,10 @@
     <el-form
       v-else
       :model="store.data.container"
-      label-width="80px"
+      label-width="90px"
       label-position="left"
     >
-      <el-form-item label="画布比例">
+      <el-form-item label="画布尺寸">
         <el-select v-model="editorSize">
           <el-option-group
             v-for="group in screenSize"
@@ -80,6 +80,10 @@
             />
           </el-option-group>
         </el-select>
+      </el-form-item>
+
+      <el-form-item label="缩放比例(%)">
+        <el-input v-model.number="scaleRatio" @change="handleScaleRatioChange" />
       </el-form-item>
 
       <el-form-item label="画布宽度">
@@ -133,7 +137,7 @@ const borderStyleList = [
   { label: '虚线', value: 'dashed' },
   { label: '点线', value: 'dotted' }
 ]
-
+const scaleRatio = ref(100)
 const editorSize = computed({
   get: () => {
     const { width, height } = store.data.container.style
@@ -165,6 +169,9 @@ const screenSize = [
   }
 ]
 
+const handleScaleRatioChange = (val: number) => {
+  store.data.container.scaleRatio = val / 100
+}
 const handleColorClick = (style: CSSProperties) => {
   if (!store.current.selected) return
   store.current.style = { ...store.current.style, ...style }

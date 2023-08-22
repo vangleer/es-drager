@@ -12,6 +12,7 @@
         v-bind="item"
         :grid-x="gridSize"
         :grid-y="gridSize"
+        :scaleRatio="scaleRatio"
         boundary
         @drag-start="onDragstart(item)"
         @drag-end="onDragend"
@@ -78,13 +79,15 @@ const data = computed({
 })
 const showMarkline = computed(() => data.value.container.markline && data.value.container.markline.show)
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
-
+const scaleRatio = computed(() => props.modelValue.container?.scaleRatio || 1)
 const editorStyle = computed(() => {
   const { width, height } =  data.value.container.style
   return {
     ...data.value.container.style,
     width: width + 'px',
     height: height + 'px',
+    transform: `scale(${scaleRatio.value})`,
+    transformOrigin: 'top left'
   }
 })
 

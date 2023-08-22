@@ -23,6 +23,7 @@ export type EditorType = {
     gridSize: number
     gridColor?: string
     style: CSSProperties
+    scaleRatio?: number
   }
   elements: ComponentType[]
 }
