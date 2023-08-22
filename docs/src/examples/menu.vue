@@ -46,6 +46,7 @@ import { $dialog, $upload } from '@/components/common'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,
+    markline: {},
     snapToGrid: true,
     style: {}
   },
