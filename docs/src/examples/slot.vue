@@ -6,7 +6,7 @@
     :top="100"
     rotatable
   >
-    <img style="width: 100%;height: 100%;" :src="imgUrl">
+    <img class="img" style="width: 100%;height: 100%;" :src="imgUrl">
   </Drager>
 
   <Drager
@@ -34,7 +34,6 @@
       <div class="custom-rotate">E</div>
     </template>
   </Drager>
-  
 </template>
 
 <script setup lang='ts'>
@@ -54,5 +53,8 @@ import imgUrl from '../assets/demo.png'
   font-size: 20px;
   font-weight: 700;
   color: #0ec3b8;
+}
+.img {
+  filter: brightness(5);
 }
 </style>

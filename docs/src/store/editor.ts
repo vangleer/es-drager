@@ -9,12 +9,14 @@ interface EditorState {
 
 const defaultData = {
   container: {
+    markline: {
+      show: true,
+      color: ''
+    },
     snapToGrid: true,
     gridSize: 10,
-    style: {
-      width: 500,
-      height: 500,
-    }
+    gridColor: '',
+    style: {}
   },
   elements: [
     {

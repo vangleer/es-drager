@@ -29,9 +29,10 @@ import { $dialog, $upload } from '@/components/common'
 import { ToolType } from '../types'
 import { useId } from '@/utils/common'
 import { useEditorStore } from '@/store'
+import { onMounted, ref } from 'vue'
 const store = useEditorStore()
 const title = 'ES Drager Editor 开发中...'
-
+const mainRef = ref<HTMLElement>()
 const { commands } = useCommand()
 
 const tools: ToolType[] = [
@@ -104,6 +105,15 @@ function drop(e: DragEvent) {
   store.data.elements = elements
   currentComponent = null
 }
+
+function init() {
+  const rect = mainRef.value!.getBoundingClientRect()
+  store.data.container.style.width = rect.width - 1
+  store.data.container.style.height = rect.height - 4
+}
+onMounted(() => {
+  init()
+})
 </script>
 
 <style lang='scss'>
@@ -120,7 +130,8 @@ function drop(e: DragEvent) {
   .es-layout-main {
     flex: 1;
     position: relative;
-    padding: 20px;
+    margin: 20px;
+    overflow: auto;
   }
 }
 </style>

@@ -16,7 +16,12 @@ export type ComponentType = DragerType & {
 export type EditorType = {
   container: {
     snapToGrid: boolean
+    markline: {
+      color?: string
+      show?: Boolean
+    }
     gridSize: number
+    gridColor?: string
     style: CSSProperties
   }
   elements: ComponentType[]

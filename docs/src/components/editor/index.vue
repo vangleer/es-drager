@@ -35,9 +35,13 @@
       </ESDrager>
     </template>
 
-    <MarkLine v-bind="markLine" />
+    <MarkLine v-if="showMarkline" v-bind="markLine" />
 
-    <GridRect v-if="data.container.snapToGrid" :grid="data.container.gridSize" />
+    <GridRect
+      v-if="data.container.snapToGrid"
+      :grid="data.container.gridSize"
+      :border-color="data.container.gridColor"
+    />
 
     <Area ref="areaRef" @move="onAreaMove" @up="onAreaUp" />
   </div>
@@ -72,15 +76,15 @@ const data = computed({
   get: () => props.modelValue,
   set: () => {}
 })
-
+const showMarkline = computed(() => data.value.container.markline && data.value.container.markline.show)
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
 
 const editorStyle = computed(() => {
   const { width, height } =  data.value.container.style
   return {
     ...data.value.container.style,
-    // width: width + 'px',
-    // height: height + 'px',
+    width: width + 'px',
+    height: height + 'px',
   }
 })
 
@@ -111,6 +115,7 @@ const {
 } = useArea(data, areaRef)
 
 const {
+  editorRect,
   onContextmenu,
   onEditorContextMenu
 } = useActions(data, editorRef)
@@ -132,7 +137,7 @@ function onDragstart(element: ComponentType) {
   extraDragData.value.startY = current.value.top!
 
   // 更新辅助线的可能性
-  updateLines()
+  showMarkline.value && updateLines()
   events.emit('dragstart')
 }
 
@@ -146,7 +151,7 @@ function onDrag(dragData: DragData) {
   const disY = dragData.top - extraDragData.value.startY
 
   // 更新是否显示markeline
-  updateMarkline(dragData)
+  showMarkline.value && updateMarkline(dragData)
 
   // 如果选中了多个
   data.value.elements.forEach((item: ComponentType, index: number) => {

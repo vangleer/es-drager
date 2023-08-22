@@ -46,6 +46,7 @@ import { useArea } from '@/hooks/useArea'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,
+    markline: {},
     snapToGrid: true,
     style: {}
   },

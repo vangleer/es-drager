@@ -30,7 +30,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
 .es-layout-info {
   flex-shrink: 0;
-  width: 200px;
+  width: 230px;
   height: 100%;
   border-left: var(--es-border);
   .es-info-tabs {

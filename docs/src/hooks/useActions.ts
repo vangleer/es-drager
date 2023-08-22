@@ -215,6 +215,7 @@ export function useActions(
   })
 
   return {
+    editorRect,
     onContextmenu,
     onEditorContextMenu
   }
