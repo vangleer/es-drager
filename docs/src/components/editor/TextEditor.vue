@@ -45,7 +45,7 @@ watch(() => [props.editable], () => {
   left: 50%;
   transform: translate(-50%, -50%);
   word-break: break-all;
-  display: inline-block;
+  display: flex;
   &.editable {
     z-index: 1;
     cursor: text;

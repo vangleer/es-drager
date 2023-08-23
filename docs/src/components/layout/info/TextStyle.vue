@@ -1,7 +1,11 @@
 <template>
   <div>
+    <el-form-item label="字体颜色">
+      <el-color-picker v-model="textStyle.color" />
+    </el-form-item>
+    
     <el-form-item label="标题">
-      <el-select v-model="titleValue" @change="handleTitleChange">
+      <el-select v-model="titleValue" placeholder="标题" @change="handleTitleChange">
         <el-option
           v-for="item in titles"
           :label="item.label"
@@ -11,13 +15,26 @@
         </el-option>
       </el-select>
     </el-form-item>
+    
+    <el-form-item label="字体">
+      <el-select v-model="textStyle.fontFamily" placeholder="字体">
+        <el-option
+          v-for="item in fontFamilyList"
+          :label="item.label"
+          :value="item.label"
+        >
+        <span :style="{ fontFamily: item.label }">{{ item.label }}</span>
+        </el-option>
+      </el-select>
+    </el-form-item>
 
     <el-form-item label="字体大小">
       <el-input v-model="textStyle.fontSize" />
     </el-form-item>
     
-    <el-form-item label="字体颜色">
-      <el-color-picker v-model="textStyle.color" />
+    
+    <el-form-item label="行高">
+      <el-input-number v-model="textStyle.lineHeight" />
     </el-form-item>
 
     <div class="text-style-block" v-for="block, index in fontStyleListFormat">
@@ -29,7 +46,6 @@
         v-html="item.label"
       ></div>
     </div>
-
   </div>
 </template>
 
@@ -37,7 +53,6 @@
 import { useEditorStore } from '@/store'
 import { ref, CSSProperties, computed } from 'vue'
 import { getIcon } from '@/assets/images/icons/index'
-
 const store = useEditorStore()
 
 const titles = [
@@ -59,10 +74,10 @@ const defaultList = [
   { label: getIcon('left'), key: 'justifyContent', value: 'flex-start' },
   { label: getIcon('center'), key: 'justifyContent', value: 'center' },
   { label: getIcon('right'), key: 'justifyContent', value: 'flex-end' },
-
-  { label: getIcon('top'), key: 'alighItems', value: 'flex-start' },
-  { label: getIcon('middle'), key: 'alighItems', value: 'center' },
-  { label: getIcon('bottom'), key: 'alighItems', value: 'flex-end' }
+  
+  { label: getIcon('top'), key: 'alignItems', value: 'flex-start' },
+  { label: getIcon('middle'), key: 'alignItems', value: 'center' },
+  { label: getIcon('bottom'), key: 'alignItems', value: 'flex-end' }
 ]
 const fontStyleList = computed(() => {
   return [...defaultList].map(item => {
@@ -78,6 +93,18 @@ const fontStyleListFormat = computed(() => {
   ]
 })
 
+const fontFamilyList = [
+  { label: 'Helvetica' },
+  { label: 'PingFang SC' },
+  { label: 'Hiragino Sans GB' },
+  { label: 'Microsoft YaHei' },
+  { label: 'Times New Roman' },
+  { label: 'Verdana' },
+  { label: 'Courier New' },
+  { label: 'Georgia' },
+  { label: 'Lucida Sans' },
+  { label: 'Tahoma' }
+]
 function handleFontStyleClick(item: any) {
   item.selected = !item.selected
   setStyle(item.key, item.selected ? item.value : undefined)

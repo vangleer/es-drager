@@ -37,10 +37,5 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
       padding-left: 20px;
     }
   }
-
-  .es-info-style,
-  .es-info-text {
-    padding: 0 10px;
-  }
 }
 </style>

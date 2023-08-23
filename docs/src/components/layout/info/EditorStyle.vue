@@ -3,6 +3,7 @@
     :model="store.data.container"
     label-width="90px"
     label-position="left"
+    style="padding: 0 10px;"
   >
     <el-form-item label="画布尺寸">
       <el-select v-model="editorSize">
@@ -94,20 +95,3 @@ const handleScaleRatioChange = (val: number) => {
 
 </script>
 
-<style lang='scss' scoped>
-.es-info-style {
-  padding: 0 10px;
-  .color-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    .color-item {
-      width: 22%;
-      height: 24px;
-      border-width: 2px;
-      border-style: solid;
-      margin-bottom: 10px;
-    }
-  }
-}
-</style>

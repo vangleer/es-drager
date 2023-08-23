@@ -1,73 +1,79 @@
 <template>
   <el-form
     :model="store.current"
-    label-width="100px"
+    label-width="80px"
     label-position="left"
     v-if="store.current && store.current.selected"
   >
-    <div class="info-color-map">
-      <div class="color-list" v-for="item in itemList">
-        <div class="color-item" v-for="style in item" :style="style" @click="handleColorClick(style)"></div>
-      </div>
-    </div>
-    <el-form-item label="left">
-      <el-input-number v-model="store.current.left" />
-    </el-form-item>
-    <el-form-item label="top">
-      <el-input-number v-model="store.current.top" />
-    </el-form-item>
-    <el-form-item label="width">
-      <el-input-number v-model="store.current.width" />
-    </el-form-item>
-    <el-form-item label="height">
-      <el-input-number v-model="store.current.height" />
-    </el-form-item>
-    <el-form-item label="angle">
-      <el-input-number v-model="store.current.angle" />
-    </el-form-item>
+    <el-collapse v-model="collapseList">
+      <el-collapse-item title="布局/样式" name="style">
+        <div class="info-color-map">
+          <div class="color-list" v-for="item in itemList">
+            <div class="color-item" v-for="style in item" :style="style" @click="handleColorClick(style)"></div>
+          </div>
+        </div>
+        <el-form-item label="left">
+          <el-input-number v-model="store.current.left" />
+        </el-form-item>
+        <el-form-item label="top">
+          <el-input-number v-model="store.current.top" />
+        </el-form-item>
+        <el-form-item label="width">
+          <el-input-number v-model="store.current.width" />
+        </el-form-item>
+        <el-form-item label="height">
+          <el-input-number v-model="store.current.height" />
+        </el-form-item>
+        <el-form-item label="angle">
+          <el-input-number v-model="store.current.angle" />
+        </el-form-item>
 
-    <el-form-item label="disabled">
-      <el-checkbox v-model="store.current.disabled" />
-    </el-form-item>
-    <el-form-item label="resizable">
-      <el-checkbox v-model="store.current.resizable" :checked="true" />
-    </el-form-item>
-    <el-form-item label="rotatable">
-      <el-checkbox v-model="store.current.rotatable" :checked="true" />
-    </el-form-item>
+        <el-form-item label="disabled">
+          <el-checkbox v-model="store.current.disabled" />
+        </el-form-item>
+        <el-form-item label="resizable">
+          <el-checkbox v-model="store.current.resizable" :checked="true" />
+        </el-form-item>
+        <el-form-item label="rotatable">
+          <el-checkbox v-model="store.current.rotatable" :checked="true" />
+        </el-form-item>
 
-    <template v-if="store.current.style">
-      <el-form-item label="背景">
-        <el-color-picker v-model="store.current.style.backgroundColor" />
-      </el-form-item>
-      <el-form-item label="边框宽度">
-        <el-input-number v-model="store.current.style.borderWidth" />
-      </el-form-item>
-      <el-form-item label="边框风格">
-        <el-select v-model="store.current.style.borderStyle">
-          <el-option
-            v-for="item in borderStyleList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="边框颜色">
-        <el-color-picker v-model="store.current.style.borderColor" />
-      </el-form-item>
-    </template>
-
-    <TextStyle />
+        <template v-if="store.current.style">
+          <el-form-item label="背景">
+            <el-color-picker v-model="store.current.style.backgroundColor" />
+          </el-form-item>
+          <el-form-item label="边框颜色">
+            <el-color-picker v-model="store.current.style.borderColor" />
+          </el-form-item>
+          <el-form-item label="边框宽度">
+            <el-input-number v-model="store.current.style.borderWidth" />
+          </el-form-item>
+          <el-form-item label="边框风格">
+            <el-select v-model="store.current.style.borderStyle">
+              <el-option
+                v-for="item in borderStyleList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </template>
+      </el-collapse-item>
+      <el-collapse-item title="文本" name="text">
+        <TextStyle />
+      </el-collapse-item>
+    </el-collapse>
+    
   </el-form>
 </template>
 
 <script setup lang='ts'>
 import { useEditorStore } from '@/store'
-import { ref, CSSProperties, computed } from 'vue'
+import { ref, CSSProperties } from 'vue'
 import TextStyle from './TextStyle.vue'
 const store = useEditorStore()
-
+const collapseList = ref(['style'])
 const itemList = ref<CSSProperties[][]>([
   [
     { backgroundColor: '#18141d', borderColor: '#ffffff' },

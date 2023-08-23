@@ -13,8 +13,13 @@ const store = useEditorStore()
 
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .es-info-style {
-  padding: 0 10px;
+  .el-collapse-item__header {
+    padding: 0 10px;
+  }
+  .el-collapse-item__content {
+    padding: 8px 12px;
+  }
 }
 </style>

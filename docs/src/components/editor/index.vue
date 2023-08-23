@@ -9,7 +9,7 @@
     <template v-for="item in data.elements">
       <ESDrager
         rotatable
-        v-bind="item"
+        v-bind="omit(item, ['style', 'props'])"
         :grid-x="gridSize"
         :grid-y="gridSize"
         :scaleRatio="scaleRatio"
@@ -26,12 +26,17 @@
           :is="item.component!"
           v-bind="item.props"
           :style="{
-            ...item.style,
+            ...pickStyle(item.style, false),
             width: '100%',
             height: '100%'
           }"
         >
-          <TextEditor v-if="item.text" :editable="item.editable" :text="item.text" />
+          <TextEditor
+            v-if="item.text"
+            :editable="item.editable"
+            :text="item.text"
+            :style="pickStyle(item.style)"
+          />
         </component>
       </ESDrager>
     </template>
@@ -52,7 +57,7 @@
 import { computed, ref, PropType, onMounted, onBeforeMount } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { events} from '@/utils'
+import { omit, events, pickStyle } from '@/utils'
 import { EditorType, ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
@@ -60,6 +65,7 @@ import Area from './Area.vue'
 import TextEditor from './TextEditor.vue'
 import { useMarkline, useArea, CommandStateType, useActions } from '@/hooks'
 import { useEditorStore } from '@/store'
+
 const store = useEditorStore()
 const props = defineProps({
   modelValue: {
