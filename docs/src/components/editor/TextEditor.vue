@@ -39,12 +39,13 @@ watch(() => [props.editable], () => {
 <style lang='scss' scoped>
 .es-text {
   width: calc(100% - 1px);
-  text-align: center;
+  height: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   word-break: break-all;
+  display: inline-block;
   &.editable {
     z-index: 1;
     cursor: text;

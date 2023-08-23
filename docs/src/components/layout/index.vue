@@ -64,16 +64,22 @@ const tools: ToolType[] = [
     $upload({
       resultType: 'image',
       onChange(e: string) {
+        const defaultWidth = 200
         const newElement: ComponentType = {
           id: useId(),
           component: 'img',
-          props: { src: e, width: 160, onLoad(e: Event) {
+          props: { src: e, width: defaultWidth, onLoadOnce(e: Event) {
+            // 避免多次执行
+            if (newElement.props.loaded) return
             // 图片加载完毕，得到原始宽高
             const { naturalHeight, naturalWidth } = e.target as any
             const cur = store.data.elements.find(item => item.id === newElement.id)!
-
-            cur.width = naturalWidth
-            cur.height = naturalHeight
+            // 上传图片最大宽度设置
+            let rate = defaultWidth / naturalWidth
+            if (rate > 1) rate = 1
+            cur.width = naturalWidth * rate
+            cur.height = naturalHeight * rate
+            newElement.props.loaded = true
           }}
         }
 

@@ -1,25 +1,23 @@
 <template>
   <div class="es-layout-info">
     <el-tabs v-model="activeName" class="es-info-tabs" @tab-click="handleClick">
-      <el-tab-pane label="样式" name="style">
+      <el-tab-pane :label="title" name="style">
         <Style />
-      </el-tab-pane>
-      <el-tab-pane label="文本" name="text">
-        <div class="es-info-text">
-          文本
-        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import Style from './Style.vue'
+import { useEditorStore } from '@/store'
+const store = useEditorStore()
+
+const title = computed(() => store.current && store.current.selected ? '元素属性' : '画布属性')
 
 const activeName = ref('style')
-
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
@@ -33,6 +31,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   width: 230px;
   height: 100%;
   border-left: var(--es-border);
+  overflow-y: auto;
   .es-info-tabs {
     .el-tabs__nav-scroll {
       padding-left: 20px;

@@ -31,8 +31,8 @@
             height: '100%'
           }"
         >
+          <TextEditor v-if="item.text" :editable="item.editable" :text="item.text" />
         </component>
-        <TextEditor v-if="item.text" :editable="item.editable" :text="item.text" />
       </ESDrager>
     </template>
 
