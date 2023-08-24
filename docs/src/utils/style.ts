@@ -1,7 +1,7 @@
 import { addPxUnit } from "./common"
 
 const unitKeys = [
-  'fontSize', 'lineHeight', 'borderWidth'
+  'fontSize', 'lineHeight', 'borderWidth', 'borderRadius'
 ]
 const textStyleKeys = [
   'fontSize', 'fontWeight', 'fontFamily', 'color', 'lineHeight', 'fontStyle', 'textDecoration', 'justifyContent', 'alignItems'

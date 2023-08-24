@@ -58,6 +58,13 @@
               />
             </el-select>
           </el-form-item>
+
+          <el-form-item label="边框半径">
+            <el-input-number v-model="store.current.style.borderRadius" />
+          </el-form-item>
+          <el-form-item label="透明度">
+            <el-slider :modelValue="1" :step="0.01" :min="0" :max="1" @input="onChange('opacity', $event)" />
+          </el-form-item>
         </template>
       </el-collapse-item>
       <el-collapse-item title="文本" name="text">
@@ -96,6 +103,10 @@ const borderStyleList = [
 const handleColorClick = (style: CSSProperties) => {
   if (!store.current.selected) return
   store.current.style = { ...store.current.style, ...style }
+}
+
+function onChange(key: string, value: any) {
+  (store.current.style as any)[key] = value
 }
 </script>
 
