@@ -14,22 +14,6 @@ export type ComponentType = DragerType & {
   editable?: boolean;
 };
 export type EditorType = {
-  container?: { gridSize: number; style: { width: string; height: string } };
-  elements: ComponentType[];
-};
-
-export type ToolType = {
-  label: string;
-  handler: Function;
-};
-
-export type IconType = DragerType & {
-  component?: string;
-  text?: string;
-  style?: CSSProperties;
-  props?: any;
-  icon?: string;
-};
   container: {
     snapToGrid: boolean
     markline: {
@@ -43,6 +27,14 @@ export type IconType = DragerType & {
   }
   elements: ComponentType[]
 }
+
+export type IconType = DragerType & {
+  component?: string;
+  text?: string;
+  style?: CSSProperties;
+  props?: any;
+  icon?: string;
+};
 
 export type ToolType = {
   label: string
