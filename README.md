@@ -155,6 +155,8 @@ import Drager from 'es-drager'
 | scaleRatio | 缩放比     | ^[number]        | 1     |
 | disabledKeyEvent | 禁用方向键移动     | ^[boolean]        | -     |
 | border | 是否显示边框     | ^[boolean]        | true     |
+| aspectRatio | 宽高缩放比     | ^[boolean]        | -     |
+| equalProportion | 宽高等比缩放     | ^[boolean]        | -     |
 | resizeList |  显示的缩放handle列表，`top`, `bottom`, `left`, `right`, `top-left`, `top-right`, `bottom-left`, `bottom-right`   | ^[string[]]        | -  |
 
 ### Drager 事件

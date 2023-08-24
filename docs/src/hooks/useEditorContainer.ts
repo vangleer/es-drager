@@ -1,12 +1,12 @@
 let cachedContainer: HTMLElement
 const selector = `es-editor-container-1996`
 
-type PopperContainerType = {
+type EditorContainerType = {
   container: HTMLElement
   selector: string
 }
 
-export const useEditorContainer = (): PopperContainerType => {
+export const useEditorContainer = (): EditorContainerType => {
   if (!cachedContainer && !document.querySelector(`#${selector}`)) {
     const container = document.createElement('div')
     container.id = selector

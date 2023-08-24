@@ -131,45 +131,45 @@ export function useCommand() {
       }
     }
   })
-  // 复制
-  registry({
-    name: 'copy',
-    keyboard: 'ctrl+c',
-    execute(newValue) {
-      const selectedItems = store.data.elements.filter(item => item.selected)
-      return {}
-    }
-  })
-  // 全选
-  registry({
-    name: 'selectAll',
-    keyboard: 'ctrl+a',
-    execute(newValue) {
-      store.data.elements.forEach(item => item.selected = true)
-      return {}
-    }
-  })
-  // 删除
-  registry({
-    name: 'remove',
-    keyboard: 'Delete',
-    pushQueue: true,
-    execute(newValue) {
-      const elements = store.data.elements.filter(item => !item.selected)
-      const state = {
-        before: store.data,
-        after: { ...store.data, elements }
-      }
-      return {
-        redo() {
-          store.data = state.after
-        },
-        undo() {
-          store.data = state.before
-        }
-      }
-    }
-  })
+  // // 复制
+  // registry({
+  //   name: 'copy',
+  //   keyboard: 'ctrl+c',
+  //   execute(newValue) {
+  //     const selectedItems = store.data.elements.filter(item => item.selected)
+  //     return {}
+  //   }
+  // })
+  // // 全选
+  // registry({
+  //   name: 'selectAll',
+  //   keyboard: 'ctrl+a',
+  //   execute(newValue) {
+  //     store.data.elements.forEach(item => item.selected = true)
+  //     return {}
+  //   }
+  // })
+  // // 删除
+  // registry({
+  //   name: 'remove',
+  //   keyboard: 'Delete',
+  //   pushQueue: true,
+  //   execute(newValue) {
+  //     const elements = store.data.elements.filter(item => !item.selected)
+  //     const state = {
+  //       before: store.data,
+  //       after: { ...store.data, elements }
+  //     }
+  //     return {
+  //       redo() {
+  //         store.data = state.after
+  //       },
+  //       undo() {
+  //         store.data = state.before
+  //       }
+  //     }
+  //   }
+  // })
   state.commandArray.forEach(command => {
     command.init && state.destoryArray.push(command.init())
   })
@@ -178,7 +178,6 @@ export function useCommand() {
   const keyboardEvent = () => {
     const onKeydown = (e: KeyboardEvent) => {
       const { ctrlKey, key } = e
-      console.log(key)
       // 拼凑按下的键
       const keyArr = []
       if (ctrlKey) keyArr.push('ctrl')

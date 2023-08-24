@@ -30,3 +30,22 @@ export type IconType = DragerType & {
   props?: any;
   icon?: string;
 };
+  container: {
+    snapToGrid: boolean
+    markline: {
+      color?: string
+      show?: Boolean
+    }
+    gridSize: number
+    gridColor?: string
+    style: CSSProperties
+    scaleRatio?: number
+  }
+  elements: ComponentType[]
+}
+
+export type ToolType = {
+  label: string
+  icon?: any
+  handler: Function
+}

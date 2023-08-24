@@ -2,8 +2,8 @@
   <div class="es-header">
     <h1 @click="router.replace('/')">{{ title }}</h1>
     <div class="es-header-toolbar">
-      <div v-for="item in tools" class="es-tool-btn" @click="item.handler">
-        <el-button>{{ item.label }}</el-button>
+      <div v-for="item in tools" class="es-tool-btn" @click="handleToolClick(item)">
+        <el-button :icon="item.icon">{{ item.label }}</el-button>
       </div>
     </div>
     <div class="es-navbar">
@@ -42,6 +42,11 @@ defineProps({
 })
 function handleThemeChange() {
   store.theme = store.isLight ? 'dark' : 'light'
+}
+function handleToolClick(item: ToolType) {
+  if (typeof item.handler === 'function') {
+    item.handler()
+  }
 }
 watch(() => store.theme, (val) => {
   document.documentElement.className = val

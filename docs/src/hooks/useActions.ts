@@ -1,9 +1,18 @@
-import { $dropdown, ActionType, DropdownItem } from '@/components/common'
+import { $contextmenu, ActionType, MenuItem } from '@/components/common'
 import { ComponentType, EditorType } from '@/components/types'
 import { cancelGroup, deepCopy, makeGroup, useId } from '@/utils'
-import { computed, Ref } from 'vue'
+import { computed, onBeforeMount, onMounted, Ref } from 'vue'
 type ActionMethods = {
   [key in ActionType]?: (element: ComponentType, ...args: any[]) => void
+}
+// 键盘映射表
+const keyboardMap = {
+  ['ctrl+x']: 'cut',
+  ['ctrl+c']: 'copy',
+  ['ctrl+v']: 'paste',
+  ['Delete']: 'remove',
+  ['ctrl+a']: 'selectAll',
+  ['ctrl+d']: 'duplicate'
 }
 export function useActions(
   data: Ref<EditorType>,
@@ -12,6 +21,7 @@ export function useActions(
   const editorRect = computed(() => {
     return editorRef.value?.getBoundingClientRect() || {} as DOMRect
   })
+  // 当前右键元素
   let currentMenudownElement: ComponentType | null = null
   // 复制元素
   let copySnapshot: ComponentType | null = null
@@ -30,20 +40,27 @@ export function useActions(
   // 添加元素
   const addElement = (element: ComponentType | null) => {
     if (!element) return
+    // 拷贝一份
     const newElement = deepCopy(element)
+    // 修改id
     newElement.id = useId()
     data.value.elements.push(newElement)
   }
   const actions: ActionMethods = {
-    remove() {
+    remove() { // 删除
       const index = getIndex(currentMenudownElement)
       if (index > -1) data.value.elements.splice(index, 1)
     },
-    copy(element) {
+    cut(element) { // 剪切
+      copySnapshot = element
+      actions.remove!(element)
+    },
+    copy(element) { // 拷贝
       copySnapshot = element
     },
     duplicate(element) { // 创建副本
       const newElement = deepCopy(element)
+      // 偏移left和top避免重叠
       newElement.left += 10
       newElement.top += 10
       addElement(newElement)
@@ -64,28 +81,29 @@ export function useActions(
       // 添加到开头
       data.value.elements.unshift(topElement)
     },
-    group() {
+    group() { // 组合
       data.value.elements = makeGroup(data.value.elements, editorRect.value)
     },
-    ungroup() {
+    ungroup() { // 拆分
       data.value.elements = cancelGroup(data.value.elements, editorRect.value)
     },
-    paste(_, clientX: number, clientY: number){
+    paste(_, clientX: number, clientY: number){ // 粘贴
       if (!copySnapshot) return
       const element = deepCopy(copySnapshot)
+      // 计算粘贴位置
       element.left = clientX - editorRect.value!.left
       element.top = clientY - editorRect.value!.top
   
       addElement(element)
     },
-    selectAll() {
+    selectAll() { // 全选
       data.value.elements.forEach(item => item.selected = true)
     },
-    lock(element) {
+    lock(element) { // 锁定/解锁
       const index = getIndex(element)
       data.value.elements[index].disabled = !data.value.elements[index].disabled
     },
-    moveUp(element) {
+    moveUp(element) { // 上移
       // 获取当前元素索引
       const index = getIndex(element)
       // 不能超过边界
@@ -95,7 +113,7 @@ export function useActions(
 
       swap(index, index + 1)
     },
-    moveDown(element) {
+    moveDown(element) { // 下移
       // 获取当前元素索引
       const index = getIndex(element)
       // 不能超过边界
@@ -114,8 +132,9 @@ export function useActions(
     currentMenudownElement = deepCopy(item)
     
     const selectedElements = data.value.elements.filter(item => item.selected)
-    const actionItems: DropdownItem[] = [
+    const actionItems: MenuItem[] = [
       { action: 'remove', label: '删除' },
+      { action: 'cut', label: '剪切' },
       { action: 'copy', label: '复制' },
       { action: 'duplicate', label: '创建副本' },
       { action: 'top', label: '置顶' },
@@ -132,15 +151,14 @@ export function useActions(
     }
 
     const isLocked = currentMenudownElement!.disabled
-    const lockAction: DropdownItem = { action: 'lock', label: '锁定 / 解锁' }
+    const lockAction: MenuItem = { action: 'lock', label: '锁定 / 解锁' }
     if (!isLocked) {
       actionItems.push(lockAction)
     }
-    $dropdown({
-      el: e.target as HTMLElement,
+    $contextmenu({
       clientX,
       clientY,
-      items: !isLocked ? actionItems : [lockAction],
+      items: !isLocked ? actionItems : [lockAction], // 如果是锁定元素只显示解锁操作
       onClick: ({ action }) => {
         if (actions[action]) {
           actions[action]!(currentMenudownElement!)
@@ -152,8 +170,7 @@ export function useActions(
   // 画布右键菜单
   const onEditorContextMenu = (e: MouseEvent) => {
     const { clientX, clientY }  = e
-    $dropdown({
-      el: e.target as HTMLElement,
+    $contextmenu({
       clientX,
       clientY,
       items: [
@@ -170,7 +187,35 @@ export function useActions(
     })
   }
 
+  // 监听键盘事件
+  const onKeydown = (e: KeyboardEvent) => {
+    const { ctrlKey, key } = e
+    // 拼凑按下的键
+    const keyArr = []
+    if (ctrlKey) keyArr.push('ctrl')
+    keyArr.push(key)
+    const keyStr = keyArr.join('+')
+    // 获取操作
+    const action = (keyboardMap as any)[keyStr]! as ActionType
+    // 如果actions中有具体的操作则执行
+    if (actions[action]) {
+      e.preventDefault()
+      // 找到当前选中的元素
+      currentMenudownElement = data.value.elements.find(item => item.selected) || null
+      actions[action]!(currentMenudownElement!)
+    }
+  }
+  
+  onMounted(() => {
+    window.addEventListener('keydown', onKeydown)
+  })
+
+  onBeforeMount(() => {
+    window.removeEventListener('keydown', onKeydown)
+  })
+
   return {
+    editorRect,
     onContextmenu,
     onEditorContextMenu
   }

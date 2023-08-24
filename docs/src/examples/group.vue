@@ -44,6 +44,12 @@ import { useId, makeGroup, cancelGroup } from '@/utils'
 import { useArea } from '@/hooks/useArea'
 
 const data = ref<EditorType>({
+  container: {
+    gridSize: 10,
+    markline: {},
+    snapToGrid: true,
+    style: {}
+  },
   elements: [
     {
       id: useId(),

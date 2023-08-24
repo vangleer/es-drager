@@ -44,7 +44,6 @@ const angle = computed({
 function onRotateMousedown(e: MouseTouchEvent) {
   if (!props.element) return console.warn('[es-drager] rotate component need drag element property')
   e.stopPropagation()
-  e.preventDefault()
   
   const { width, height, left, top } = props.element.getBoundingClientRect()
   // 旋转中心位置

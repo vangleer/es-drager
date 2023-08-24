@@ -3,17 +3,22 @@ import { useId } from '@/utils'
 import { defineStore } from 'pinia'
 
 interface EditorState {
-  data: EditorType,
+  data: EditorType
   current: ComponentType
+  preview: Boolean
 }
 
 const defaultData = {
   container: {
+    markline: {
+      show: true,
+      color: ''
+    },
+    snapToGrid: true,
     gridSize: 10,
-    style: {
-      width: '500px',
-      height: '500px',
-    }
+    gridColor: '',
+    style: {},
+    scaleRatio: 1
   },
   elements: [
     {
@@ -48,7 +53,8 @@ export const  useEditorStore = defineStore('editor', {
   state: (): EditorState => {
     return {
       data: defaultData,
-      current: {}
+      current: {},
+      preview: false
     }
   },
   actions: {

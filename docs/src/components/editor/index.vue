@@ -8,11 +8,12 @@
   >
     <template v-for="item in data.elements">
       <ESDrager
-        v-bind="item"
+        rotatable
+        v-bind="omit(item, ['style', 'props'])"
         :grid-x="gridSize"
         :grid-y="gridSize"
+        :scaleRatio="scaleRatio"
         boundary
-        rotatable
         @drag-start="onDragstart(item)"
         @drag-end="onDragend"
         @drag="onDrag"
@@ -25,19 +26,28 @@
           :is="item.component!"
           v-bind="item.props"
           :style="{
-            ...item.style,
+            ...pickStyle(item.style, false),
             width: '100%',
             height: '100%'
           }"
         >
+          <TextEditor
+            v-if="item.text"
+            :editable="item.editable"
+            :text="item.text"
+            :style="pickStyle(item.style)"
+          />
         </component>
-        <TextEditor v-if="item.text" :editable="item.editable" :text="item.text" />
       </ESDrager>
     </template>
 
-    <MarkLine v-bind="markLine" />
+    <MarkLine v-if="showMarkline" v-bind="markLine" />
 
-    <GridRect />
+    <GridRect
+      v-if="data.container.snapToGrid"
+      :grid="data.container.gridSize"
+      :border-color="data.container.gridColor"
+    />
 
     <Area ref="areaRef" @move="onAreaMove" @up="onAreaUp" />
   </div>
@@ -47,7 +57,7 @@
 import { computed, ref, PropType, onMounted, onBeforeMount } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
-import { events} from '@/utils'
+import { omit, events, pickStyle } from '@/utils'
 import { EditorType, ComponentType } from '@/components/types'
 import GridRect from './GridRect.vue'
 import MarkLine from './MarkLine.vue'
@@ -55,6 +65,7 @@ import Area from './Area.vue'
 import TextEditor from './TextEditor.vue'
 import { useMarkline, useArea, CommandStateType, useActions } from '@/hooks'
 import { useEditorStore } from '@/store'
+
 const store = useEditorStore()
 const props = defineProps({
   modelValue: {
@@ -72,12 +83,17 @@ const data = computed({
   get: () => props.modelValue,
   set: () => {}
 })
-
+const showMarkline = computed(() => data.value.container.markline && data.value.container.markline.show)
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
+const scaleRatio = computed(() => props.modelValue.container?.scaleRatio || 1)
 const editorStyle = computed(() => {
+  const { width, height } =  data.value.container.style
   return {
-    '--es-editor-grid-size': gridSize.value + 'px',
-    transformOrigin: 'left top'
+    ...data.value.container.style,
+    width: width + 'px',
+    height: height + 'px',
+    transform: `scale(${scaleRatio.value})`,
+    transformOrigin: 'top left'
   }
 })
 
@@ -108,6 +124,7 @@ const {
 } = useArea(data, areaRef)
 
 const {
+  editorRect,
   onContextmenu,
   onEditorContextMenu
 } = useActions(data, editorRef)
@@ -129,7 +146,7 @@ function onDragstart(element: ComponentType) {
   extraDragData.value.startY = current.value.top!
 
   // 更新辅助线的可能性
-  updateLines()
+  showMarkline.value && updateLines()
   events.emit('dragstart')
 }
 
@@ -143,7 +160,7 @@ function onDrag(dragData: DragData) {
   const disY = dragData.top - extraDragData.value.startY
 
   // 更新是否显示markeline
-  updateMarkline(dragData)
+  showMarkline.value && updateMarkline(dragData)
 
   // 如果选中了多个
   data.value.elements.forEach((item: ComponentType, index: number) => {
@@ -197,6 +214,7 @@ onBeforeMount(() => {
 
 <style lang='scss' scoped>
 .es-editor {
+  box-sizing: border-box;
   position: relative;
   width: 100%;
   height: 100%;

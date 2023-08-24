@@ -15,7 +15,7 @@
         class="es-drager-dot"
         :data-side="item.side"
         :style="{ ...item }"
-        @mousedown.stop.prevent="onDotMousedown(item, $event)"
+        @mousedown="onDotMousedown(item, $event)"
         @touchstart.passive="onDotMousedown(item, $event)"
       >
         <slot name="resize" v-bind="{ side: item.side }">
@@ -66,7 +66,11 @@ const emitFn = (type: EventType, ...args: any) => {
   emit('change', ...args)
 }
 const dragRef = ref<HTMLElement | null>(null)
-const { selected, dragData, isMousedown } = useDrager(dragRef, props, emitFn)
+const {
+  selected,
+  dragData,
+  isMousedown
+} = useDrager(dragRef, props, emitFn)
 
 const dotList = ref(getDotList(0, props.resizeList))
 const showResize = computed(() => props.resizable && !props.disabled)
@@ -102,7 +106,6 @@ function handleRotateEnd(angle: number) {
  */
 function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   e.stopPropagation()
-  e.preventDefault()
   // 获取鼠标按下的坐标
   const { clientX, clientY } = getXY(e)
   const downX = clientX
@@ -203,6 +206,7 @@ watch(() => props.selected, (val) => {
   }
   &.selected {
     transition: none;
+    user-select: none;
     &::after {
       display: block;
       outline: 1px dashed var(--es-drager-color);
@@ -213,9 +217,6 @@ watch(() => props.selected, (val) => {
   }
   &.border {
     border: 1px solid var(--es-drager-color);
-  }
-  &.dragging {
-    user-select: none;
   }
   &.disabled {
     opacity: 0.4;

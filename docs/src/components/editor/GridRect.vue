@@ -18,6 +18,7 @@
 <script setup lang='ts'>
 import { computed } from 'vue'
 import { useAppStore } from '@/store'
+import MColor from 'color'
 const store = useAppStore()
 
 const props = defineProps({
@@ -32,6 +33,9 @@ const props = defineProps({
   showSmall: { // 是否显示小网格
     type: Boolean,
     default: true
+  },
+  borderColor: {
+    type: String
   }
 })
 
@@ -40,6 +44,12 @@ const bigGrid = computed(() => props.grid * props.gridCount)
 
 // 处理网站皮肤，可忽略
 const color = computed(() => {
+  if (props.borderColor) {
+    return {
+      bigGrid: props.borderColor,
+      grid: MColor(props.borderColor).fade(0.5).rgb().string()
+    }
+  }
   const colors = [['#e4e7ed', '#ebeef5'], ['#414243', '#363637']]
   const [bigGrid, grid] = colors[store.isLight ? 0 : 1]
   return { bigGrid, grid }

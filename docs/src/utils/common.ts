@@ -163,3 +163,13 @@ function toPercent(val: number) {
 function perToNum(perStr: any) {
   return parseFloat(perStr as string) / 100
 }
+
+export function addPxUnit(value: number | string) {
+  // 检查传入的值是否已经有单位，例如 %, rem, em 等
+  if (`${value}`.match(/^[0-9.-]+(px|%|rem|em|vh|vw)$/)) {
+    return value; // 如果已经有单位，则不做替换，直接返回
+  }
+
+  // 否则，添加 px 单位并返回
+  return value + 'px';
+}
