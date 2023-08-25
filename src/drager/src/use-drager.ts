@@ -1,6 +1,6 @@
 import { Ref, onMounted, ref, ExtractPropTypes, watch, onBeforeUnmount } from 'vue'
 import { DragerProps, DragData } from './drager'
-import { setupMove, MouseTouchEvent, calcGrid, getXY } from './utils'
+import { setupMove, MouseTouchEvent, calcGrid, getXY, checkCollision } from './utils'
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
   props: ExtractPropTypes<typeof DragerProps>,
@@ -63,6 +63,13 @@ export function useDrager(
     }
 
     setupMove(onMousemove, (e: MouseTouchEvent) => {
+      if (props.checkCollision) {
+        const isCollision = checkDragerCollision()
+        if (isCollision) {
+          dragData.value.top = top
+          dragData.value.left = left
+        }
+      }
       mouseSet.clear()
       isMousedown.value = false
       document.addEventListener('click', clickOutsize, { once: true })
@@ -113,6 +120,17 @@ export function useDrager(
     moveY = moveY < minY ? minY : moveY
     moveY = moveY > maxY ? maxY : moveY
     return [moveX, moveY]
+  }
+  const checkDragerCollision = () => {
+    const parentEl = targetRef.value!.parentElement || document.body
+    const broList = Array.from(parentEl.children).filter(item => {
+      return item !== targetRef.value! && item.classList.contains('es-drager')
+    })
+    for (let i = 0; i < broList.length; i++) {
+      const item = broList[i]
+      const flag = checkCollision(targetRef.value!, item)
+      if (flag) return true
+    }
   }
   const clickOutsize = () => {
     selected.value = false
@@ -186,6 +204,7 @@ export function useDrager(
     isMousedown,
     selected,
     dragData,
-    getBoundary
+    getBoundary,
+    checkDragerCollision
   }
 }

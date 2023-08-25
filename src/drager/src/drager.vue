@@ -69,7 +69,8 @@ const dragRef = ref<HTMLElement | null>(null)
 const {
   selected,
   dragData,
-  isMousedown
+  isMousedown,
+  checkDragerCollision
 } = useDrager(dragRef, props, emitFn)
 
 const dotList = ref(getDotList(0, props.resizeList))
@@ -146,7 +147,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     const {
       position: { centerX, centerY },
       size: { width, height }
-    } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight)
+    } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight )
    
     const pData = centerToTL({
       centerX,
@@ -164,6 +165,11 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   }
 
   setupMove(onMousemove, () => {
+    // 碰撞检测
+    if (props.checkCollision && checkDragerCollision()) {
+      // 发生碰撞回到原来位置
+      dragData.value = { ...dragData.value, width, height, left, top }
+    }
     emitFn('resize-end', dragData.value)
   })
 }

@@ -87,6 +87,9 @@ export const DragerProps = {
   },
   equalProportion: { // 是否等比例缩放
     type: Boolean
+  },
+  checkCollision: { // 是否开启碰撞检查
+    type: Boolean
   }
 }
 

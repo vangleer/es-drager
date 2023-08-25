@@ -49,6 +49,8 @@
 
 [元素组合与拆分](https://juejin.cn/post/7258337246024843319)
 
+[菜单操作栏、json数据导入导出](https://juejin.cn/post/7269603447673880636)
+
 ## ⚡ 使用说明
 
 ### 安装依赖
@@ -149,6 +151,7 @@ import Drager from 'es-drager'
 | minWidth | 最小宽度     | ^[number]        | -     |
 | minHeight | 最小高度     | ^[number]        | -     |
 | selected | 控制是否选中     | ^[boolean]        | -     |
+| checkCollision | 是否开启碰撞检测     | ^[boolean]        | -     |
 | snapToGrid | 开启网格     | ^[boolean]        | -     |
 | gridX | 网格X大小     | ^[number]        | 50     |
 | gridY | 网格Y大小     | ^[number]        | 50     |

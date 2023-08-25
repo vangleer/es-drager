@@ -6,10 +6,21 @@
     :height="100"
     :left="100"
     :top="100"
+    check-collision
     rotatable
     boundary
   >
     测试
+  </Drager>
+  <Drager
+    :width="100"
+    :height="100"
+    :left="300"
+    :top="100"
+    rotatable
+    boundary
+  >
+    测试2
   </Drager>
   <Drager
     :tag="Demo"
