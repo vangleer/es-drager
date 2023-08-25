@@ -115,7 +115,8 @@ function drop(e: DragEvent) {
       ...currentComponent,
       left: e.offsetX - currentComponent.width! / 2,
       top: e.offsetY - currentComponent.height! / 2,
-      id: useId()
+      id: useId(),
+      style: currentComponent.style || {}
     }
   ]
   store.data.elements = elements

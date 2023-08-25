@@ -37,14 +37,20 @@
       <el-input-number v-model="textStyle.lineHeight" />
     </el-form-item>
 
-    <div class="text-style-block" v-for="block, index in fontStyleListFormat">
-      <div
-        v-for="item in block"
-        :style="index === 0 ? { [item.key]: item.value } : {}"
-        :class="['block-item', { active: item.selected }]"
-        @click="handleFontStyleClick(item)"
-        v-html="item.label"
-      ></div>
+    <el-form-item label="文本">
+      <el-input type="textarea" v-model="store.current.text" />
+    </el-form-item>
+
+    <div class="text-block-box">
+      <div class="text-style-block" v-for="block, index in fontStyleListFormat">
+        <div
+          v-for="item in block"
+          :style="index === 0 ? { [item.key]: item.value } : {}"
+          :class="['block-item', { active: item.selected }]"
+          @click="handleFontStyleClick(item)"
+          v-html="item.label"
+        ></div>
+      </div>
     </div>
   </div>
 </template>
@@ -151,8 +157,8 @@ function getValue(key: string | number | symbol) {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border: var(--es-border);
     border-radius: 4px;
     font-size: 14px;
@@ -161,5 +167,10 @@ function getValue(key: string | number | symbol) {
       background-color: var(--el-color-primary);
     }
   }
+}
+.text-block-box {
+  border: var(--es-border);
+  border-radius: 4px;
+  padding: 10px;
 }
 </style>

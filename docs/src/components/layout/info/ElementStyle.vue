@@ -38,8 +38,12 @@
           <el-checkbox v-model="store.current.rotatable" :checked="true" />
         </el-form-item>
 
+        <el-form-item label="透明度">
+          <el-slider :modelValue="1" :step="0.01" :min="0" :max="1" @input="onChange('opacity', $event)" />
+        </el-form-item>
+
         <template v-if="store.current.style">
-          <el-form-item label="背景">
+          <el-form-item label="背景颜色">
             <el-color-picker v-model="store.current.style.backgroundColor" />
           </el-form-item>
           <el-form-item label="边框颜色">
@@ -62,9 +66,7 @@
           <el-form-item label="边框半径">
             <el-input-number v-model="store.current.style.borderRadius" />
           </el-form-item>
-          <el-form-item label="透明度">
-            <el-slider :modelValue="1" :step="0.01" :min="0" :max="1" @input="onChange('opacity', $event)" />
-          </el-form-item>
+          
         </template>
       </el-collapse-item>
       <el-collapse-item title="文本" name="text">

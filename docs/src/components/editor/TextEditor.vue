@@ -1,5 +1,9 @@
 <template>
-  <div ref="textRef" :class="['es-text', { editable }]" :contenteditable="editable" select>
+  <div
+    ref="textRef"
+    :class="['es-text', { editable }]"
+    :contenteditable="editable"
+  >
     <slot>{{ text }}</slot>
   </div>
 </template>
@@ -46,6 +50,8 @@ watch(() => [props.editable], () => {
   transform: translate(-50%, -50%);
   word-break: break-all;
   display: flex;
+  justify-content: center;
+  align-items: center;
   &.editable {
     z-index: 1;
     cursor: text;
