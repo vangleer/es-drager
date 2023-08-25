@@ -12,8 +12,15 @@ import Rect from './components/basic/Rect.vue';
 import Group from './components/editor/Group.vue';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import ElIconWrapper from '@/components/icon/icon.vue';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import i18n from './locales';
+import { createPinia } from 'pinia';
+
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 const app = createApp(App);
-app.use(store).use(router).use(ElementPlus).mount('#app');
+app.use(store).use(router).use(ElementPlus).use(i18n).mount('#app');
+
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }

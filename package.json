@@ -40,9 +40,13 @@
     "build:docs": "npm run build -w docs",
     "release": "npm run build && npm publish"
   },
-  "workspaces": ["docs"],
+  "workspaces": [
+    "docs"
+  ],
   "dependencies": {
-    "vue": ">=3.2.0"
+    "pinia-plugin-persistedstate": "^3.2.0",
+    "vue": ">=3.2.0",
+    "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
     "@types/node": "^18.15.13",

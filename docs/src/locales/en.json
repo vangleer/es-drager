@@ -1,0 +1,13 @@
+{
+  "route": {
+    "basic": "Basic Example",
+    "event": "Event Related",
+    "grid": "Grid",
+    "info": "Detailed Information",
+    "slot": "Using Slots",
+    "chart": "ECharts",
+    "markline": "SubLine",
+    "group": "Combination & Split",
+    "menu": "Menu ToolBar"
+  }
+}
