@@ -81,9 +81,12 @@ export declare const DragerProps: {
         default: boolean;
     };
     resizeList: {
-        type: PropType<string[]>;
+        type: PropType<IDotSide[]>;
     };
     equalProportion: {
+        type: BooleanConstructor;
+    };
+    checkCollision: {
         type: BooleanConstructor;
     };
 };

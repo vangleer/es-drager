@@ -47,3 +47,10 @@ export declare const formatData: (data: DragData, centerX: number, centerY: numb
  * @param grid 网格大小
  */
 export declare function calcGrid(diff: number, grid: number): number;
+/**
+ * 检查两个元素是否发生碰撞
+ * @param element1 拖拽元素
+ * @param element2 碰撞对象
+ * @returns
+ */
+export declare function checkCollision(element1: Element, element2: Element): boolean;

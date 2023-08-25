@@ -10,4 +10,6 @@ export declare function useDrager(targetRef: Ref<HTMLElement | null>, props: Ext
         top: number;
         angle: number;
     }>;
+    getBoundary: () => number[];
+    checkDragerCollision: () => true | undefined;
 };

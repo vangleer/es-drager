@@ -8,6 +8,8 @@ declare const _default: Plugin & {
         $: import("vue").ComponentInternalInstance;
         $data: {};
         $props: {
+            top?: number | undefined;
+            left?: number | undefined;
             tag?: string | import("vue").Component | undefined;
             resizable?: boolean | undefined;
             rotatable?: boolean | undefined;
@@ -15,8 +17,6 @@ declare const _default: Plugin & {
             disabled?: boolean | undefined;
             width?: number | undefined;
             height?: number | undefined;
-            left?: number | undefined;
-            top?: number | undefined;
             zIndex?: number | undefined;
             angle?: number | undefined;
             color?: string | undefined;
@@ -30,6 +30,7 @@ declare const _default: Plugin & {
             disabledKeyEvent?: boolean | undefined;
             border?: boolean | undefined;
             equalProportion?: boolean | undefined;
+            checkCollision?: boolean | undefined;
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
             "onDrag-start"?: ((...args: any[]) => any) | undefined;
@@ -41,7 +42,7 @@ declare const _default: Plugin & {
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
             readonly aspectRatio?: number | undefined;
-            readonly resizeList?: string[] | undefined;
+            readonly resizeList?: import("./src/drager").IDotSide[] | undefined;
             key?: string | number | symbol | undefined;
             ref?: import("vue").VNodeRef | undefined;
             ref_for?: boolean | undefined;
@@ -176,9 +177,12 @@ declare const _default: Plugin & {
                 default: boolean;
             };
             resizeList: {
-                type: import("vue").PropType<string[]>;
+                type: import("vue").PropType<import("./src/drager").IDotSide[]>;
             };
             equalProportion: {
+                type: BooleanConstructor;
+            };
+            checkCollision: {
                 type: BooleanConstructor;
             };
         }>> & {
@@ -193,6 +197,8 @@ declare const _default: Plugin & {
             "onRotate-start"?: ((...args: any[]) => any) | undefined;
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
         }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], string, {
+            top: number;
+            left: number;
             tag: string | import("vue").Component;
             resizable: boolean;
             rotatable: boolean;
@@ -200,8 +206,6 @@ declare const _default: Plugin & {
             disabled: boolean;
             width: number;
             height: number;
-            left: number;
-            top: number;
             zIndex: number;
             angle: number;
             color: string;
@@ -215,6 +219,7 @@ declare const _default: Plugin & {
             disabledKeyEvent: boolean;
             border: boolean;
             equalProportion: boolean;
+            checkCollision: boolean;
         }, {}, string, {}> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -311,9 +316,12 @@ declare const _default: Plugin & {
             default: boolean;
         };
         resizeList: {
-            type: import("vue").PropType<string[]>;
+            type: import("vue").PropType<import("./src/drager").IDotSide[]>;
         };
         equalProportion: {
+            type: BooleanConstructor;
+        };
+        checkCollision: {
             type: BooleanConstructor;
         };
     }>> & {
@@ -407,9 +415,12 @@ declare const _default: Plugin & {
         default: boolean;
     };
     resizeList: {
-        type: import("vue").PropType<string[]>;
+        type: import("vue").PropType<import("./src/drager").IDotSide[]>;
     };
     equalProportion: {
+        type: BooleanConstructor;
+    };
+    checkCollision: {
         type: BooleanConstructor;
     };
 }>> & {
@@ -424,6 +435,8 @@ declare const _default: Plugin & {
     "onRotate-start"?: ((...args: any[]) => any) | undefined;
     "onRotate-end"?: ((...args: any[]) => any) | undefined;
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", {
+    top: number;
+    left: number;
     tag: string | import("vue").Component;
     resizable: boolean;
     rotatable: boolean;
@@ -431,8 +444,6 @@ declare const _default: Plugin & {
     disabled: boolean;
     width: number;
     height: number;
-    left: number;
-    top: number;
     zIndex: number;
     angle: number;
     color: string;
@@ -446,5 +457,6 @@ declare const _default: Plugin & {
     disabledKeyEvent: boolean;
     border: boolean;
     equalProportion: boolean;
+    checkCollision: boolean;
 }, {}, string, {}> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;

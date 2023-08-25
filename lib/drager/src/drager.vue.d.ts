@@ -74,9 +74,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: boolean;
     };
     resizeList: {
-        type: import("vue").PropType<string[]>;
+        type: import("vue").PropType<import("./drager").IDotSide[]>;
     };
     equalProportion: {
+        type: BooleanConstructor;
+    };
+    checkCollision: {
         type: BooleanConstructor;
     };
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, ("change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end")[], "change" | "drag" | "drag-start" | "drag-end" | "resize" | "resize-start" | "resize-end" | "rotate" | "rotate-start" | "rotate-end", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
@@ -155,9 +158,12 @@ declare const _sfc_main: import("vue").DefineComponent<{
         default: boolean;
     };
     resizeList: {
-        type: import("vue").PropType<string[]>;
+        type: import("vue").PropType<import("./drager").IDotSide[]>;
     };
     equalProportion: {
+        type: BooleanConstructor;
+    };
+    checkCollision: {
         type: BooleanConstructor;
     };
 }>> & {
@@ -172,6 +178,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
     "onRotate-start"?: ((...args: any[]) => any) | undefined;
     "onRotate-end"?: ((...args: any[]) => any) | undefined;
 }, {
+    top: number;
+    left: number;
     tag: string | import("vue").Component;
     resizable: boolean;
     rotatable: boolean;
@@ -179,8 +187,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
     disabled: boolean;
     width: number;
     height: number;
-    left: number;
-    top: number;
     zIndex: number;
     angle: number;
     color: string;
@@ -194,5 +200,6 @@ declare const _sfc_main: import("vue").DefineComponent<{
     disabledKeyEvent: boolean;
     border: boolean;
     equalProportion: boolean;
+    checkCollision: boolean;
 }, {}>;
 export default _sfc_main;
