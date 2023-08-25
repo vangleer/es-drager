@@ -25,6 +25,28 @@
   <Drager
     :width="100"
     :height="100"
+    :left="300"
+    :top="300"
+    :selected="true"
+    :resizeList="['top', 'bottom', 'left', 'right']"
+  >
+    control handle display
+  </Drager>
+
+  <Drager
+    :width="100"
+    :height="100"
+    :left="500"
+    :top="300"
+    :selected="true"
+    :resizeList="['top-left', 'top-right', 'bottom-left', 'bottom-right']"
+  >
+    control handle display
+  </Drager>
+
+  <Drager
+    :width="100"
+    :height="100"
     :left="100"
     :top="450"
     rotatable
@@ -53,8 +75,5 @@ import imgUrl from '../assets/demo.png'
   font-size: 20px;
   font-weight: 700;
   color: #0ec3b8;
-}
-.img {
-  filter: brightness(5);
 }
 </style>

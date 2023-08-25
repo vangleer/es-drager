@@ -30,6 +30,7 @@ const dragList = ref([
     { color: '#6A00FF', text: '边界', boundary: true },
     { color: '#A20025', text: '禁用', disabled: true },
     { color: '#D80073', text: '碰撞检测', checkCollision: true },
+    { color: '#1BA1E2', text: '最小宽高', minWidth: 10, minHeight: 10 },
   ]
 ])
 </script>
