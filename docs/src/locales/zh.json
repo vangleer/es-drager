@@ -1,0 +1,13 @@
+{
+  "route": {
+    "basic": "基础示例",
+    "event": "事件相关",
+    "grid": "网格",
+    "info": "详情信息",
+    "slot": "使用插槽",
+    "chart": "ECharts 图表",
+    "markline": "辅助线",
+    "group": "组合与拆分",
+    "menu": "菜单操作栏"
+  }
+}

@@ -1,6 +1,6 @@
 <template>
   <el-icon>
-    <component :is="props.icon"></component>
+    <component :is="props.icon as string"></component>
   </el-icon>
 </template>
 <script setup lang="ts" name="ElIconWrapper">

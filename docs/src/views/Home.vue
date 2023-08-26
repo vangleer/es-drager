@@ -2,6 +2,21 @@
   <div class="es-app">
     <Header>
       <template #navbar-end>
+        <el-dropdown @command="handleCommand" class="es-header-lang" trigger="click">
+          <span class="el-dropdown-link">
+            {{ currentLan }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="lang in langs" :command="lang">
+                {{ lang.title }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <a class="es-header-cube" @click.prevent="router.push('/editor')">编辑器案例</a>
         <a class="es-header-cube" @click.prevent="showCode = !showCode">代码</a>
       </template>
@@ -14,110 +29,141 @@
           :class="['es-sidebar-item', { active: current.path === item.path }]"
           @click="handleClick(item)"
         >
-          {{  item.meta?.title }}
+          {{ $t(`route.${item.meta?.title}`) }}
         </div>
       </Aside>
       <div class="es-content">
         <RouterView />
       </div>
 
-      <el-drawer
-        v-model="showCode"
-        title="示例代码"
-      >
+      <el-drawer v-model="showCode" title="示例代码">
         <pre><code v-html="codeHtml"></code></pre>
       </el-drawer>
     </div>
   </div>
 </template>
 
-<script setup lang='ts'>
-import { shallowRef, computed, ref, watch } from 'vue'
-import { useRouter, RouteRecordRaw, useRoute } from 'vue-router'
-import { menuRoutes } from '@/router'
-import 'highlight.js/styles/panda-syntax-light.css'
-import hljs from 'highlight.js'
+<script setup lang="ts">
+  import { shallowRef, computed, ref, watch } from 'vue';
+  import { useRouter, RouteRecordRaw, useRoute } from 'vue-router';
+  import { menuRoutes } from '@/router';
+  import 'highlight.js/styles/panda-syntax-light.css';
+  import hljs from 'highlight.js';
+  import { langs } from '@/locales';
+  import { useLocaleStore } from '@/store/locales';
 
-import Header from '@/components/layout/Header.vue'
-import Aside from '@/components/layout/Aside.vue'
-const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' })
+  import Header from '@/components/layout/Header.vue';
+  import Aside from '@/components/layout/Aside.vue';
+  const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' });
+  console.log(langs);
 
-const router = useRouter()
-const route = useRoute()
+  const router = useRouter();
+  const route = useRoute();
+  const useLocale = useLocaleStore();
+  // set lang
+  let curLocale = useLocale.locale;
+  let currentLan = ref(langs.find(cur => cur.key === curLocale)?.title || '');
 
-const codeHtml = computed(() => {
-  return hljs.highlight(examplesSource[`../examples/${current.value.path}.vue`], { language: 'html' }).value
-})
+  const handleCommand = (command: any) => {
+    console.log(command);
 
-const current = shallowRef()
+    currentLan.value = command.title;
+    useLocale.setLocale(command.key);
+  };
 
-const showCode = ref(false)
-function handleClick(item: RouteRecordRaw) {
-  router.push(item.path)
-}
+  const codeHtml = computed(() => {
+    return hljs.highlight(examplesSource[`../examples/${current.value.path}.vue`], {
+      language: 'html',
+    }).value;
+  });
 
-watch(() => route.path, () => {
-  current.value = menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0]
-}, { immediate: true })
+  const current = shallowRef();
 
+  const showCode = ref(false);
+  function handleClick(item: RouteRecordRaw) {
+    router.push(item.path);
+  }
+
+  watch(
+    () => route.path,
+    () => {
+      current.value = menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0];
+    },
+    { immediate: true }
+  );
 </script>
 
-<style lang='scss'>
-.es-header-cube {
-  padding: 0 12px;
-  color: #001938;
-  background: #f7f8fa;
-  font-size: 14px;
-  line-height: 30px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 20px;
-  cursor: pointer;
-  margin-left: 16px;
-  &:hover {
-    color: var(--el-color-primary);
+<style lang="scss">
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
-}
-.es-app {
-  width: 100vw;
-  height: 100vh;
-  color: var(--es-color);
-  font-size: 14px;
-  overflow: hidden;
-  background-color: var(--es-color-bg);
-  transition: border-color .2s, background-color .2s;
+  .es-header-cube {
+    padding: 0 12px;
+    color: #001938;
+    background: #f7f8fa;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 16px;
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
+  .es-header-lang {
+    padding: 0 12px;
+    border: none;
+    color: #001938;
+    font-size: 14px;
 
-  .es-main {
-    display: flex;
-    position: relative;
-    height: calc(100%);
-    min-width: 400px;
-    .es-sidebar {
-      padding: 24px 6px;
-      .es-sidebar-item {
-        display: flex;
-        align-items: center;
-        padding: 8px 24px;
-        width: 100%;
-        height: 36px;
-        margin: 8px 0;
-        cursor: pointer;
-        transition: color .2s;
-        font-size: 15px;
-        &:hover {
-          color: var(--el-color-primary);
-        }
-        &.active {
-          background-color: rgba(var(--el-color-primary-rgb), .1);
-          color: var(--el-color-primary);
-          border-radius: 36px;
+    cursor: pointer;
+    margin-left: 16px;
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
+  .es-app {
+    width: 100vw;
+    height: 100vh;
+    color: var(--es-color);
+    font-size: 14px;
+    overflow: hidden;
+    background-color: var(--es-color-bg);
+    transition: border-color 0.2s, background-color 0.2s;
+
+    .es-main {
+      display: flex;
+      position: relative;
+      height: calc(100%);
+      min-width: 400px;
+      .es-sidebar {
+        padding: 24px 6px;
+        .es-sidebar-item {
+          display: flex;
+          align-items: center;
+          padding: 8px 24px;
+          width: 100%;
+          height: 36px;
+          margin: 8px 0;
+          cursor: pointer;
+          transition: color 0.2s;
+          font-size: 15px;
+          &:hover {
+            color: var(--el-color-primary);
+          }
+          &.active {
+            background-color: rgba(var(--el-color-primary-rgb), 0.1);
+            color: var(--el-color-primary);
+            border-radius: 36px;
+          }
         }
       }
-    }
-    .es-content {
-      position: relative;
-      flex: 1;
+      .es-content {
+        position: relative;
+        flex: 1;
+      }
     }
   }
-}
 </style>
