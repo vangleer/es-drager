@@ -49,13 +49,12 @@
   import { menuRoutes } from '@/router';
   import 'highlight.js/styles/panda-syntax-light.css';
   import hljs from 'highlight.js';
-  import { langs } from '@/locales';
+  import { langs } from '@/plugins/locales';
   import { useLocaleStore } from '@/store/locales';
 
   import Header from '@/components/layout/Header.vue';
   import Aside from '@/components/layout/Aside.vue';
   const examplesSource = import.meta.glob('../examples/*.vue', { eager: true, as: 'raw' });
-  console.log(langs);
 
   const router = useRouter();
   const route = useRoute();
@@ -167,3 +166,4 @@
     }
   }
 </style>
+@/plugins/locales
