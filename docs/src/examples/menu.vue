@@ -43,6 +43,7 @@ import { ComponentType, EditorType, ToolType } from '@/components/types'
 import { useId } from '@/utils'
 import { useActions } from '@/hooks'
 import { $dialog, $upload } from '@/components/common'
+import { t } from '@/plugins/locales'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,
@@ -78,16 +79,16 @@ const {
 } = useActions(data, editorRef)
 
 const tools: ToolType[] = [
-  { label: '导出', handler: () => {
+  { label: t('examples.export'), handler: () => {
     $dialog({
-      title: '导出',
+      title: t('examples.export'),
       content: JSON.stringify(data.value),
       confirm(text: string) {
         data.value = JSON.parse(text)
       }
     })
   }},
-  { label: '导入', handler: () => {
+  { label: t('examples.import'), handler: () => {
     $upload({
       resultType: 'json',
       onChange(text: string) {
@@ -95,7 +96,7 @@ const tools: ToolType[] = [
       }
     })
   }},
-  { label: '插入图片', handler: () => {
+  { label: t('examples.uploadImage'), handler: () => {
     $upload({
       resultType: 'image',
       onChange(e: string) {

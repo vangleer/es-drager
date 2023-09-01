@@ -1,8 +1,8 @@
 <template>
   <div class="es-container">
     <div class="es-tools">
-      <el-button type="primary" @click="handleMakeGroup">组合</el-button>
-      <el-button type="primary" @click="handleCancelGroup">拆分</el-button>
+      <el-button type="primary" @click="handleMakeGroup">{{ t('examples.group') }}</el-button>
+      <el-button type="primary" @click="handleCancelGroup">{{ t('examples.unGroup') }}</el-button>
     </div>
     <div ref="editorRef" class="es-editor" @mousedown="onEditorMouseDown">
       <Drager
@@ -42,7 +42,7 @@ import Area from '@/components/editor/Area.vue'
 import { ComponentType, EditorType } from '@/components/types'
 import { useId, makeGroup, cancelGroup } from '@/utils'
 import { useArea } from '@/hooks/useArea'
-
+import { t } from '@/plugins/locales'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,

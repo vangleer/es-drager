@@ -10,27 +10,28 @@
       v-bind="item"
       :style="{ color: item.color }"
     >
-      {{ item.text }}
+      {{ t(item.text) }}
     </Drager>
   </template>
 </template>
 
 <script setup lang='ts'>
 import { ref } from 'vue'
+import { t } from '@/plugins/locales'
 import Drager from '../../../src/drager'
 
 const dragList = ref([
   [
-    { text: '移动', resizable: false, rotatable: false },
-    { color: '#00c48f', text: '移动+缩放', rotatable: false },
-    { color: '#ff9f00', text: '旋转', rotatable: true, resizable: false },
-    { color: '#f44336', text: '旋转+缩放', rotatable: true },
+    { text: 'examples.move', resizable: false, rotatable: false },
+    { color: '#00c48f', text: 'examples.moveAndResize', rotatable: false },
+    { color: '#ff9f00', text: 'examples.rotate', rotatable: true, resizable: false },
+    { color: '#f44336', text: 'examples.rotateAndResize', rotatable: true },
   ],
   [
-    { color: '#6A00FF', text: '边界', boundary: true },
-    { color: '#A20025', text: '禁用', disabled: true },
-    { color: '#D80073', text: '碰撞检测', checkCollision: true },
-    { color: '#1BA1E2', text: '最小宽高', minWidth: 10, minHeight: 10 },
+    { color: '#6A00FF', text: 'examples.boundary', boundary: true },
+    { color: '#A20025', text: 'examples.disabled', disabled: true },
+    { color: '#D80073', text: 'examples.checkCollision', checkCollision: true },
+    { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 },
   ]
 ])
 </script>

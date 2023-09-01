@@ -1,8 +1,8 @@
 <template>
   <div class="es-container">
     <div class="es-tools">
-      <el-button type="primary" @click="command.undo">撤销</el-button>
-      <el-button type="primary" @click="command.redo">重做</el-button>
+      <el-button type="primary" @click="command.undo">{{ t('examples.undo') }}</el-button>
+      <el-button type="primary" @click="command.redo">{{ t('examples.redo') }}</el-button>
     </div>
     <div class="es-editor">
       <Drager
@@ -28,6 +28,7 @@ import GridRect from '@/components/editor/GridRect.vue'
 import Drager, { DragData } from 'es-drager'
 import MarkLine from '@/components/editor/MarkLine.vue'
 import { calcLines } from '@/utils'
+import { t } from '@/plugins/locales'
 // 组件类型
 type ComponentType = {
   id?: string

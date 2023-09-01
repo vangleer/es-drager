@@ -6,8 +6,30 @@
     "info": "Detailed Information",
     "slot": "Using Slots",
     "chart": "ECharts",
-    "markline": "SubLine",
+    "markline": "Markline",
     "group": "Combination & Split",
     "menu": "Menu ToolBar"
+  },
+  "common": {
+    "code": "Code",
+    "editorDemo": "ES Drager Editor"
+  },
+  "examples": {
+    "move": "Move",
+    "moveAndResize": "Move+Resize",
+    "rotate": "Rotate",
+    "rotateAndResize": "Rotate+Resize",
+    "boundary": "Boundary",
+    "disabled": "disabled",
+    "checkCollision": "Collision",
+    "minSzie": "min width and min height",
+    "undo": "Undo",
+    "redo": "Redo",
+    "group": "Group",
+    "unGroup": "UnGroup",
+    "export": "Export",
+    "import": "Import",
+    "uploadImage": "Upload Image",
+    "chartTitle": "ECharts Demo"
   }
 }

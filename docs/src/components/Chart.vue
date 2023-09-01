@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
-
+import { t } from '@/plugins/locales'
 const chartRef = ref()
 let chart: echarts.ECharts | null = null
 
@@ -14,16 +14,16 @@ function init() {
   // 绘制图表
   chart.setOption({
     title: {
-      text: 'ECharts 入门示例'
+      text: t('examples.chartTitle')
     },
     tooltip: {},
     xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      data: ['item1', 'item2', 'item3', 'item4', 'item5', 'item6']
     },
     yAxis: {},
     series: [
       {
-        name: '销量',
+        name: 'Sales',
         type: 'bar',
         data: [5, 20, 36, 10, 10, 20]
       }

@@ -17,8 +17,8 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <a class="es-header-cube" @click.prevent="router.push('/editor')">编辑器案例</a>
-        <a class="es-header-cube" @click.prevent="showCode = !showCode">代码</a>
+        <a class="es-header-cube" @click.prevent="router.push('/editor')">{{ t('common.editorDemo') }}</a>
+        <a class="es-header-cube" @click.prevent="showCode = !showCode">{{ t('common.code') }}</a>
       </template>
     </Header>
     <div class="es-main">
@@ -29,14 +29,14 @@
           :class="['es-sidebar-item', { active: current.path === item.path }]"
           @click="handleClick(item)"
         >
-          {{ $t(`route.${item.meta?.title}`) }}
+          {{ t(`route.${item.meta?.title}`) }}
         </div>
       </Aside>
       <div class="es-content">
         <RouterView />
       </div>
 
-      <el-drawer v-model="showCode" title="示例代码">
+      <el-drawer v-model="showCode" :title="t('common.code')">
         <pre><code v-html="codeHtml"></code></pre>
       </el-drawer>
     </div>
@@ -49,7 +49,7 @@
   import { menuRoutes } from '@/router';
   import 'highlight.js/styles/panda-syntax-light.css';
   import hljs from 'highlight.js';
-  import { langs } from '@/plugins/locales';
+  import { langs, t } from '@/plugins/locales';
   import { useLocaleStore } from '@/store/locales';
 
   import Header from '@/components/layout/Header.vue';
