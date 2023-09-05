@@ -16,11 +16,19 @@ export function calcLines(list: ComponentType[], current: ComponentType) {
   const { width = 0, height = 0 } = current
   list.forEach(block => {
     if (current.id === block.id) return
-    const { top: ATop, left: ALeft, width: AWidth, height: AHeight } = block as any
+    const {
+      top: ATop,
+      left: ALeft,
+      width: AWidth,
+      height: AHeight
+    } = block as any
     lines.y.push({ showTop: ATop, top: ATop }) // 顶对顶
     lines.y.push({ showTop: ATop, top: ATop - height }) // 顶对底
 
-    lines.y.push({ showTop: ATop + AHeight / 2, top: ATop + AHeight / 2 - height / 2 }) // 中
+    lines.y.push({
+      showTop: ATop + AHeight / 2,
+      top: ATop + AHeight / 2 - height / 2
+    }) // 中
 
     lines.y.push({ showTop: ATop + AHeight, top: ATop + AHeight }) // 底对顶
 
@@ -29,7 +37,10 @@ export function calcLines(list: ComponentType[], current: ComponentType) {
     lines.x.push({ showLeft: ALeft, left: ALeft }) // 左对左
     lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth }) // 右对左
     // 中间对中间
-    lines.x.push({ showLeft: ALeft + AWidth / 2, left: ALeft + AWidth / 2 - width / 2 }) // 中
+    lines.x.push({
+      showLeft: ALeft + AWidth / 2,
+      left: ALeft + AWidth / 2 - width / 2
+    }) // 中
     lines.x.push({ showLeft: ALeft + AWidth, left: ALeft + AWidth - width })
     lines.x.push({ showLeft: ALeft, left: ALeft - width }) // 左对右
   })
@@ -47,8 +58,11 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
   const selectedItems = elements.filter(item => item.selected)
 
   if (!selectedItems.length) return elements
-  
-  let minLeft = Infinity, minTop = Infinity, maxLeft = -Infinity, maxTop = -Infinity
+
+  let minLeft = Infinity,
+    minTop = Infinity,
+    maxLeft = -Infinity,
+    maxTop = -Infinity
 
   Math.max(...selectedItems.map(item => item.left!))
   selectedItems.forEach(item => {
@@ -58,7 +72,7 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
     minLeft = Math.min(minLeft, itemRect.left - editorRect.left)
     // 最大left
     maxLeft = Math.max(maxLeft, itemRect.right - editorRect.left)
-   
+
     // 最小top
     minTop = Math.min(minTop, itemRect.top - editorRect.top)
     // 最大top
@@ -69,14 +83,15 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
     left: minLeft,
     top: minTop,
     width: maxLeft - minLeft, // 宽度 = 最大left - 最小left
-    height: maxTop - minTop, // 高度 = 最大top - 最小top
+    height: maxTop - minTop // 高度 = 最大top - 最小top
   }
   let hasRotate = false
   // 子元素相对父元素的位置
   selectedItems.forEach(item => {
     item.left = item.left! - minLeft
     item.top = item.top! - minTop
-    item.groupStyle = { // 使用百分比的好处是组合元素缩放里面的子元素可以自适应
+    item.groupStyle = {
+      // 使用百分比的好处是组合元素缩放里面的子元素可以自适应
       ...item.style,
       width: toPercent(item.width! / dragData.width),
       height: toPercent(item.height! / dragData.height),
@@ -89,7 +104,7 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
       hasRotate = true
     }
   })
-  
+
   // 组合组件信息
   const groupElement: ComponentType = {
     id: useId(),
@@ -98,13 +113,14 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
     selected: true,
     ...dragData,
     equalProportion: hasRotate,
-    props: { // 组合组件的props，参见Group.vue
+    props: {
+      // 组合组件的props，参见Group.vue
       elements: selectedItems
     }
   }
 
   const newElements = elements.filter(item => !item.selected)
-  
+
   return [...newElements, groupElement]
 }
 
@@ -116,7 +132,9 @@ export function makeGroup(elements: ComponentType[], editorRect: DOMRect) {
  */
 export function cancelGroup(elements: ComponentType[], editorRect: DOMRect) {
   // 得到当前选中元素
-  const current = elements.find(item => item.selected) as Required<ComponentType>
+  const current = elements.find(
+    item => item.selected
+  ) as Required<ComponentType>
   // 如果没有选中的元素或者不是组合元素直接返回
   if (!current || current.component !== 'es-group') {
     return elements
@@ -126,11 +144,13 @@ export function cancelGroup(elements: ComponentType[], editorRect: DOMRect) {
   const items = current.props.elements as ComponentType[]
   const newElements = items.map(item => {
     // 子组件相对于浏览器视口位置大小
-    const componentRect = document.getElementById(item.id!)!.getBoundingClientRect()
+    const componentRect = document
+      .getElementById(item.id!)!
+      .getBoundingClientRect()
     // 获取元素的中心点坐标
     const center = {
       x: componentRect.left - editorRect.left + componentRect.width / 2,
-      y: componentRect.top - editorRect.top + componentRect.height / 2,
+      y: componentRect.top - editorRect.top + componentRect.height / 2
     }
     const groupStyle = item.groupStyle!
     // 拆分后的宽高
@@ -167,9 +187,9 @@ function perToNum(perStr: any) {
 export function addPxUnit(value: number | string) {
   // 检查传入的值是否已经有单位，例如 %, rem, em 等
   if (`${value}`.match(/^[0-9.-]+(px|%|rem|em|vh|vw)$/)) {
-    return value; // 如果已经有单位，则不做替换，直接返回
+    return value // 如果已经有单位，则不做替换，直接返回
   }
 
   // 否则，添加 px 单位并返回
-  return value + 'px';
+  return value + 'px'
 }

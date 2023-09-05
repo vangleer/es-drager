@@ -5,15 +5,14 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEditorStore } from '@/store'
 import EditorStyle from './EditorStyle.vue'
 import ElementStyle from './ElementStyle.vue'
 const store = useEditorStore()
-
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .es-info-style {
   .el-collapse-item__header {
     padding: 0 10px;

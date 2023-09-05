@@ -2,15 +2,15 @@
   <div class="es-grid-info">
     <div class="es-info-item">
       <span>snapToGrid</span>
-      <input type="checkbox" v-model="snapToGrid">
+      <input type="checkbox" v-model="snapToGrid" />
     </div>
     <div class="es-info-item">
       <span>gridSize</span>
-      <input v-model.number="gridSize">
+      <input v-model.number="gridSize" />
     </div>
     <div class="es-info-item">
       <span>scaleRatio</span>
-      <input :value="scale" @change="handleScaleChange">
+      <input :value="scale" @change="handleScaleChange" />
     </div>
   </div>
   <div class="es-grid-box" :style="boxStyle">
@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import Drager from 'es-drager'
 import GridRect from '@/components/editor/GridRect.vue'
@@ -47,10 +47,9 @@ const boxStyle = computed(() => {
     transform: `scale(${scale.value})`
   }
 })
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-grid-box {
   position: relative;
   width: calc(80% - 40px);

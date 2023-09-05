@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 
 const props = defineProps({
@@ -32,15 +32,17 @@ function selectText() {
   window.getSelection()!.addRange(range)
 }
 
-watch(() => [props.editable], () => {
-  if (props.editable) {
-    selectText()
+watch(
+  () => [props.editable],
+  () => {
+    if (props.editable) {
+      selectText()
+    }
   }
-})
-
+)
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-text {
   width: calc(100% - 1px);
   height: 100%;

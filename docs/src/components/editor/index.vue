@@ -54,7 +54,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed, ref, PropType, onMounted, onBeforeMount } from 'vue'
 import ESDrager, { DragData } from '../../../../src/drager'
 import 'es-drager/lib/style.css'
@@ -84,11 +84,13 @@ const data = computed({
   get: () => props.modelValue,
   set: () => {}
 })
-const showMarkline = computed(() => data.value.container.markline && data.value.container.markline.show)
+const showMarkline = computed(
+  () => data.value.container.markline && data.value.container.markline.show
+)
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
 const scaleRatio = computed(() => props.modelValue.container?.scaleRatio || 1)
 const editorStyle = computed(() => {
-  const { width, height } =  data.value.container.style
+  const { width, height } = data.value.container.style
   return {
     ...data.value.container.style,
     width: width + 'px',
@@ -107,28 +109,21 @@ const extraDragData = ref({
 })
 const current = computed<ComponentType>({
   get: () => store.current,
-  set: (val) => {
+  set: val => {
     store.current = val
   }
 })
-const {
-  markLine,
-  updateLines,
-  updateMarkline
-} = useMarkline(data, current)
+const { markLine, updateLines, updateMarkline } = useMarkline(data, current)
 const areaRef = ref()
-const {
-  areaSelected,
-  onEditorMouseDown,
-  onAreaMove,
-  onAreaUp
-} = useArea(data, areaRef)
+const { areaSelected, onEditorMouseDown, onAreaMove, onAreaUp } = useArea(
+  data,
+  areaRef
+)
 
-const {
-  editorRect,
-  onContextmenu,
-  onEditorContextMenu
-} = useActions(data, editorRef)
+const { editorRect, onContextmenu, onEditorContextMenu } = useActions(
+  data,
+  editorRef
+)
 
 function onDragstart(element: ComponentType) {
   current.value = element
@@ -136,10 +131,10 @@ function onDragstart(element: ComponentType) {
     const seletedItems = data.value.elements.filter(item => item.selected)
     if (seletedItems.length === 1) {
       // 将上一次移动元素变为非选
-      data.value.elements.forEach(item => item.selected = false)
+      data.value.elements.forEach(item => (item.selected = false))
     }
   }
- 
+
   // 选中当前元素
   current.value.selected = true
   // 记录按下的数据，为了计算多个选中时移动的距离
@@ -176,8 +171,8 @@ function onDrag(dragData: DragData) {
 }
 
 function onChange(dragData: DragData, item: ComponentType) {
-  Object.keys(dragData).forEach((key) => {
-    (item as any)[key] = dragData[key as keyof DragData]
+  Object.keys(dragData).forEach(key => {
+    ;(item as any)[key] = dragData[key as keyof DragData]
   })
 }
 
@@ -210,10 +205,9 @@ onMounted(() => {
 onBeforeMount(() => {
   setGlobalEvents('off')
 })
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-editor {
   box-sizing: border-box;
   position: relative;

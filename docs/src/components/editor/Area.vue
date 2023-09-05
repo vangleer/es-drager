@@ -2,7 +2,7 @@
   <div v-show="show" class="es-editor-area" :style="areaStyle"></div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 
 const emit = defineEmits(['move', 'up'])
@@ -13,7 +13,7 @@ const areaData = ref({
   top: 0,
   left: 0
 })
-const areaStyle = computed(()=> {
+const areaStyle = computed(() => {
   const { width, height, top, left } = areaData.value
   return {
     width: width + 'px',
@@ -24,9 +24,8 @@ const areaStyle = computed(()=> {
 })
 
 function onMouseDown(e: MouseEvent) {
-  
   // 鼠标按下的位置
-  const { pageX: downX, pageY: downY } = e;
+  const { pageX: downX, pageY: downY } = e
   const elRect = (e.target as HTMLElement)!.getBoundingClientRect()
 
   // 鼠标在编辑器中的偏移量
@@ -39,9 +38,11 @@ function onMouseDown(e: MouseEvent) {
     const disY = e.pageY - downY
 
     // 得到默认的left、top
-    let left = offsetX, top = offsetY
+    let left = offsetX,
+      top = offsetY
     // 宽高取鼠标移动距离的绝对值
-    let width = Math.abs(disX), height = Math.abs(disY)
+    let width = Math.abs(disX),
+      height = Math.abs(disY)
     // 避免点击显示
     if (width > 2 || height > 2) {
       show.value = true
@@ -91,7 +92,7 @@ defineExpose({
 })
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-editor-area {
   position: absolute;
   top: 0;
@@ -100,6 +101,6 @@ defineExpose({
   width: 100px;
   height: 100px;
   border: 1px dashed var(--el-color-primary);
-  background-color: rgba(var(--el-color-primary-rgb), .1);
+  background-color: rgba(var(--el-color-primary-rgb), 0.1);
 }
 </style>

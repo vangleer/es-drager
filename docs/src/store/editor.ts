@@ -49,7 +49,7 @@ const defaultData = {
     }
   ]
 }
-export const  useEditorStore = defineStore('editor', {
+export const useEditorStore = defineStore('editor', {
   state: (): EditorState => {
     return {
       data: defaultData,

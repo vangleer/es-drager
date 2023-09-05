@@ -38,7 +38,8 @@
     "dev": "npm run dev -w docs",
     "build": "vite build",
     "build:docs": "npm run build -w docs",
-    "release": "npm run build && npm publish"
+    "release": "npm run build && npm publish",
+    "prettier": "prettier --write docs/**/*.{vue,ts,tsx,json}"
   },
   "workspaces": [
     "docs"
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@types/node": "^18.15.13",
     "@vitejs/plugin-vue": "^4.1.0",
+    "prettier": "3.0.3",
     "sass": "^1.62.0",
     "typescript": "^4.9.3",
     "vite": "^4.2.0",

@@ -2,7 +2,6 @@ import { useEditorContainer } from '@/hooks'
 import { VNode, createVNode, render } from 'vue'
 import Dialog from './Dialog.vue'
 
-
 let vm: VNode | null = null
 export function $dialog(option: Object) {
   if (!vm) {

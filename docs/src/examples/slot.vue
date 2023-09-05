@@ -1,21 +1,9 @@
 <template>
-  <Drager
-    :width="200"
-    :height="120"
-    :left="100"
-    :top="100"
-    rotatable
-  >
-    <img class="img" style="width: 100%;height: 100%;" :src="imgUrl">
+  <Drager :width="200" :height="120" :left="100" :top="100" rotatable>
+    <img class="img" style="width: 100%; height: 100%" :src="imgUrl" />
   </Drager>
 
-  <Drager
-    :width="100"
-    :height="100"
-    :left="100"
-    :top="300"
-    rotatable
-  >
+  <Drager :width="100" :height="100" :left="100" :top="300" rotatable>
     resize handle
     <template #resize>
       <div class="custom-resize"></div>
@@ -44,13 +32,7 @@
     control handle display
   </Drager>
 
-  <Drager
-    :width="100"
-    :height="100"
-    :left="100"
-    :top="450"
-    rotatable
-  >
+  <Drager :width="100" :height="100" :left="100" :top="450" rotatable>
     rotate handle
     <template #rotate>
       <div class="custom-rotate">E</div>
@@ -58,13 +40,12 @@
   </Drager>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import Drager from 'es-drager'
 import imgUrl from '../assets/demo.png'
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .custom-resize {
   width: 6px;
   height: 6px;

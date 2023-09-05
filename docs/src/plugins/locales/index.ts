@@ -1,15 +1,15 @@
-import { createI18n } from 'vue-i18n';
-import zh from './zh.json';
-import en from './en.json';
+import { createI18n } from 'vue-i18n'
+import zh from './zh.json'
+import en from './en.json'
 
 // 获取浏览器界面语言，默认语言
 // https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/language
-let currentLanguage = navigator.language.replace(/-(\S*)/, '');
+let currentLanguage = navigator.language.replace(/-(\S*)/, '')
 
 // 如果本地缓存记录了语言环境，则使用本地缓存
-let lsLocale = localStorage.getItem('locale') || '';
+let lsLocale = localStorage.getItem('locale') || ''
 if (lsLocale) {
-  currentLanguage = JSON.parse(lsLocale)?.locale;
+  currentLanguage = JSON.parse(lsLocale)?.locale
 }
 
 const i18n = createI18n({
@@ -19,9 +19,9 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {
     zh,
-    en,
-  },
-});
+    en
+  }
+})
 
 export default i18n
 
@@ -29,5 +29,5 @@ export const t = (key: string) => i18n.global.t(key)
 
 export const langs = [
   { key: 'zh', title: '中文' },
-  { key: 'en', title: 'English' },
-];
+  { key: 'en', title: 'English' }
+]

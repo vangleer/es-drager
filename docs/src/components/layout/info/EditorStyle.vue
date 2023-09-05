@@ -3,7 +3,7 @@
     :model="store.data.container"
     label-width="90px"
     label-position="left"
-    style="padding: 0 10px;"
+    style="padding: 0 10px"
   >
     <el-form-item label="画布尺寸">
       <el-select v-model="editorSize">
@@ -52,7 +52,7 @@
   </el-form>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEditorStore } from '@/store'
 import { ref, computed } from 'vue'
 const store = useEditorStore()
@@ -63,7 +63,7 @@ const editorSize = computed({
     const { width, height } = store.data.container.style
     return `${width} x ${height}`
   },
-  set: (val) => {
+  set: val => {
     const [width, height] = val.split(' x ')
     store.data.container.style.width = +width
     store.data.container.style.height = +height
@@ -92,6 +92,4 @@ const screenSize = [
 const handleScaleRatioChange = (val: number) => {
   store.data.container.scaleRatio = val / 100
 }
-
 </script>
-

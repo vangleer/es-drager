@@ -1,10 +1,16 @@
-import { addPxUnit } from "./common"
+import { addPxUnit } from './common'
 
-const unitKeys = [
-  'fontSize', 'lineHeight', 'borderWidth', 'borderRadius'
-]
+const unitKeys = ['fontSize', 'lineHeight', 'borderWidth', 'borderRadius']
 const textStyleKeys = [
-  'fontSize', 'fontWeight', 'fontFamily', 'color', 'lineHeight', 'fontStyle', 'textDecoration', 'justifyContent', 'alignItems'
+  'fontSize',
+  'fontWeight',
+  'fontFamily',
+  'color',
+  'lineHeight',
+  'fontStyle',
+  'textDecoration',
+  'justifyContent',
+  'alignItems'
 ]
 export function pickStyle(obj: AnyObject | undefined, flag: boolean = true) {
   if (!obj) return obj

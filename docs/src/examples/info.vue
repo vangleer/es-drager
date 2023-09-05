@@ -1,35 +1,31 @@
 <template>
-  <Drager
-    v-bind="info"
-    rotatable
-    @change="onChange"
-  />
-  
+  <Drager v-bind="info" rotatable @change="onChange" />
+
   <div class="es-info">
     <div class="es-info-item">
       <span>width</span>
-      <input v-model.number="info.width">
+      <input v-model.number="info.width" />
     </div>
     <div class="es-info-item">
       <span class="es-info-item-label">height</span>
-      <input v-model.number="info.height">
+      <input v-model.number="info.height" />
     </div>
     <div class="es-info-item">
       <span class="es-info-item-label">left</span>
-      <input v-model.number="info.left">
+      <input v-model.number="info.left" />
     </div>
     <div class="es-info-item">
       <span class="es-info-item-label">top</span>
-      <input v-model.number="info.top">
+      <input v-model.number="info.top" />
     </div>
     <div class="es-info-item">
       <span class="es-info-item-label">angle</span>
-      <input v-model.number="info.angle">
+      <input v-model.number="info.angle" />
     </div>
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref } from 'vue'
 import Drager, { type DragData } from 'es-drager'
 
@@ -44,10 +40,9 @@ const info = ref<DragData>({
 const onChange = (dragData: DragData) => {
   info.value = dragData
 }
-
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .es-info {
   position: absolute;
   top: 0;

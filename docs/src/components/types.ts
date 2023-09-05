@@ -1,18 +1,18 @@
-import { CSSProperties, ExtractPropTypes } from 'vue';
-import { DragerProps } from '../../../src/drager/src/drager';
+import { CSSProperties, ExtractPropTypes } from 'vue'
+import { DragerProps } from '../../../src/drager/src/drager'
 
-type DragerType = Partial<ExtractPropTypes<typeof DragerProps>>;
+type DragerType = Partial<ExtractPropTypes<typeof DragerProps>>
 
 export type ComponentType = DragerType & {
-  id?: string;
-  component?: string;
-  text?: string;
-  group?: boolean;
-  groupStyle?: any;
-  props?: any;
-  style?: CSSProperties;
-  editable?: boolean;
-};
+  id?: string
+  component?: string
+  text?: string
+  group?: boolean
+  groupStyle?: any
+  props?: any
+  style?: CSSProperties
+  editable?: boolean
+}
 export type EditorType = {
   container: {
     snapToGrid: boolean
@@ -29,12 +29,12 @@ export type EditorType = {
 }
 
 export type IconType = DragerType & {
-  component?: string;
-  text?: string;
-  style?: CSSProperties;
-  props?: any;
-  icon?: string;
-};
+  component?: string
+  text?: string
+  style?: CSSProperties
+  props?: any
+  icon?: string
+}
 
 export type ToolType = {
   label: string

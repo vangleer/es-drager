@@ -1,8 +1,14 @@
 <template>
-  <input ref="inpurRef" type="file" :accept="state.option?.accept" class="es-upload" @change="handleChange">
+  <input
+    ref="inpurRef"
+    type="file"
+    :accept="state.option?.accept"
+    class="es-upload"
+    @change="handleChange"
+  />
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref, onMounted, reactive, PropType } from 'vue'
 import { UploadOption } from './index'
 const acceptMap = {
@@ -49,14 +55,13 @@ const handleChange = async (e: Event) => {
   inpurRef.value.value = ''
 }
 
-
 /**
  * 读取文件的文本内容
  */
 const readFile = (file: File, type: string = 'text') => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const reader = new FileReader()
-    reader.addEventListener('load', (e) => {
+    reader.addEventListener('load', e => {
       const result = e.target!.result || '{}'
       resolve(result)
     })
@@ -78,7 +83,7 @@ defineExpose({
 })
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-upload {
   display: none;
 }

@@ -3,7 +3,10 @@ import { calcLines } from '@/utils/common'
 import { DragData } from 'es-drager'
 import { reactive, Ref, ref } from 'vue'
 
-export function useMarkline(data: Ref<EditorType>, current: Ref<ComponentType | null>) {
+export function useMarkline(
+  data: Ref<EditorType>,
+  current: Ref<ComponentType | null>
+) {
   const markLine = reactive({
     left: null,
     top: null

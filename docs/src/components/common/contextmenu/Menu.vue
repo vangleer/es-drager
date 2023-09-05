@@ -10,14 +10,23 @@
       @mousedown.stop
     >
       <ul v-if="state.option.items">
-        <li v-for="item in state.option.items" @click="handleItemClick(item)">{{ item.label }}</li>
+        <li v-for="item in state.option.items" @click="handleItemClick(item)">
+          {{ item.label }}
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
-<script setup lang='ts'>
-import { ref, computed, onMounted, reactive, onBeforeUnmount, PropType } from 'vue'
+<script setup lang="ts">
+import {
+  ref,
+  computed,
+  onMounted,
+  reactive,
+  onBeforeUnmount,
+  PropType
+} from 'vue'
 import { computePosition, flip, shift, offset } from '@floating-ui/dom'
 import { MenuItem, MenuOption } from './index'
 const props = defineProps({
@@ -37,9 +46,15 @@ const state = reactive({
 })
 
 // 菜单的位置
-const style = computed(() => ({ left: state.left + 'px', top: state.top + 'px' }))
+const style = computed(() => ({
+  left: state.left + 'px',
+  top: state.top + 'px'
+}))
 // 触发器的位置
-const triggerStyle = computed(() => ({ left: state.option.clientX + 'px', top: state.option.clientY + 'px' }))
+const triggerStyle = computed(() => ({
+  left: state.option.clientX + 'px',
+  top: state.option.clientY + 'px'
+}))
 
 // floating-ui 中间件
 const middleware = [shift(), flip(), offset(10)]
@@ -48,10 +63,12 @@ const open = (option: Record<string, any>) => {
   state.option = option
   state.visible = true
   // 每次打开计算最新位置
-  computePosition(triggerRef.value, menuRef.value, { middleware }).then(data => {
-    state.left = data.x
-    state.top = data.y
-  })
+  computePosition(triggerRef.value, menuRef.value, { middleware }).then(
+    data => {
+      state.left = data.x
+      state.top = data.y
+    }
+  )
 }
 const close = () => {
   state.visible = false
@@ -77,7 +94,7 @@ defineExpose({
 })
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-contentmenu {
   position: absolute;
   top: 0;

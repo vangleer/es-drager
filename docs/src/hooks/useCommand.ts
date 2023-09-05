@@ -1,6 +1,6 @@
-import { useEditorStore } from "@/store"
-import { deepCopy, events } from "@/utils"
-import { onUnmounted, onMounted } from "vue"
+import { useEditorStore } from '@/store'
+import { deepCopy, events } from '@/utils'
+import { onUnmounted, onMounted } from 'vue'
 
 type CommandType = {
   name: string
@@ -12,8 +12,8 @@ type CommandType = {
 export type CommandStateType = {
   current: number
   queue: QueueType[]
-  commands: { [key in string]: any },
-  commandArray: CommandType[],
+  commands: { [key in string]: any }
+  commandArray: CommandType[]
   destoryArray: any[]
 }
 type QueueType = {
@@ -84,10 +84,11 @@ export function useCommand() {
   registry({
     name: 'drag',
     pushQueue: true,
-    init() { // 初始化操作 默认就会执行
+    init() {
+      // 初始化操作 默认就会执行
       // 监控拖拽开始事件，保持状态
       const dragstart = () => {
-        (this as any).before = deepCopy(store.data.elements)
+        ;(this as any).before = deepCopy(store.data.elements)
       }
       const dragend = () => state.commands.drag()
       events.on('dragstart', dragstart)
@@ -193,7 +194,8 @@ export function useCommand() {
       })
     }
     window.addEventListener('keydown', onKeydown)
-    return () => { // 销毁事件
+    return () => {
+      // 销毁事件
       window.removeEventListener('keydown', onKeydown)
     }
   }

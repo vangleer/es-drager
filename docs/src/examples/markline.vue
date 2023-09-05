@@ -1,12 +1,16 @@
 <template>
   <div class="es-container">
     <div class="es-tools">
-      <el-button type="primary" @click="command.undo">{{ t('examples.undo') }}</el-button>
-      <el-button type="primary" @click="command.redo">{{ t('examples.redo') }}</el-button>
+      <el-button type="primary" @click="command.undo">{{
+        t('examples.undo')
+      }}</el-button>
+      <el-button type="primary" @click="command.redo">{{
+        t('examples.redo')
+      }}</el-button>
     </div>
     <div class="es-editor">
       <Drager
-        v-for="item, index in data.componentList"
+        v-for="(item, index) in data.componentList"
         v-bind="item"
         @drag-start="onDragstart(index)"
         @drag="onDrag($event)"
@@ -22,7 +26,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref, reactive, CSSProperties, Ref, onBeforeUnmount } from 'vue'
 import GridRect from '@/components/editor/GridRect.vue'
 import Drager, { DragData } from 'es-drager'
@@ -80,16 +84,19 @@ const lines = ref({ x: [], y: [] })
 const command = useCommand(data)
 /**
  * 监听拖拽开始
- * @param index 
+ * @param index
  */
 function onDragstart(index: number) {
   currentIndex.value = index
-  lines.value = calcLines(data.value.componentList, data.value.componentList[index])
+  lines.value = calcLines(
+    data.value.componentList,
+    data.value.componentList[index]
+  )
 }
 
 /**
  * 监听拖拽事件
- * @param dragData 
+ * @param dragData
  */
 function onDrag(dragData: DragData) {
   markLine.top = null
@@ -121,8 +128,8 @@ function onDragend() {
 }
 
 function onChange(dragData: DragData, item: any) {
-  Object.keys(dragData).forEach((key) => {
-    (item as any)[key] = dragData[key as keyof DragData]
+  Object.keys(dragData).forEach(key => {
+    ;(item as any)[key] = dragData[key as keyof DragData]
   })
 }
 
@@ -161,7 +168,7 @@ function useCommand(data: Ref<EditorState>) {
     if (ctrlKey) {
       if (key === 'z') undo()
       else if (key === 'y') redo()
-    } 
+    }
   }
   window.addEventListener('keydown', onKeydown)
 
@@ -178,10 +185,9 @@ function useCommand(data: Ref<EditorState>) {
 function deepCopy(obj: any) {
   return JSON.parse(JSON.stringify(obj))
 }
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-container {
   width: 800px;
   height: 600px;

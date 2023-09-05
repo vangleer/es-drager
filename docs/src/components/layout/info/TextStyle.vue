@@ -3,19 +3,25 @@
     <el-form-item label="字体颜色">
       <el-color-picker v-model="textStyle.color" />
     </el-form-item>
-    
+
     <el-form-item label="标题">
-      <el-select v-model="titleValue" placeholder="标题" @change="handleTitleChange">
+      <el-select
+        v-model="titleValue"
+        placeholder="标题"
+        @change="handleTitleChange"
+      >
         <el-option
           v-for="item in titles"
           :label="item.label"
           :value="item.value"
         >
-          <span :style="{ fontSize: item.value, fontWeight: 'bold' }">{{ item.label }}</span>
+          <span :style="{ fontSize: item.value, fontWeight: 'bold' }">{{
+            item.label
+          }}</span>
         </el-option>
       </el-select>
     </el-form-item>
-    
+
     <el-form-item label="字体">
       <el-select v-model="textStyle.fontFamily" placeholder="字体">
         <el-option
@@ -23,7 +29,7 @@
           :label="item.label"
           :value="item.label"
         >
-        <span :style="{ fontFamily: item.label }">{{ item.label }}</span>
+          <span :style="{ fontFamily: item.label }">{{ item.label }}</span>
         </el-option>
       </el-select>
     </el-form-item>
@@ -31,8 +37,7 @@
     <el-form-item label="字体大小">
       <el-input v-model="textStyle.fontSize" />
     </el-form-item>
-    
-    
+
     <el-form-item label="行高">
       <el-input-number v-model="textStyle.lineHeight" />
     </el-form-item>
@@ -42,7 +47,10 @@
     </el-form-item>
 
     <div class="text-block-box">
-      <div class="text-style-block" v-for="block, index in fontStyleListFormat">
+      <div
+        class="text-style-block"
+        v-for="(block, index) in fontStyleListFormat"
+      >
         <div
           v-for="item in block"
           :style="index === 0 ? { [item.key]: item.value } : {}"
@@ -55,7 +63,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEditorStore } from '@/store'
 import { ref, CSSProperties, computed } from 'vue'
 import { getIcon } from '@/assets/images/icons/index'
@@ -80,7 +88,7 @@ const defaultList = [
   { label: getIcon('left'), key: 'justifyContent', value: 'flex-start' },
   { label: getIcon('center'), key: 'justifyContent', value: 'center' },
   { label: getIcon('right'), key: 'justifyContent', value: 'flex-end' },
-  
+
   { label: getIcon('top'), key: 'alignItems', value: 'flex-start' },
   { label: getIcon('middle'), key: 'alignItems', value: 'center' },
   { label: getIcon('bottom'), key: 'alignItems', value: 'flex-end' }
@@ -124,7 +132,7 @@ const textStyle = computed({
   get: () => {
     return store.current.style || {}
   },
-  set: (val) => {
+  set: val => {
     store.current.style = store.current.style || {}
     Object.keys(val).forEach(key => {
       setStyle(key, (val as any)[key])
@@ -134,7 +142,7 @@ const textStyle = computed({
 
 // 设置样式
 function setStyle(key: string | number | symbol, value: any) {
-  (store.current.style as any)[key] = value
+  ;(store.current.style as any)[key] = value
 }
 // 根据key获取样式值
 function getValue(key: string | number | symbol) {
@@ -142,7 +150,7 @@ function getValue(key: string | number | symbol) {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .el-select-dropdown__item {
   height: auto;
   line-height: normal;

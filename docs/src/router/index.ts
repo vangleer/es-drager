@@ -1,70 +1,70 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import Home from '@/views/Home.vue';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import Home from '@/views/Home.vue'
 
 export const menuRoutes: RouteRecordRaw[] = [
   {
     path: 'basic',
     component: () => import('@/examples/basic.vue'),
     meta: {
-      title: 'basic',
-    },
+      title: 'basic'
+    }
   },
   {
     path: 'event',
     component: () => import('@/examples/event.vue'),
     meta: {
-      title: 'event',
-    },
+      title: 'event'
+    }
   },
   {
     path: 'grid',
     component: () => import('@/examples/grid.vue'),
     meta: {
-      title: 'grid',
-    },
+      title: 'grid'
+    }
   },
   {
     path: 'info',
     component: () => import('@/examples/info.vue'),
     meta: {
-      title: 'info',
-    },
+      title: 'info'
+    }
   },
   {
     path: 'slot',
     component: () => import('@/examples/slot.vue'),
     meta: {
-      title: 'slot',
-    },
+      title: 'slot'
+    }
   },
   {
     path: 'chart',
     component: () => import('@/examples/chart.vue'),
     meta: {
-      title: 'chart',
-    },
+      title: 'chart'
+    }
   },
   {
     path: 'markline',
     component: () => import('@/examples/markline.vue'),
     meta: {
-      title: 'markline',
-    },
+      title: 'markline'
+    }
   },
   {
     path: 'group',
     component: () => import('@/examples/group.vue'),
     meta: {
-      title: 'group',
-    },
+      title: 'group'
+    }
   },
   {
     path: 'menu',
     component: () => import('@/examples/menu.vue'),
     meta: {
-      title: 'menu',
-    },
-  },
+      title: 'menu'
+    }
+  }
   // {
   //   path: 'temp',
   //   component: () => import('@/examples/temp.vue'),
@@ -72,24 +72,24 @@ export const menuRoutes: RouteRecordRaw[] = [
   //     title: 'temp'
   //   }
   // }
-];
+]
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: Home,
     redirect: '/basic',
-    children: menuRoutes,
+    children: menuRoutes
   },
   {
     path: '/editor',
-    component: () => import('@/views/editor/index.vue'),
-  },
-];
+    component: () => import('@/views/editor/index.vue')
+  }
+]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
-});
+  routes
+})
 
-export default router;
+export default router

@@ -1,7 +1,7 @@
 <template>
-  <template v-for="list, index in dragList">
+  <template v-for="(list, index) in dragList">
     <Drager
-      v-for="item, index2 in list"
+      v-for="(item, index2) in list"
       :key="index"
       :width="100"
       :height="100"
@@ -15,7 +15,7 @@
   </template>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '@/plugins/locales'
 import Drager from '../../../src/drager'
@@ -24,15 +24,19 @@ const dragList = ref([
   [
     { text: 'examples.move', resizable: false, rotatable: false },
     { color: '#00c48f', text: 'examples.moveAndResize', rotatable: false },
-    { color: '#ff9f00', text: 'examples.rotate', rotatable: true, resizable: false },
-    { color: '#f44336', text: 'examples.rotateAndResize', rotatable: true },
+    {
+      color: '#ff9f00',
+      text: 'examples.rotate',
+      rotatable: true,
+      resizable: false
+    },
+    { color: '#f44336', text: 'examples.rotateAndResize', rotatable: true }
   ],
   [
     { color: '#6A00FF', text: 'examples.boundary', boundary: true },
     { color: '#A20025', text: 'examples.disabled', disabled: true },
     { color: '#D80073', text: 'examples.checkCollision', checkCollision: true },
-    { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 },
+    { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 }
   ]
 ])
 </script>
-

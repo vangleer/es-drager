@@ -16,10 +16,9 @@
     @rotate-start="onRotateStart"
     @rotate-end="onRotateEnd"
   />
-  
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import Drager, { type DragData } from 'es-drager'
 
 // @change="onChange"
@@ -66,5 +65,4 @@ const onRotateStart = (dragData: DragData) => {
 const onRotateEnd = (dragData: DragData) => {
   console.log('onRotateEnd', dragData)
 }
-
 </script>

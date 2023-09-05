@@ -9,7 +9,12 @@
       <el-collapse-item title="布局/样式" name="style">
         <div class="info-color-map">
           <div class="color-list" v-for="item in itemList">
-            <div class="color-item" v-for="style in item" :style="style" @click="handleColorClick(style)"></div>
+            <div
+              class="color-item"
+              v-for="style in item"
+              :style="style"
+              @click="handleColorClick(style)"
+            ></div>
           </div>
         </div>
         <el-form-item label="left">
@@ -39,7 +44,13 @@
         </el-form-item>
 
         <el-form-item label="透明度">
-          <el-slider :modelValue="1" :step="0.01" :min="0" :max="1" @input="onChange('opacity', $event)" />
+          <el-slider
+            :modelValue="1"
+            :step="0.01"
+            :min="0"
+            :max="1"
+            @input="onChange('opacity', $event)"
+          />
         </el-form-item>
 
         <template v-if="store.current.style">
@@ -66,18 +77,16 @@
           <el-form-item label="边框半径">
             <el-input-number v-model="store.current.style.borderRadius" />
           </el-form-item>
-          
         </template>
       </el-collapse-item>
       <el-collapse-item title="文本" name="text">
         <TextStyle />
       </el-collapse-item>
     </el-collapse>
-    
   </el-form>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEditorStore } from '@/store'
 import { ref, CSSProperties } from 'vue'
 import TextStyle from './TextStyle.vue'
@@ -92,7 +101,7 @@ const itemList = ref<CSSProperties[][]>([
     { backgroundColor: '#ffe6cc', borderColor: '#d79b00' },
     { backgroundColor: '#fff2cc', borderColor: '#d6b656' },
     { backgroundColor: '#f8cecc', borderColor: '#b85450' },
-    { backgroundColor: '#e1d5e7', borderColor: '#9673a6' },
+    { backgroundColor: '#e1d5e7', borderColor: '#9673a6' }
   ]
 ])
 
@@ -108,11 +117,11 @@ const handleColorClick = (style: CSSProperties) => {
 }
 
 function onChange(key: string, value: any) {
-  (store.current.style as any)[key] = value
+  ;(store.current.style as any)[key] = value
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .color-list {
   display: flex;
   flex-wrap: wrap;

@@ -1,20 +1,20 @@
-import { defineStore } from 'pinia';
-import i18n from '@/plugins/locales';
-import { ref } from 'vue';
+import { defineStore } from 'pinia'
+import i18n from '@/plugins/locales'
+import { ref } from 'vue'
 export const useLocaleStore = defineStore(
   'locale',
   () => {
-    let locale = ref(i18n.global.locale.value);
+    let locale = ref(i18n.global.locale.value)
 
     // 设置locale
     function setLocale(lang: any) {
-      locale.value = lang;
-      i18n.global.locale.value = lang;
+      locale.value = lang
+      i18n.global.locale.value = lang
     }
 
-    return { locale, setLocale };
+    return { locale, setLocale }
   },
   {
-    persist: true,
+    persist: true
   }
-);
+)

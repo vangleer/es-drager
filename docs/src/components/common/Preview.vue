@@ -5,34 +5,37 @@
       <el-button type="primary" @click="handleExport('jpg')">导出JPG</el-button>
       <el-button type="primary" @click="handleExport('pdf')">导出PDF</el-button>
     </div>
-    <div class="es-preview-body" :style="{ width: editorStyle.width, height: editorStyle.height }">
-      <div
-        ref="editorRef"
-        class="es-editor preview"
-        :style="editorStyle"
-      >
+    <div
+      class="es-preview-body"
+      :style="{ width: editorStyle.width, height: editorStyle.height }"
+    >
+      <div ref="editorRef" class="es-editor preview" :style="editorStyle">
         <template v-for="item in store.data.elements">
           <component
-              :is="item.component!"
-              v-bind="item.props"
-              :style="{
-                ...pickStyle(item.style, false),
-                width: item.width + 'px',
-                height: item.height + 'px',
-                position: 'absolute',
-                left: item.left + 'px',
-                top: item.top + 'px'
-              }"
-            >
-              <TextEditor v-if="item.text" :text="item.text" :style="pickStyle(item.style)" />
-            </component>
+            :is="item.component!"
+            v-bind="item.props"
+            :style="{
+              ...pickStyle(item.style, false),
+              width: item.width + 'px',
+              height: item.height + 'px',
+              position: 'absolute',
+              left: item.left + 'px',
+              top: item.top + 'px'
+            }"
+          >
+            <TextEditor
+              v-if="item.text"
+              :text="item.text"
+              :style="pickStyle(item.style)"
+            />
+          </component>
         </template>
       </div>
     </div>
   </el-dialog>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import TextEditor from '@/components/editor/TextEditor.vue'
 import { useEditorStore } from '@/store'
 import { computed, ref } from 'vue'
@@ -43,7 +46,7 @@ import { pickStyle } from '@/utils'
 const store = useEditorStore()
 const editorRef = ref<HTMLElement>()
 const editorStyle = computed(() => {
-  const { width, height } =  store.data.container.style
+  const { width, height } = store.data.container.style
   return {
     ...store.data.container.style,
     width: width + 'px',
@@ -55,7 +58,7 @@ const editorStyle = computed(() => {
 const scaleRatio = computed(() => store.data.container?.scaleRatio || 1)
 
 function handleExport(type: 'png' | 'jpg' | 'pdf') {
-  const { width, height } =  store.data.container.style
+  const { width, height } = store.data.container.style
   // 生成文件名称
   const filename = dayjs().format('YYYY-MM-DD') + '-es-drager-editor.' + type
   html2canvas(editorRef.value!).then(canvas => {
@@ -81,7 +84,7 @@ function handleExport(type: 'png' | 'jpg' | 'pdf') {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .es-editor {
   &.preview {
     position: relative;

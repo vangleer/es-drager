@@ -1,9 +1,17 @@
 <template>
-  <div v-show="left" class="es-editor-markline-left" :style="{ left: left + 'px' }"></div>
-  <div v-show="top" class="es-editor-markline-top" :style="{ top: top + 'px' }"></div>
+  <div
+    v-show="left"
+    class="es-editor-markline-left"
+    :style="{ left: left + 'px' }"
+  ></div>
+  <div
+    v-show="top"
+    class="es-editor-markline-top"
+    :style="{ top: top + 'px' }"
+  ></div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { PropType } from 'vue'
 
 defineProps({
@@ -12,8 +20,8 @@ defineProps({
 })
 </script>
 
-<style lang='scss' scoped>
-[class^=es-editor-markline] {
+<style lang="scss" scoped>
+[class^='es-editor-markline'] {
   position: absolute;
   z-index: 9999;
   background-color: var(--el-color-primary);

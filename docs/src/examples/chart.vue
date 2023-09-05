@@ -9,10 +9,9 @@
   >
     <Chart ref="chartRef" />
   </Drager>
-  
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref } from 'vue'
 import Drager from 'es-drager'
 import Chart from '@/components/Chart.vue'
@@ -22,6 +21,4 @@ function handleResize() {
 }
 </script>
 
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

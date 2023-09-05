@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ComponentType } from '@/components/types'
 import { PropType } from 'vue'
 
@@ -23,4 +23,3 @@ defineProps({
   }
 })
 </script>
-

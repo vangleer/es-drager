@@ -2,10 +2,23 @@ import { useEditorContainer } from '@/hooks'
 import { VNode, createVNode, render } from 'vue'
 import Menu from './Menu.vue'
 
-export type ActionType = 'remove' | 'cut' | 'copy' | 'paste' | 'duplicate' | 'top' | 'bottom' | 'group' | 'ungroup' | 'selectAll' | 'lock' | 'moveUp' | 'moveDown'
+export type ActionType =
+  | 'remove'
+  | 'cut'
+  | 'copy'
+  | 'paste'
+  | 'duplicate'
+  | 'top'
+  | 'bottom'
+  | 'group'
+  | 'ungroup'
+  | 'selectAll'
+  | 'lock'
+  | 'moveUp'
+  | 'moveDown'
 
 export type MenuItem = {
-  label: string,
+  label: string
   action: ActionType
 }
 

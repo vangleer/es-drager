@@ -8,24 +8,24 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import Style from './Style.vue'
 import { useEditorStore } from '@/store'
 const store = useEditorStore()
 
-const title = computed(() => store.current && store.current.selected ? '元素属性' : '画布属性')
+const title = computed(() =>
+  store.current && store.current.selected ? '元素属性' : '画布属性'
+)
 
 const activeName = ref('style')
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
-
 </script>
 
-<style lang='scss'>
-
+<style lang="scss">
 .es-layout-info {
   flex-shrink: 0;
   width: 230px;

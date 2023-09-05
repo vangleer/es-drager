@@ -1,9 +1,5 @@
 <template>
-  <ElDialog
-    v-model="state.visible"
-    v-bind="state.option"
-    draggable
-  >
+  <ElDialog v-model="state.visible" v-bind="state.option" draggable>
     <div id="esEditor"></div>
 
     <template #footer>
@@ -14,8 +10,8 @@
   </ElDialog>
 </template>
 
-<script setup lang='ts'>
-import { ElButton, ElDialog, dayjs} from 'element-plus'
+<script setup lang="ts">
+import { ElButton, ElDialog, dayjs } from 'element-plus'
 import { nextTick, reactive } from 'vue'
 import ace from 'ace-builds'
 import 'ace-builds/src-min-noconflict/theme-one_dark'
@@ -85,4 +81,3 @@ defineExpose({
   close
 })
 </script>
-
