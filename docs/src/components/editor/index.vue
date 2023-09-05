@@ -24,6 +24,7 @@
       >
         <component
           :is="item.component!"
+          :element="item"
           v-bind="item.props"
           :style="{
             ...pickStyle(item.style, false),

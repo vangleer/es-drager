@@ -131,10 +131,12 @@
 
   function drop(e: DragEvent) {
     if (!currentComponent) return;
+    const isIcon = currentComponent.component === 'es-icon'
     const elements = [
       ...store.data.elements,
       {
         ...currentComponent,
+        equalProportion: isIcon,
         left: e.offsetX - currentComponent.width! / 2,
         top: e.offsetY - currentComponent.height! / 2,
         id: useId(),

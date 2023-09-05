@@ -16,14 +16,15 @@
               :is="item.component!"
               v-bind="item.props"
               :style="{
-                ...item.style,
+                ...pickStyle(item.style, false),
                 width: item.width + 'px',
                 height: item.height + 'px',
-                transform: `translate(${item.left}px, ${item.top}px)`,
-                position: 'relative'
+                position: 'absolute',
+                left: item.left + 'px',
+                top: item.top + 'px'
               }"
             >
-              <TextEditor v-if="item.text" :text="item.text" />
+              <TextEditor v-if="item.text" :text="item.text" :style="pickStyle(item.style)" />
             </component>
         </template>
       </div>
@@ -38,6 +39,7 @@ import { computed, ref } from 'vue'
 import html2canvas from 'html2canvas'
 import JsPdf from 'jspdf'
 import { dayjs } from 'element-plus'
+import { pickStyle } from '@/utils'
 const store = useEditorStore()
 const editorRef = ref<HTMLElement>()
 const editorStyle = computed(() => {
@@ -82,6 +84,7 @@ function handleExport(type: 'png' | 'jpg' | 'pdf') {
 <style lang='scss' scoped>
 .es-editor {
   &.preview {
+    position: relative;
     .es-drager.disabled {
       opacity: 1;
     }

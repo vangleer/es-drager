@@ -46,10 +46,15 @@
   const activeNames = ref(['1']);
 
   function dragstart(e: DragEvent, component: ComponentType) {
+    let width = 50, height = 50
+    if (component.component !== 'es-icon') {
+      width = (e.target as HTMLElement).offsetWidth
+      height = (e.target as HTMLElement).offsetHeight
+    }
     emit('dragstart', {
       ...component,
-      width: (e.target as HTMLElement).offsetWidth,
-      height: (e.target as HTMLElement).offsetHeight,
+      width,
+      height
     });
   }
   function dragend() {
