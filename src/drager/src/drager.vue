@@ -2,15 +2,18 @@
   <component
     :is="tag"
     :ref="setRef"
-    :class="['es-drager', { disabled, dragging: isMousedown, selected, border }]"
+    :class="[
+      'es-drager',
+      { disabled, dragging: isMousedown, selected, border }
+    ]"
     :style="dragStyle"
     @click.stop
   >
     <slot />
-    
+
     <template v-if="showResize">
       <div
-        v-for="item, index in dotList"
+        v-for="(item, index) in dotList"
         :key="index"
         class="es-drager-dot"
         :data-side="item.side"
@@ -23,7 +26,7 @@
         </slot>
       </div>
     </template>
-    
+
     <Rotate
       v-if="showRotate"
       v-model="dragData.angle"
@@ -37,12 +40,15 @@
   </component>
 </template>
 
-<script setup lang='ts'>
-import { computed, ref, watch, ComponentPublicInstance, CSSProperties } from 'vue'
+<script setup lang="ts">
 import {
-  DragerProps,
-  EventType
-} from './drager'
+  computed,
+  ref,
+  watch,
+  ComponentPublicInstance,
+  CSSProperties
+} from 'vue'
+import { DragerProps, EventType } from './drager'
 import { useDrager } from './use-drager'
 import {
   formatData,
@@ -60,22 +66,34 @@ import {
 import Rotate from './rotate.vue'
 
 const props = defineProps(DragerProps)
-const emit = defineEmits(['change', 'drag', 'drag-start', 'drag-end', 'resize', 'resize-start', 'resize-end', 'rotate', 'rotate-start', 'rotate-end'])
+const emit = defineEmits([
+  'change',
+  'drag',
+  'drag-start',
+  'drag-end',
+  'resize',
+  'resize-start',
+  'resize-end',
+  'rotate',
+  'rotate-start',
+  'rotate-end'
+])
 const emitFn = (type: EventType, ...args: any) => {
   emit(type, ...args)
   emit('change', ...args)
 }
 const dragRef = ref<HTMLElement | null>(null)
-const {
-  selected,
-  dragData,
-  isMousedown,
-  checkDragerCollision
-} = useDrager(dragRef, props, emitFn)
+const { selected, dragData, isMousedown, checkDragerCollision } = useDrager(
+  dragRef,
+  props,
+  emitFn
+)
 
 const dotList = ref(getDotList(0, props.resizeList))
 const showResize = computed(() => props.resizable && !props.disabled)
-const showRotate = computed(() => props.rotatable && !props.disabled && selected.value)
+const showRotate = computed(
+  () => props.rotatable && !props.disabled && selected.value
+)
 
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
@@ -102,8 +120,8 @@ function handleRotateEnd(angle: number) {
 
 /**
  * 缩放
- * @param dotInfo 
- * @param e 
+ * @param dotInfo
+ * @param e
  */
 function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   e.stopPropagation()
@@ -117,14 +135,19 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   const centerX = left + width / 2
   const centerY = top + height / 2
 
-  const rect = { width, height, centerX, centerY, rotateAngle: dragData.value.angle }
+  const rect = {
+    width,
+    height,
+    centerX,
+    centerY,
+    rotateAngle: dragData.value.angle
+  }
   const type = dotInfo.side
 
   const { minWidth, minHeight, aspectRatio, equalProportion } = props
   emitFn('resize-start', dragData.value)
 
   const onMousemove = (e: MouseTouchEvent) => {
-
     const { clientX, clientY } = getXY(e)
     // 距离
     let deltaX = (clientX - downX) / props.scaleRatio
@@ -142,13 +165,24 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     const beta = alpha - degToRadian(rect.rotateAngle)
     const deltaW = deltaL * Math.cos(beta)
     const deltaH = deltaL * Math.sin(beta)
-    const ratio = (equalProportion || isShiftKey) && !aspectRatio ? rect.width / rect.height : aspectRatio
-    
+    const ratio =
+      (equalProportion || isShiftKey) && !aspectRatio
+        ? rect.width / rect.height
+        : aspectRatio
+
     const {
       position: { centerX, centerY },
       size: { width, height }
-    } = getNewStyle(type, { ...rect, rotateAngle: rect.rotateAngle }, deltaW, deltaH, ratio, minWidth, minHeight )
-   
+    } = getNewStyle(
+      type,
+      { ...rect, rotateAngle: rect.rotateAngle },
+      deltaW,
+      deltaH,
+      ratio,
+      minWidth,
+      minHeight
+    )
+
     const pData = centerToTL({
       centerX,
       centerY,
@@ -174,35 +208,35 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   })
 }
 
-watch(() => [
-  props.width,
-  props.height,
-  props.left,
-  props.top,
-  props.angle
-], ([width, height, left, top, angle]) => {
-  dragData.value = {
-    ...dragData.value,
-    width,
-    height,
-    left,
-    top,
-    angle
+watch(
+  () => [props.width, props.height, props.left, props.top, props.angle],
+  ([width, height, left, top, angle]) => {
+    dragData.value = {
+      ...dragData.value,
+      width,
+      height,
+      left,
+      top,
+      angle
+    }
   }
-})
+)
 
-watch(() => props.selected, (val) => {
-  selected.value = val
-}, { immediate: true })
-
+watch(
+  () => props.selected,
+  val => {
+    selected.value = val
+  },
+  { immediate: true }
+)
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .es-drager {
   --es-drager-color: #3a7afe;
   position: absolute;
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -237,13 +271,13 @@ watch(() => props.selected, (val) => {
     z-index: 1;
     transform: translate(-50%, -50%);
     cursor: se-resize;
-    &[data-side*="right"] {
+    &[data-side*='right'] {
       transform: translate(50%, -50%);
     }
-    &[data-side*="bottom"] {
+    &[data-side*='bottom'] {
       transform: translate(-50%, 50%);
     }
-    &[data-side="bottom-right"] {
+    &[data-side='bottom-right'] {
       transform: translate(50%, 50%);
     }
 

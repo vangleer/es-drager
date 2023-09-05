@@ -1,12 +1,24 @@
-import { Ref, onMounted, ref, ExtractPropTypes, watch, onBeforeUnmount } from 'vue'
+import {
+  Ref,
+  onMounted,
+  ref,
+  ExtractPropTypes,
+  watch,
+  onBeforeUnmount
+} from 'vue'
 import { DragerProps, DragData } from './drager'
-import { setupMove, MouseTouchEvent, calcGrid, getXY, checkCollision } from './utils'
+import {
+  setupMove,
+  MouseTouchEvent,
+  calcGrid,
+  getXY,
+  checkCollision
+} from './utils'
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
   props: ExtractPropTypes<typeof DragerProps>,
   emit: Function
 ) {
-  
   const isMousedown = ref(false)
   const selected = ref(false)
   const dragData = ref<DragData>({
@@ -20,17 +32,20 @@ export function useDrager(
   const mouseSet = new Set()
   function onMousedown(e: MouseTouchEvent) {
     mouseSet.add((e as MouseEvent).button)
-    if (props.disabled) return 
+    if (props.disabled) return
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
-    
+
     const { left, top } = dragData.value
-    let minX = 0, maxX = 0, minY = 0, maxY = 0
+    let minX = 0,
+      maxX = 0,
+      minY = 0,
+      maxY = 0
     if (props.boundary) {
-      [minX, maxX, minY, maxY] = getBoundary()
+      ;[minX, maxX, minY, maxY] = getBoundary()
     }
-    
+
     emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseTouchEvent) => {
       // 不是一个按键不执行移动
@@ -51,14 +66,14 @@ export function useDrager(
         moveX = curX + calcGrid(diffX, props.gridX)
         moveY = curY + calcGrid(diffY, props.gridY)
       }
-      
+
       if (props.boundary) {
-        [moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
+        ;[moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
       }
 
       dragData.value.left = moveX
       dragData.value.top = moveY
-      
+
       emit && emit('drag', dragData.value)
     }
 
@@ -77,7 +92,8 @@ export function useDrager(
     })
   }
   const getBoundary2 = () => {
-    let minX = 0, minY = 0
+    let minX = 0,
+      minY = 0
     const { width, height } = dragData.value
     const parentEl = targetRef.value!.parentElement || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
@@ -89,7 +105,8 @@ export function useDrager(
     return [minX, maxX - minX, minY, maxY - minY]
   }
   const getBoundary = () => {
-    let minX = 0, minY = 0
+    let minX = 0,
+      minY = 0
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.parentElement || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
@@ -98,7 +115,7 @@ export function useDrager(
       minX = Math.abs(rect.left - (left + parentElRect.left))
       minY = Math.abs(rect.top - (top + parentElRect.top))
     }
-    
+
     // 最大x
     const maxX = parentElRect.width / props.scaleRatio - width
     // 最大y
@@ -111,7 +128,14 @@ export function useDrager(
    * @param maxX 最大移动X距离
    * @param maxY 最大移动Y距离
    */
-  const fixBoundary = (moveX: number, moveY: number, minX: number, maxX: number, minY: number, maxY: number) => {
+  const fixBoundary = (
+    moveX: number,
+    moveY: number,
+    minX: number,
+    maxX: number,
+    minY: number,
+    maxY: number
+  ) => {
     // 判断x最小最大边界
     moveX = moveX < minX ? minX : moveX
     moveX = moveX > maxX ? maxX : moveX
@@ -149,7 +173,6 @@ export function useDrager(
         diff = isRight ? props.gridX : -props.gridX
       }
       moveX = moveX + diff
-      
     } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
       // 左右键修改top
       const isDown = e.key === 'ArrowDown'
@@ -179,20 +202,27 @@ export function useDrager(
     if (!dragData.value.width && !dragData.value.height) {
       const { width, height } = targetRef.value.getBoundingClientRect()
       // 获取默认宽高
-      dragData.value = { ...dragData.value, width: width || 100, height: height || 100 }
+      dragData.value = {
+        ...dragData.value,
+        width: width || 100,
+        height: height || 100
+      }
       emit('change', { ...dragData.value })
     }
-    
+
     targetRef.value.addEventListener('mousedown', onMousedown)
-    targetRef.value.addEventListener('touchstart', onMousedown, { passive: true })
+    targetRef.value.addEventListener('touchstart', onMousedown, {
+      passive: true
+    })
   })
 
-  watch(selected, (val) => {
+  watch(selected, val => {
     if (props.disabledKeyEvent) return
     // 每次选中注册键盘事件
     if (val) {
       document.addEventListener('keydown', onKeydown)
-    } else { // 不是选中移除
+    } else {
+      // 不是选中移除
       document.removeEventListener('keydown', onKeydown)
     }
   })
