@@ -22,6 +22,8 @@ declare const _default: Plugin & {
             color?: string | undefined;
             minWidth?: number | undefined;
             minHeight?: number | undefined;
+            maxWidth?: number | undefined;
+            maxHeight?: number | undefined;
             selected?: boolean | undefined;
             snapToGrid?: boolean | undefined;
             gridX?: number | undefined;
@@ -154,6 +156,14 @@ declare const _default: Plugin & {
                 type: NumberConstructor;
                 default: number;
             };
+            maxWidth: {
+                type: NumberConstructor;
+                default: number;
+            };
+            maxHeight: {
+                type: NumberConstructor;
+                default: number;
+            };
             aspectRatio: {
                 type: NumberConstructor;
             };
@@ -211,6 +221,8 @@ declare const _default: Plugin & {
             color: string;
             minWidth: number;
             minHeight: number;
+            maxWidth: number;
+            maxHeight: number;
             selected: boolean;
             snapToGrid: boolean;
             gridX: number;
@@ -290,6 +302,14 @@ declare const _default: Plugin & {
             default: number;
         };
         minHeight: {
+            type: NumberConstructor;
+            default: number;
+        };
+        maxWidth: {
+            type: NumberConstructor;
+            default: number;
+        };
+        maxHeight: {
             type: NumberConstructor;
             default: number;
         };
@@ -392,6 +412,14 @@ declare const _default: Plugin & {
         type: NumberConstructor;
         default: number;
     };
+    maxWidth: {
+        type: NumberConstructor;
+        default: number;
+    };
+    maxHeight: {
+        type: NumberConstructor;
+        default: number;
+    };
     aspectRatio: {
         type: NumberConstructor;
     };
@@ -449,6 +477,8 @@ declare const _default: Plugin & {
     color: string;
     minWidth: number;
     minHeight: number;
+    maxWidth: number;
+    maxHeight: number;
     selected: boolean;
     snapToGrid: boolean;
     gridX: number;

@@ -51,6 +51,14 @@ declare const _sfc_main: import("vue").DefineComponent<{
         type: NumberConstructor;
         default: number;
     };
+    maxWidth: {
+        type: NumberConstructor;
+        default: number;
+    };
+    maxHeight: {
+        type: NumberConstructor;
+        default: number;
+    };
     aspectRatio: {
         type: NumberConstructor;
     };
@@ -135,6 +143,14 @@ declare const _sfc_main: import("vue").DefineComponent<{
         type: NumberConstructor;
         default: number;
     };
+    maxWidth: {
+        type: NumberConstructor;
+        default: number;
+    };
+    maxHeight: {
+        type: NumberConstructor;
+        default: number;
+    };
     aspectRatio: {
         type: NumberConstructor;
     };
@@ -192,6 +208,8 @@ declare const _sfc_main: import("vue").DefineComponent<{
     color: string;
     minWidth: number;
     minHeight: number;
+    maxWidth: number;
+    maxHeight: number;
     selected: boolean;
     snapToGrid: boolean;
     gridX: number;
