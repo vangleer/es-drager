@@ -32,6 +32,9 @@
         <el-form-item label="angle">
           <el-input-number v-model="store.current.angle" />
         </el-form-item>
+        <el-form-item label="color">
+          <el-color-picker v-model="store.current.color" />
+        </el-form-item>
 
         <el-form-item label="disabled">
           <el-checkbox v-model="store.current.disabled" />
