@@ -91,19 +91,6 @@ export function useDrager(
       emit && emit('drag-end', dragData.value)
     })
   }
-  const getBoundary2 = () => {
-    let minX = 0,
-      minY = 0
-    const { width, height } = dragData.value
-    const parentEl = targetRef.value!.parentElement || document.body
-    const parentElRect = parentEl!.getBoundingClientRect()
-
-    // 最大x
-    const maxX = parentElRect.width / props.scaleRatio - width
-    // 最大y
-    const maxY = parentElRect.height / props.scaleRatio - height
-    return [minX, maxX - minX, minY, maxY - minY]
-  }
   const getBoundary = () => {
     let minX = 0,
       minY = 0
@@ -120,7 +107,7 @@ export function useDrager(
     const maxX = parentElRect.width / props.scaleRatio - width
     // 最大y
     const maxY = parentElRect.height / props.scaleRatio - height
-    return [minX, maxX - minX, minY, maxY - minY]
+    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width, parentElRect.height]
   }
   /**
    * @param moveX 移动的X

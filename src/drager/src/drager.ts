@@ -79,6 +79,14 @@ export const DragerProps = {
     type: Number,
     default: -Infinity
   },
+  maxWidth: {
+    type: Number,
+    default: 0
+  },
+  maxHeight: {
+    type: Number,
+    default: 0
+  },
   aspectRatio: {
     // 缩放比例
     type: Number

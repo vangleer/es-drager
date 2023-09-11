@@ -150,6 +150,8 @@ import Drager from 'es-drager'
 | disabled | 是否禁用     | ^[boolean]        | -     |
 | minWidth | 最小宽度     | ^[number]        | -     |
 | minHeight | 最小高度     | ^[number]        | -     |
+| maxWidth | 最大宽度     | ^[number]        | -     |
+| maxHeight | 最大高度     | ^[number]        | -     |
 | selected | 控制是否选中     | ^[boolean]        | -     |
 | checkCollision | 是否开启碰撞检测     | ^[boolean]        | -     |
 | snapToGrid | 开启网格     | ^[boolean]        | -     |
