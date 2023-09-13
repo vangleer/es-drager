@@ -210,7 +210,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
 
     // 如果开启了边界，则调用 fixResizeBoundary 函数处理
     if (props.boundary) {
-      d = fixResizeBoundary(d, boundaryInfo)
+      d = fixResizeBoundary(d, boundaryInfo, ratio)
     }
 
     dragData.value = d
@@ -227,15 +227,16 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   })
 }
 
-function fixResizeBoundary(d: DragData, boundaryInfo: number[]) {
+function fixResizeBoundary(d: DragData, boundaryInfo: number[], ratio: number | undefined) {
   const [minX, maxX, minY, maxY, parentWidth, parentHeight] = boundaryInfo
-  
   // 如果left小于最小x
   if (d.left < minX) { 
     // 则将left赋值为最小x
     d.left = minX
     // 宽度保持原来的不变
     d.width = dragData.value.width
+    // 如果设置等比则相应的高度也无需改变
+    if (ratio) d.height = dragData.value.height
   }
 
   // 如果left+width超过了父元素的宽度
@@ -244,6 +245,8 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[]) {
     d.left = dragData.value.left
     // 宽度变为parentWidth减去left，这样元素的left+width的和刚好等于parentWidth
     d.width = parentWidth - d.left
+
+    if (ratio) d.height = dragData.value.height
   }
 
   // top的做法与上面类似，如果小于最小y
@@ -252,6 +255,8 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[]) {
     d.top = minY
     // 高度保持原来的不变
     d.height = dragData.value.height
+
+    if (ratio) d.width = dragData.value.width
   }
   // 如果top+height超过了父元素的高度
   if (d.top + d.height > parentHeight) {
@@ -259,6 +264,8 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[]) {
     d.top = dragData.value.top
     // 宽度变为parentHeight减去top，这样元素的top+height的和刚好等于parentHeight
     d.height = parentHeight - d.top
+
+    if (ratio) d.width = dragData.value.width
   }
   return d
 }
