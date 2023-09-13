@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '@/plugins/locales'
-import Drager from '../../../src/drager'
+import Drager from 'es-drager'
 
 const dragList = ref([
   [
