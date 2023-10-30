@@ -124,6 +124,7 @@ function handleRotateEnd(angle: number) {
  * @param e
  */
 function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
+  if (props.disabled) return
   e.stopPropagation()
   // 获取鼠标按下的坐标
   const { clientX, clientY } = getXY(e)
