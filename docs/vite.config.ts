@@ -12,6 +12,9 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': pathResolve('src')
       }
+    },
+    server: {
+      host: true
     }
   }
 })

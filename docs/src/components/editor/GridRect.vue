@@ -4,7 +4,7 @@
       <defs>
         <pattern
           v-if="showSmall"
-          id="smallGrid"
+          :id="smallGridId"
           :width="grid"
           :height="grid"
           patternUnits="userSpaceOnUse"
@@ -17,7 +17,7 @@
           />
         </pattern>
         <pattern
-          id="grid"
+          :id="gridId"
           :width="bigGrid"
           :height="bigGrid"
           patternUnits="userSpaceOnUse"
@@ -26,7 +26,7 @@
             v-if="showSmall"
             :width="bigGrid"
             :height="bigGrid"
-            fill="url(#smallGrid)"
+            :fill="`url(#${smallGridId})`"
           />
           <path
             :d="`M ${bigGrid} 0 L 0 0 0 ${bigGrid}`"
@@ -36,7 +36,7 @@
           />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#grid)" />
+      <rect width="100%" height="100%" :fill="`url(#${gridId})`" />
     </svg>
   </div>
 </template>
@@ -45,6 +45,7 @@
 import { computed } from 'vue'
 import { useAppStore } from '@/store'
 import MColor from 'color'
+import { useId } from '@/utils'
 const store = useAppStore()
 
 const props = defineProps({
@@ -65,8 +66,13 @@ const props = defineProps({
   },
   borderColor: {
     type: String
-  }
+  },
+  smallGridId: String,
+  gridId: String
 })
+
+const smallGridId = computed(() => props.smallGridId || useId('smallGrid'))
+const gridId = computed(() => props.gridId || useId('grid'))
 
 // 计算大网格的大小
 const bigGrid = computed(() => props.grid * props.gridCount)
