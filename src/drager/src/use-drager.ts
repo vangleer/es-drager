@@ -181,6 +181,8 @@ export function useDrager(
     // 一次只会有一个会变
     dragData.value.left = moveX
     dragData.value.top = moveY
+
+    emit('change', { ...dragData.value })
   }
   onMounted(() => {
     if (!targetRef.value) return
