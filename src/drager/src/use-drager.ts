@@ -107,7 +107,7 @@ export function useDrager(
     const maxX = parentElRect.width / props.scaleRatio - width
     // 最大y
     const maxY = parentElRect.height / props.scaleRatio - height
-    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width, parentElRect.height]
+    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width / props.scaleRatio, parentElRect.height / props.scaleRatio]
   }
   /**
    * @param moveX 移动的X
