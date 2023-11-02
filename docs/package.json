@@ -14,7 +14,6 @@
     "color": "^4.2.3",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.8",
-    "es-drager": "^1.1.9",
     "highlight.js": "^11.8.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
