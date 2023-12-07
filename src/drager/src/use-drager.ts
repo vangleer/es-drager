@@ -2,9 +2,7 @@ import {
   Ref,
   onMounted,
   ref,
-  ExtractPropTypes,
-  watch,
-  onBeforeUnmount
+  ExtractPropTypes
 } from 'vue'
 import { DragerProps, DragData } from './drager'
 import {
@@ -14,6 +12,7 @@ import {
   getXY,
   checkCollision
 } from './utils'
+import { useKeyEvent } from './use-key-event'
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
   props: ExtractPropTypes<typeof DragerProps>,
@@ -146,44 +145,20 @@ export function useDrager(
   const clickOutsize = () => {
     selected.value = false
   }
+
   // 键盘事件
-  const onKeydown = (e: KeyboardEvent) => {
-    if (isMousedown.value) return
-    let { left: moveX, top: moveY } = dragData.value
-    if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
-      // 左右键修改left
-      const isRight = e.key === 'ArrowRight'
-      // 默认移动1像素距离
-      let diff = isRight ? 1 : -1
-      // 如果开启网格，移动gridX距离
-      if (props.snapToGrid) {
-        diff = isRight ? props.gridX : -props.gridX
-      }
-      moveX = moveX + diff
-    } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-      // 左右键修改top
-      const isDown = e.key === 'ArrowDown'
-      // 默认移动1像素距离
-      let diff = isDown ? 1 : -1
-      // 如果开启网格，移动gridY距离
-      if (props.snapToGrid) {
-        diff = isDown ? props.gridY : -props.gridY
-      }
-
-      moveY = moveY + diff
+  useKeyEvent(
+    props,
+    dragData,
+    selected,
+    {
+      getBoundary,
+      fixBoundary,
+      checkDragerCollision,
+      emit
     }
-
-    // 边界判断
-    if (props.boundary) {
-      const [minX, maxX, minY, maxY] = getBoundary()
-      ;[moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
-    }
-    // 一次只会有一个会变
-    dragData.value.left = moveX
-    dragData.value.top = moveY
-
-    emit('change', { ...dragData.value })
-  }
+  )
+  
   onMounted(() => {
     if (!targetRef.value) return
 
@@ -203,21 +178,6 @@ export function useDrager(
     targetRef.value.addEventListener('touchstart', onMousedown, {
       passive: true
     })
-  })
-
-  watch(selected, val => {
-    if (props.disabledKeyEvent) return
-    // 每次选中注册键盘事件
-    if (val) {
-      document.addEventListener('keydown', onKeydown)
-    } else {
-      // 不是选中移除
-      document.removeEventListener('keydown', onKeydown)
-    }
-  })
-
-  onBeforeUnmount(() => {
-    document.removeEventListener('keydown', onKeydown)
   })
   return {
     isMousedown,
