@@ -1,5 +1,8 @@
 # ES Drager 拖拽组件
 
+- [中文](https://github.com/vangleer/es-drager)
+- [English](https://github.com/vangleer/es-drager/blob/main/README_en.md)
+
 <p align="middle" ><img src="https://vangleer.github.io/es-drager/static/logo.png"/></p>
 
 <table width="100%" align="center">
