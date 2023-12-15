@@ -1,5 +1,6 @@
 import { App, Plugin } from 'vue'
-export type { DragData, DragerProps } from './src/drager'
+export type { DragData, MarklineData } from './src/drager'
+export { DragerProps } from './src/drager'
 import Drager from './src/drager.vue'
 
 export const install = (app: App) => {

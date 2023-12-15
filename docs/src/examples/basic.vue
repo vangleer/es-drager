@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '@/plugins/locales'
-import Drager from 'es-drager'
+import Drager from '../../../src/drager'
 
 const dragList = ref([
   [
@@ -37,6 +37,11 @@ const dragList = ref([
     { color: '#A20025', text: 'examples.disabled', disabled: true },
     { color: '#D80073', text: 'examples.checkCollision', checkCollision: true },
     { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 }
+  ],
+  [
+    { color: '#31eff6', text: 'examples.snap', boundary: true, snap: true },
+    { color: '#f46619', text: 'examples.markline', boundary: true, markline: true },
+    { color: '#6bf419', text: 'examples.snapAndMarkline', boundary: true, snap: true, markline: true }
   ]
 ])
 </script>

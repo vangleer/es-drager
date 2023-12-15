@@ -1,5 +1,5 @@
 import { ExtractPropTypes, Ref, computed, onMounted, ref } from 'vue'
-import { DragerProps, IMarklineData } from '../drager'
+import { DragerProps, MarklineData } from '../drager'
 type MarklineEvent = 'drag-start' | 'drag' | 'drag-end'
 const isFn = (value: any): value is Function => typeof value === 'function'
 export function useMarkline(
@@ -23,7 +23,7 @@ export function useMarkline(
       }
     }
   }
-  const update = (marklineData: IMarklineData = {}) => {
+  const update = (marklineData: MarklineData = {}) => {
     if (!props.markline) return
 
     if (isFn(props.markline)) {
@@ -60,7 +60,7 @@ export function useMarkline(
   }
 
   const handleDrag = () => {
-    const markLine: IMarklineData = {
+    const markLine: MarklineData = {
       top: null,
       left: null,
       diffX: 0,

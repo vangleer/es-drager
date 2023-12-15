@@ -25,7 +25,7 @@ export type IDot = {
   cursor?: string
 }
 
-export interface IMarklineData {
+export interface MarklineData {
   top?: null | number
   left?: null | number
   diffX?: number
@@ -133,7 +133,7 @@ export const DragerProps = {
     type: Number,
     default: 10
   },
-  markline: [Boolean, Function] as PropType<boolean | ((e: IMarklineData) => void)> // 辅助线
+  markline: [Boolean, Function] as PropType<boolean | ((e: MarklineData) => void)> // 辅助线
 }
 
 export interface DragData {

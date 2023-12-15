@@ -10,28 +10,44 @@
     </div>
     <div class="es-editor">
       <Drager
-        v-for="(item, index) in data.componentList"
+        v-for="item in data.componentList"
         v-bind="item"
-        @drag-start="onDragstart(index)"
-        @drag="onDrag($event)"
+        snap
+        :snap-threshold="10"
+        markline
         @change="onChange($event, item)"
         @drag-end="onDragend"
       >
         <component :is="item.component">{{ item.text }}</component>
       </Drager>
 
-      <MarkLine v-bind="markLine" />
+      <Drager
+        :width="100"
+        :height="100"
+        :markline="onMarkline"
+      >
+        custom markline
+      </Drager>
+
+      <div
+        v-show="markLineData.left"
+        class="es-editor-markline-left"
+        :style="{ left: markLineData.left + 'px' }"
+      ></div>
+      <div
+        v-show="markLineData.top"
+        class="es-editor-markline-top"
+        :style="{ top: markLineData.top + 'px' }"
+      ></div>
       <GridRect class="grid-rect" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, CSSProperties, Ref, onBeforeUnmount } from 'vue'
+import { ref, CSSProperties, Ref, onBeforeUnmount } from 'vue'
 import GridRect from '@/components/editor/GridRect.vue'
-import Drager, { DragData } from 'es-drager'
-import MarkLine from '@/components/editor/MarkLine.vue'
-import { calcLines } from '@/utils'
+import Drager, { DragData, MarklineData } from '../../../src/drager'
 import { t } from '@/plugins/locales'
 // 组件类型
 type ComponentType = {
@@ -46,11 +62,11 @@ type ComponentType = {
   style?: CSSProperties // 样式
 }
 
+const markLineData = ref<MarklineData>({ left: null, top: null })
+
 interface EditorState {
   componentList: ComponentType[]
 }
-
-const currentIndex = ref(-1)
 
 const data = ref<EditorState>({
   componentList: [
@@ -74,57 +90,12 @@ const data = ref<EditorState>({
     }
   ]
 })
-const markLine = reactive({
-  left: null,
-  top: null
-})
-
-const lines = ref({ x: [], y: [] })
 
 const command = useCommand(data)
-/**
- * 监听拖拽开始
- * @param index
- */
-function onDragstart(index: number) {
-  currentIndex.value = index
-  lines.value = calcLines(
-    data.value.componentList,
-    data.value.componentList[index]
-  )
-}
-
-/**
- * 监听拖拽事件
- * @param dragData
- */
-function onDrag(dragData: DragData) {
-  markLine.top = null
-  markLine.left = null
-  for (let i = 0; i < lines.value.y.length; i++) {
-    const { top, showTop } = lines.value.y[i]
-
-    if (Math.abs(top - dragData.top) < 5) {
-      markLine.top = showTop
-      break
-    }
-  }
-
-  for (let i = 0; i < lines.value.x.length; i++) {
-    const { left, showLeft } = lines.value.x[i]
-
-    if (Math.abs(left - dragData.left) < 5) {
-      markLine.left = showLeft
-      break
-    }
-  }
-}
 
 function onDragend() {
   // 每次拖拽结束记录变化
   command.record()
-  markLine.top = null
-  markLine.left = null
 }
 
 function onChange(dragData: DragData, item: any) {
@@ -185,6 +156,10 @@ function useCommand(data: Ref<EditorState>) {
 function deepCopy(obj: any) {
   return JSON.parse(JSON.stringify(obj))
 }
+
+function onMarkline(data: MarklineData) {
+  markLineData.value = data
+}
 </script>
 
 <style lang="scss" scoped>
@@ -207,5 +182,22 @@ function deepCopy(obj: any) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+[class^='es-editor-markline'] {
+  position: absolute;
+  z-index: 9999;
+  background-color: greenyellow;
+}
+
+.es-editor-markline-left {
+  height: 100%;
+  width: 1px;
+  top: 0;
+}
+.es-editor-markline-top {
+  width: 100%;
+  height: 1px;
+  left: 0;
 }
 </style>
