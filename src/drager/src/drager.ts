@@ -25,6 +25,13 @@ export type IDot = {
   cursor?: string
 }
 
+export interface IMarklineData {
+  top?: null | number
+  left?: null | number
+  diffX?: number
+  diffY?: number
+}
+
 export const DragerProps = {
   tag: {
     type: [String, Object] as PropType<string | Component>,
@@ -120,7 +127,13 @@ export const DragerProps = {
   checkCollision: {
     // 是否开启碰撞检查
     type: Boolean
-  }
+  },
+  snap: Boolean, // 是否开启吸附
+  snapThreshold: { // 吸附阈值，默认10px
+    type: Number,
+    default: 10
+  },
+  markline: [Boolean, Function] as PropType<boolean | ((e: IMarklineData) => void)> // 辅助线
 }
 
 export interface DragData {

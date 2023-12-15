@@ -64,14 +64,14 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'menu'
     }
+  },
+  {
+    path: 'temp',
+    component: () => import('@/examples/temp.vue'),
+    meta: {
+      title: 'temp'
+    }
   }
-  // {
-  //   path: 'temp',
-  //   component: () => import('@/examples/temp.vue'),
-  //   meta: {
-  //     title: 'temp'
-  //   }
-  // }
 ]
 
 const routes: RouteRecordRaw[] = [

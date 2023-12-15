@@ -2,7 +2,8 @@ import {
   Ref,
   onMounted,
   ref,
-  ExtractPropTypes
+  ExtractPropTypes,
+  nextTick
 } from 'vue'
 import { DragerProps, DragData } from './drager'
 import {
@@ -12,7 +13,7 @@ import {
   getXY,
   checkCollision
 } from './utils'
-import { useKeyEvent } from './use-key-event'
+import { useMarkline, useKeyEvent } from './hooks'
 export function useDrager(
   targetRef: Ref<HTMLElement | null>,
   props: ExtractPropTypes<typeof DragerProps>,
@@ -27,6 +28,7 @@ export function useDrager(
     top: props.top,
     angle: props.angle
   })
+  const { marklineEmit } = useMarkline(targetRef, props)
   // 限制多个鼠标键按下的情况
   const mouseSet = new Set()
   function onMousedown(e: MouseTouchEvent) {
@@ -35,7 +37,6 @@ export function useDrager(
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
-
     const { left, top } = dragData.value
     let minX = 0,
       maxX = 0,
@@ -45,6 +46,7 @@ export function useDrager(
       ;[minX, maxX, minY, maxY] = getBoundary()
     }
 
+    marklineEmit('drag-start')
     emit && emit('drag-start', dragData.value)
     const onMousemove = (e: MouseTouchEvent) => {
       // 不是一个按键不执行移动
@@ -52,7 +54,7 @@ export function useDrager(
       const { clientX, clientY } = getXY(e)
       let moveX = (clientX - downX) / props.scaleRatio + left
       let moveY = (clientY - downY) / props.scaleRatio + top
-
+      
       // 是否开启网格对齐
       if (props.snapToGrid) {
         // 当前位置
@@ -69,11 +71,25 @@ export function useDrager(
       if (props.boundary) {
         ;[moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
       }
-
+      
       dragData.value.left = moveX
       dragData.value.top = moveY
 
       emit && emit('drag', dragData.value)
+
+      nextTick(() => {
+        const markLine = marklineEmit('drag')!
+        // 是否开启吸附
+        if (props.snap) {
+          if (markLine.diffX) {
+            dragData.value.left += markLine.diffX
+          }
+    
+          if (markLine.diffY) {
+            dragData.value.top += markLine.diffY
+          }
+        }
+      })
     }
 
     setupMove(onMousemove, (e: MouseTouchEvent) => {
@@ -87,6 +103,7 @@ export function useDrager(
       mouseSet.clear()
       isMousedown.value = false
       document.addEventListener('click', clickOutsize, { once: true })
+      marklineEmit('drag-end')
       emit && emit('drag-end', dragData.value)
     })
   }
@@ -94,7 +111,7 @@ export function useDrager(
     let minX = 0,
       minY = 0
     const { left, top, height, width, angle } = dragData.value
-    const parentEl = targetRef.value!.parentElement || document.body
+    const parentEl = targetRef.value!.offsetParent || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
     if (angle && props.scaleRatio === 1) {
       const rect = targetRef.value!.getBoundingClientRect()
@@ -132,7 +149,7 @@ export function useDrager(
     return [moveX, moveY]
   }
   const checkDragerCollision = () => {
-    const parentEl = targetRef.value!.parentElement || document.body
+    const parentEl = targetRef.value!.offsetParent || document.body
     const broList = Array.from(parentEl.children).filter(item => {
       return item !== targetRef.value! && item.classList.contains('es-drager')
     })
@@ -142,6 +159,7 @@ export function useDrager(
       if (flag) return true
     }
   }
+
   const clickOutsize = () => {
     selected.value = false
   }
@@ -161,7 +179,6 @@ export function useDrager(
   
   onMounted(() => {
     if (!targetRef.value) return
-
     // 没传宽高使用元素默认
     if (!dragData.value.width && !dragData.value.height) {
       const { width, height } = targetRef.value.getBoundingClientRect()

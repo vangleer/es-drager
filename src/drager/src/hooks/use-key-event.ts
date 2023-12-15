@@ -4,7 +4,7 @@ import {
   watch,
   onBeforeUnmount
 } from 'vue'
-import { DragerProps, DragData } from './drager'
+import { DragerProps, DragData } from '../drager'
 type UtilFN = {
   getBoundary: Function,
   fixBoundary: Function,
