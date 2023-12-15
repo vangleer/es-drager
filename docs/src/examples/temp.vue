@@ -34,13 +34,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Drager from '../../../src/drager'
-import Demo from '@/components/Demo.vue'
 const selected = ref(false)
 
 const markLineData = ref({ left: null, top: null })
 
 function handleMarkline(data: any) {
-  console.log(data)
+  // console.log(data)
   markLineData.value = data
 }
 </script>

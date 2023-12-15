@@ -188,7 +188,6 @@ export function useDrager(
         width: width || 100,
         height: height || 100
       }
-      emit('change', { ...dragData.value })
     }
 
     targetRef.value.addEventListener('mousedown', onMousedown)

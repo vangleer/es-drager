@@ -80,7 +80,6 @@ const emit = defineEmits([
 ])
 const emitFn = (type: EventType, ...args: any) => {
   emit(type, ...args)
-  emit('change', ...args)
 }
 const dragRef = ref<HTMLElement | null>(null)
 const { selected, dragData, isMousedown, getBoundary, checkDragerCollision } = useDrager(
@@ -274,15 +273,20 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[], ratio: number | 
 watch(
   () => [props.width, props.height, props.left, props.top, props.angle],
   ([width, height, left, top, angle]) => {
-    dragData.value = {
-      ...dragData.value,
-      width,
-      height,
-      left,
-      top,
-      angle
-    }
+    dragData.value.width = width
+    dragData.value.height = height
+    dragData.value.left = left
+    dragData.value.top = top
+    dragData.value.angle = angle
   }
+)
+
+watch(
+  () => dragData.value,
+  (val) => {
+    emit('change', { ...val })
+  },
+  { deep: true }
 )
 
 watch(

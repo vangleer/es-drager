@@ -63,7 +63,6 @@ export function useKeyEvent(
     // 一次只会有一个会变
     dragData.value.left = moveX
     dragData.value.top = moveY
-    emit('change', { ...dragData.value })
   }
   const onKeyup = (e: KeyboardEvent) => {
     if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
