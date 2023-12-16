@@ -160,6 +160,9 @@ import Drager from 'es-drager'
 | snapToGrid | 开启网格     | ^[boolean]        | -     |
 | gridX | 网格X大小     | ^[number]        | 50     |
 | gridY | 网格Y大小     | ^[number]        | 50     |
+| snap | 开启吸附     | ^[boolean]        | -     |
+| snapThreshold | 吸附阈值     | ^[number]        | 10     |
+| markline | 辅助线([可自定义](https://vangleer.github.io/es-drager/#/markline))     | ^[boolean]^[Function]       | -     |
 | scaleRatio | 缩放比     | ^[number]        | 1     |
 | disabledKeyEvent | 禁用方向键移动     | ^[boolean]        | -     |
 | border | 是否显示边框     | ^[boolean]        | true     |

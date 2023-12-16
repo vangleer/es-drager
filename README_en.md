@@ -148,6 +148,9 @@ Directly import `es-drager` using the HTML script tag, then you can use the glob
 | snapToGrid            | Enable grid               | ^[boolean]           | -       |
 | gridX                 | Grid size in X            | ^[number]            | 50      |
 | gridY                 | Grid size in Y            | ^[number]            | 50      |
+| snap | Open adsorption     | ^[boolean]        | -     |
+| snapThreshold | Adsorption threshold     | ^[number]        | 10     |
+| markline | markline([custom](https://vangleer.github.io/es-drager/#/markline))     | ^[boolean]^
 | scaleRatio            | Scaling ratio             | ^[number]            | 1       |
 | disabledKeyEvent      | Disable arrow key movement | ^[boolean]         | -       |
 | border                | Show border               | ^[boolean]           | true    |

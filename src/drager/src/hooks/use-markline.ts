@@ -34,6 +34,7 @@ export function useMarkline(
       lineX!.style.display = 'none'
     } else {
       lineX!.style.left = marklineData.left + 'px'
+      lineX!.style.backgroundColor = props.color
       lineX!.style.display = 'block'
     }
     
@@ -41,6 +42,7 @@ export function useMarkline(
       lineY!.style.display = 'none'
     } else {
       lineY!.style.top = marklineData.top + 'px'
+      lineY!.style.backgroundColor = props.color
       lineY!.style.display = 'block'
     }
   }
