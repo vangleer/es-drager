@@ -1,5 +1,6 @@
 import { App, Plugin } from 'vue';
-export type { DragData, DragerProps } from './src/drager';
+export type { DragData, MarklineData } from './src/drager';
+export { DragerProps } from './src/drager';
 import Drager from './src/drager.vue';
 export declare const install: (app: App) => void;
 export { Drager as ESDrager };
@@ -33,6 +34,8 @@ declare const _default: Plugin & {
             border?: boolean | undefined;
             equalProportion?: boolean | undefined;
             checkCollision?: boolean | undefined;
+            snap?: boolean | undefined;
+            snapThreshold?: number | undefined;
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
             "onDrag-start"?: ((...args: any[]) => any) | undefined;
@@ -45,6 +48,7 @@ declare const _default: Plugin & {
             "onRotate-end"?: ((...args: any[]) => any) | undefined;
             readonly aspectRatio?: number | undefined;
             readonly resizeList?: import("./src/drager").IDotSide[] | undefined;
+            readonly markline?: boolean | ((e: import("./src/drager").MarklineData) => void) | undefined;
             key?: string | number | symbol | undefined;
             ref?: import("vue").VNodeRef | undefined;
             ref_for?: boolean | undefined;
@@ -195,6 +199,12 @@ declare const _default: Plugin & {
             checkCollision: {
                 type: BooleanConstructor;
             };
+            snap: BooleanConstructor;
+            snapThreshold: {
+                type: NumberConstructor;
+                default: number;
+            };
+            markline: import("vue").PropType<boolean | ((e: import("./src/drager").MarklineData) => void)>;
         }>> & {
             onChange?: ((...args: any[]) => any) | undefined;
             onDrag?: ((...args: any[]) => any) | undefined;
@@ -232,6 +242,8 @@ declare const _default: Plugin & {
             border: boolean;
             equalProportion: boolean;
             checkCollision: boolean;
+            snap: boolean;
+            snapThreshold: number;
         }, {}, string, {}> & {
             beforeCreate?: ((() => void) | (() => void)[]) | undefined;
             created?: ((() => void) | (() => void)[]) | undefined;
@@ -344,6 +356,12 @@ declare const _default: Plugin & {
         checkCollision: {
             type: BooleanConstructor;
         };
+        snap: BooleanConstructor;
+        snapThreshold: {
+            type: NumberConstructor;
+            default: number;
+        };
+        markline: import("vue").PropType<boolean | ((e: import("./src/drager").MarklineData) => void)>;
     }>> & {
         onChange?: ((...args: any[]) => any) | undefined;
         onDrag?: ((...args: any[]) => any) | undefined;
@@ -451,6 +469,12 @@ declare const _default: Plugin & {
     checkCollision: {
         type: BooleanConstructor;
     };
+    snap: BooleanConstructor;
+    snapThreshold: {
+        type: NumberConstructor;
+        default: number;
+    };
+    markline: import("vue").PropType<boolean | ((e: import("./src/drager").MarklineData) => void)>;
 }>> & {
     onChange?: ((...args: any[]) => any) | undefined;
     onDrag?: ((...args: any[]) => any) | undefined;
@@ -488,5 +512,7 @@ declare const _default: Plugin & {
     border: boolean;
     equalProportion: boolean;
     checkCollision: boolean;
+    snap: boolean;
+    snapThreshold: number;
 }, {}, string, {}> & import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps;
 export default _default;

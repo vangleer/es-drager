@@ -5,6 +5,12 @@ export type IDot = {
     side: IDotSide;
     cursor?: string;
 };
+export interface MarklineData {
+    top?: null | number;
+    left?: null | number;
+    diffX?: number;
+    diffY?: number;
+}
 export declare const DragerProps: {
     tag: {
         type: PropType<string | Component>;
@@ -97,6 +103,12 @@ export declare const DragerProps: {
     checkCollision: {
         type: BooleanConstructor;
     };
+    snap: BooleanConstructor;
+    snapThreshold: {
+        type: NumberConstructor;
+        default: number;
+    };
+    markline: PropType<boolean | ((e: MarklineData) => void)>;
 };
 export interface DragData {
     width: number;

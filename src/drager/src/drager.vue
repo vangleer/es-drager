@@ -272,12 +272,22 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[], ratio: number | 
 
 watch(
   () => [props.width, props.height, props.left, props.top, props.angle],
-  ([width, height, left, top, angle]) => {
-    dragData.value.width = width
-    dragData.value.height = height
-    dragData.value.left = left
-    dragData.value.top = top
-    dragData.value.angle = angle
+  ([width, height, left, top, angle], [oldWidth, oldHeight, oldLeft, oldTop, oldAngle]) => {
+    if (width !== oldWidth) {
+      dragData.value.width = width
+    }
+    if (height !== oldHeight) {
+      dragData.value.height = height
+    }
+    if (left !== oldLeft) {
+      dragData.value.left = left
+    }
+    if (top !== oldTop) {
+      dragData.value.top = top
+    }
+    if (angle !== oldAngle) {
+      dragData.value.angle = angle
+    }
   }
 )
 
