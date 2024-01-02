@@ -9,7 +9,6 @@ import i18n from '@/plugins/locales'
 import '@/utils/echarts'
 import 'es-drager/lib/style.css'
 import '@/assets/css/index.scss'
-
 const app = createApp(App)
 app
   .use(store)
