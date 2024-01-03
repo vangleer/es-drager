@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -12,17 +14,17 @@
     "allowJs": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@es-drager/*": [
+        "packages/*"
+      ],
+      "es-drager": [
+        "packages/"
+      ]
+    },
   },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "paths": {
-    "@es-drager/*": [
-      "packages/*/src"
-    ],
-    "es-drager": [
-      "packages/pinia/src"
-    ]
-  },
   "types": [
     "node",
     "vite/client"
