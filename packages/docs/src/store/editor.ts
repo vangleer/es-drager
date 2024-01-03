@@ -1,5 +1,5 @@
-import { ComponentType, EditorType } from '@/components/types'
-import { useId } from '@/utils'
+import { ComponentType, EditorType } from '@es-drager/editor'
+import { useId } from '@es-drager/editor/src/utils'
 import { defineStore } from 'pinia'
 
 interface EditorState {

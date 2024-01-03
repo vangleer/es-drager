@@ -78,6 +78,7 @@ const bigGrid = computed(() => props.grid * props.gridCount)
 
 // 处理网站皮肤，可忽略
 const color = computed(() => {
+  const theme = store && store.theme || localStorage.getItem('theme')
   if (props.borderColor) {
     return {
       bigGrid: props.borderColor,
@@ -88,7 +89,7 @@ const color = computed(() => {
     ['#e4e7ed', '#ebeef5'],
     ['#414243', '#363637']
   ]
-  const [bigGrid, grid] = colors[store.isLight ? 0 : 1]
+  const [bigGrid, grid] = colors[theme === 'light' ? 0 : 1]
   return { bigGrid, grid }
 })
 

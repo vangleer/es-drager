@@ -41,54 +41,19 @@ import {
   Picture,
   View
 } from '@element-plus/icons-vue'
+import { PropType } from 'vue'
 
-const store = reactive<EditorState>({
-  data: {
-    container: {
-      markline: {
-        show: true,
-        color: ''
-      },
-      snapToGrid: true,
-      gridSize: 10,
-      gridColor: '',
-      style: {},
-      scaleRatio: 1
-    },
-    elements: [
-      {
-        id: useId(),
-        component: 'div',
-        width: 100,
-        height: 100,
-        left: 100,
-        top: 100,
-        text: 'div1',
-        style: {
-          border: '1px solid red',
-          background: 'blue'
-        }
-      },
-      {
-        id: useId(),
-        component: 'div',
-        width: 100,
-        height: 100,
-        left: 300,
-        top: 150,
-        text: 'div2',
-        style: {
-          border: '1px solid red',
-          background: 'pink'
-        }
-      }
-    ]
-  },
-  current: {},
-  preview: false,
-  isLight: true
+const props = defineProps({
+  store: {
+    type: Object as PropType<EditorState>,
+    required: true
+  }
 })
+
+const store = reactive<EditorState>(props.store)
+store.theme = props.store.theme || 'light'
 provide(EditorStoreKey, store)
+
 const title = 'ES Drager Editor 开发中...'
 const mainRef = ref<HTMLElement>()
 const { commands } = useCommand(store)

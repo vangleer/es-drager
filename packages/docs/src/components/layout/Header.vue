@@ -37,7 +37,7 @@ import lightThemeIcon from '@/assets/images/light-theme.svg'
 import darkThemeIcon from '@/assets/images/dark-theme.svg'
 import { useRouter } from 'vue-router'
 import { PropType, watch } from 'vue'
-import { ToolType } from '@/components/types'
+import { ToolType } from '@es-drager/editor'
 import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const router = useRouter()

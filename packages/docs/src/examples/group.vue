@@ -40,13 +40,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import GridRect from '@/components/editor/GridRect.vue'
-import Drager, { DragData } from '../../../src/drager'
-import Area from '@/components/editor/Area.vue'
-import { ComponentType, EditorType } from '@/components/types'
-import { useId, makeGroup, cancelGroup } from '@/utils'
-import { useArea } from '@/hooks/useArea'
-import { t } from '@/plugins/locales'
+import Drager, { DragData } from 'es-drager'
+import { ComponentType, EditorType, GridRect, Area, useArea } from '@es-drager/editor'
+import { useId, makeGroup, cancelGroup } from '@es-drager/editor/src/utils'
+import { t } from '@es-drager/common/i18n'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,

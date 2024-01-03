@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
-import { t } from '@/plugins/locales'
+import { t } from '@es-drager/common/i18n'
 const chartRef = ref()
 let chart: echarts.ECharts | null = null
 

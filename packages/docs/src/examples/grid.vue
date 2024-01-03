@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import Drager from 'es-drager'
-import GridRect from '@/components/editor/GridRect.vue'
+import { GridRect } from '@es-drager/editor'
 const snapToGrid = ref(true)
 const gridSize = ref(50)
 const scale = ref(1)

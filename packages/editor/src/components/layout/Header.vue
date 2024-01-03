@@ -1,6 +1,6 @@
 <template>
   <div class="es-header">
-    <h1 @click="router.replace('/')">{{ title }}</h1>
+    <h1>{{ title }}</h1>
     <div class="es-header-toolbar">
       <div
         v-for="item in tools"
@@ -16,14 +16,14 @@
         :class="['es-header-link', store.theme]"
         @click.prevent="handleThemeChange"
       >
-        <img :src="store.isLight ? lightThemeIcon : darkThemeIcon" />
+        <img :src="store.theme === 'light' ? lightThemeIcon : darkThemeIcon" />
       </a>
       <a
         class="es-header-link"
         href="https://github.com/vangleer/es-drager"
         target="_blank"
       >
-        <img :src="store.isLight ? lightGithubIcon : darkGithubIcon" />
+        <img :src="store.theme === 'light' ? lightGithubIcon : darkGithubIcon" />
       </a>
       <slot name="navbar-end" />
     </div>
@@ -35,12 +35,9 @@ import lightGithubIcon from '../../assets/images/light-github.svg'
 import darkGithubIcon from '../../assets/images/dark-github.svg'
 import lightThemeIcon from '../../assets/images/light-theme.svg'
 import darkThemeIcon from '../../assets/images/dark-theme.svg'
-import { useRouter } from 'vue-router'
-import { PropType, watch } from 'vue'
-import { ToolType } from '../../types'
-import { useAppStore } from '@/store/app'
-const store = useAppStore()
-const router = useRouter()
+import { PropType, watch, inject } from 'vue'
+import { ToolType, EditorStoreKey } from '../../types'
+const store = inject(EditorStoreKey)!
 defineProps({
   tools: {
     type: Array as PropType<ToolType[]>,
@@ -52,7 +49,7 @@ defineProps({
   }
 })
 function handleThemeChange() {
-  store.theme = store.isLight ? 'dark' : 'light'
+  store.theme = store.theme === 'light' ? 'dark' : 'light'
 }
 function handleToolClick(item: ToolType) {
   if (typeof item.handler === 'function') {
@@ -62,8 +59,10 @@ function handleToolClick(item: ToolType) {
 watch(
   () => store.theme,
   val => {
-    document.documentElement.className = val
-    localStorage.setItem('theme', val)
+    if (val) {
+      document.documentElement.className = val
+      localStorage.setItem('theme', val)
+    }
   },
   { immediate: true }
 )

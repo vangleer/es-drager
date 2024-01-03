@@ -57,7 +57,7 @@ import { useRouter, RouteRecordRaw, useRoute } from 'vue-router'
 import { menuRoutes } from '@/router'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
-import { langs, t } from '@/plugins/locales'
+import { langs, t } from '@es-drager/common/i18n'
 import { useLocaleStore } from '@/store/locales'
 
 import Header from '@/components/layout/Header.vue'
@@ -183,4 +183,4 @@ watch(
   }
 }
 </style>
-@/plugins/locales
+

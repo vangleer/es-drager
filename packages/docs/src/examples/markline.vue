@@ -49,9 +49,9 @@
 
 <script setup lang="ts">
 import { ref, CSSProperties, Ref, onBeforeUnmount } from 'vue'
-import GridRect from '@/components/editor/GridRect.vue'
+import { GridRect } from '@es-drager/editor'
 import Drager, { DragData, MarklineData } from 'es-drager'
-import { t } from '@/plugins/locales'
+import { t } from '@es-drager/common/i18n'
 // 组件类型
 type ComponentType = {
   id?: string

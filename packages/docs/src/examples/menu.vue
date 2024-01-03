@@ -39,13 +39,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import GridRect from '@/components/editor/GridRect.vue'
 import Drager, { DragData } from 'es-drager'
-import { ComponentType, EditorType, ToolType } from '@/components/types'
-import { useId } from '@/utils'
-import { useActions } from '@/hooks'
-import { $dialog, $upload } from '@/components/common'
-import { t } from '@/plugins/locales'
+import { ComponentType, EditorType, ToolType, GridRect, useActions } from '@es-drager/editor'
+import { useId } from '@es-drager/editor/src/utils'
+import { $dialog, $upload } from '@es-drager/editor/src/components/common'
+import { t } from '@es-drager/common/i18n'
 const data = ref<EditorType>({
   container: {
     gridSize: 10,
