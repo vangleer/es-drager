@@ -1,6 +1,6 @@
-import { ComponentType, EditorType } from '../components/types'
-import { calcLines } from '../utils/common'
-import { DragData } from '@es-drager/drager'
+import { ComponentType, EditorType } from '@es-drager/editor'
+import { calcLines } from '@es-drager/editor/src/utils'
+import { DragData } from 'es-drager'
 import { reactive, Ref, ref } from 'vue'
 
 export function useMarkline(

@@ -17,19 +17,6 @@
   },
   "license": "MIT",
   "author": "huangwantong <965002107@qq.com>",
-  "files": [
-    "lib"
-  ],
-  "main": "./lib/index.umd.js",
-  "module": "./lib/index.es.js",
-  "exports": {
-    ".": {
-      "import": "./lib/index.es.js",
-      "require": "./lib/index.umd.js",
-      "types": "./lib/drager/index.d.ts"
-    },
-    "./*": "./*"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/vangleer/es-drager.git"
@@ -37,7 +24,7 @@
   "scripts": {
     "dev": "pnpm --filter ./packages/docs docs:dev",
     "build": "pnpm --filter ./packages/drager build",
-    "docs:build": "pnpm --filter ./packages/docs docs:build",
+    "docs:build": "pnpm build && pnpm --filter ./packages/docs docs:build",
     "release": "pnpm build && node ./scripts/release.js",
     "prettier": "prettier --write packages/docs/**/*.{vue,ts,tsx,json}"
   },
@@ -75,9 +62,5 @@
     "enquirer": "^2.4.1",
     "minimist": "^1.2.8",
     "semver": "^7.5.4"
-  },
-  "peerDependencies": {
-    "vue": ">=3.2.0"
-  },
-  "typings": "lib/drager/index.d.ts"
+  }
 }

@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Drager from '../../../src/drager'
+import Drager from 'es-drager'
 const selected = ref(false)
 
 const markLineData = ref({ left: null, top: null })

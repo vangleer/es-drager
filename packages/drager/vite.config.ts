@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     outDir: 'lib',
     lib: {
-      entry: resolve(__dirname, './src/drager/index.ts'),
+      entry: resolve(__dirname, './index.ts'),
       name: 'ESDrager',
       fileName: format => `index.${format}.js`
     },

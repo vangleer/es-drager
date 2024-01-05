@@ -35,14 +35,10 @@
     "url": "https://github.com/vangleer/es-drager.git"
   },
   "scripts": {
-    "dev": "npm run dev -w docs",
-    "build": "vite build",
-    "build:docs": "npm run build -w docs",
-    "release": "npm run build && npm publish",
-    "prettier": "prettier --write docs/**/*.{vue,ts,tsx,json}"
+    "build": "vite build ."
   },
   "peerDependencies": {
     "vue": ">=3.2.0"
   },
-  "typings": "lib/drager/index.d.ts"
+  "typings": "lib/index.d.ts"
 }

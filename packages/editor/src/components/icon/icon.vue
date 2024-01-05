@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts" name="ElIconWrapper">
 import { CSSProperties, PropType } from 'vue'
-import { ComponentType } from '../types'
+import { ComponentType } from '@es-drager/editor'
 
 const props = defineProps({
   element: Object as PropType<ComponentType>,
