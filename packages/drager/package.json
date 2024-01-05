@@ -1,6 +1,6 @@
 {
   "name": "es-drager",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "description": "A draggable, resizable, rotatable component based on vue3",
   "keywords": [
     "drag",
@@ -26,7 +26,7 @@
     ".": {
       "import": "./lib/index.es.js",
       "require": "./lib/index.umd.js",
-      "types": "./lib/drager/index.d.ts"
+      "types": "./lib/index.d.ts"
     },
     "./*": "./*"
   },

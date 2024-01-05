@@ -6,13 +6,14 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [
     dts({
-      // root: resolve(__dirname, '../..'),
-      tsConfigFilePath: resolve(__dirname, '../../tsconfig.json')
+      tsConfigFilePath: resolve(__dirname, '../../tsconfig.json'),
+      outputDir: './lib',
+      exclude: ['./lib/**/*', 'node_modules']
     }),
     vue()
   ],
   build: {
-    outDir: 'lib',
+    outDir: resolve(__dirname, 'lib'),
     lib: {
       entry: resolve(__dirname, './index.ts'),
       name: 'ESDrager',

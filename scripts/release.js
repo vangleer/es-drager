@@ -101,7 +101,7 @@ async function publishPackage(pkgName, version) {
 
     // execSync(`git commit -m "chore: release v${version}"`, { stdio: 'inherit' })
     // execSync(`git tag -a v${version} -m "v${version}"`, { stdio: 'inherit' })
-    // execSync('npm publish', { cwd: pkgRoot, stdio: 'inherit' })
+    execSync('npm publish', { cwd: pkgRoot, stdio: 'inherit' })
 
     console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
   } catch (e) {
