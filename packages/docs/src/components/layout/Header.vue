@@ -1,15 +1,7 @@
 <template>
   <div class="es-header">
     <h1 @click="router.replace('/')">{{ title }}</h1>
-    <div class="es-header-toolbar">
-      <div
-        v-for="item in tools"
-        class="es-tool-btn"
-        @click="handleToolClick(item)"
-      >
-        <el-button :icon="item.icon">{{ item.label }}</el-button>
-      </div>
-    </div>
+    <slot />
     <div class="es-navbar">
       <slot name="navbar-start" />
       <a
@@ -36,16 +28,11 @@ import darkGithubIcon from '@/assets/images/dark-github.svg'
 import lightThemeIcon from '@/assets/images/light-theme.svg'
 import darkThemeIcon from '@/assets/images/dark-theme.svg'
 import { useRouter } from 'vue-router'
-import { PropType, watch } from 'vue'
-import { ToolType } from '@es-drager/editor'
+import { watch } from 'vue'
 import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const router = useRouter()
 defineProps({
-  tools: {
-    type: Array as PropType<ToolType[]>,
-    default: () => []
-  },
   title: {
     type: String,
     default: 'ES Drager'
@@ -54,11 +41,7 @@ defineProps({
 function handleThemeChange() {
   store.theme = store.isLight ? 'dark' : 'light'
 }
-function handleToolClick(item: ToolType) {
-  if (typeof item.handler === 'function') {
-    item.handler()
-  }
-}
+
 watch(
   () => store.theme,
   val => {
@@ -90,15 +73,6 @@ watch(
     cursor: pointer;
     &:hover {
       opacity: 0.8;
-    }
-  }
-  .es-header-toolbar {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .es-tool-btn + .es-tool-btn {
-      margin-left: 10px;
     }
   }
   .es-navbar {

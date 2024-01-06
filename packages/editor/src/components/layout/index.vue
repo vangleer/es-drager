@@ -1,36 +1,31 @@
 <template>
-  <div class="es-layout">
-    <Header :title="title" :tools="tools" />
-    <div class="es-layout-container">
-      <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
-      <div ref="mainRef" class="es-layout-main">
-        <el-scrollbar :height="mainRect.height">
-          <Editor
-            v-model="store.data"
-            :commands="commands"
-            @dragenter="dragenter"
-            @drop="drop"
-            @dragover.prevent
-          />
-        </el-scrollbar>
-      </div>
-      <Info v-model="store.current" />
-    </div>  
+  <div class="es-layout-container">
+    <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
+    <div ref="mainRef" class="es-layout-main">
+      <el-scrollbar :height="mainRect.height">
+        <Editor
+          v-model="store.data"
+          :commands="commands"
+          @dragenter="dragenter"
+          @drop="drop"
+          @dragover.prevent
+        />
+      </el-scrollbar>
+    </div>
+    <Info v-model="store.current" />
   </div>
   <Preview v-model="store.preview" />
 </template>
 
 <script setup lang="ts">
 import Aside from './Aside.vue'
-import Header from './Header.vue'
 import Info from './info/Info.vue'
 import Editor from '../../components/editor/index.vue'
 import Preview from '../../components/common/Preview.vue'
-import { ComponentType, EditorState, EditorStoreKey, EditorType } from '../../types'
+import { ComponentType, EditorState, EditorStoreKey, ToolType } from '../../types'
 import { events } from '../../utils/events'
 import { useCommand } from '../../hooks/useCommand'
 import { $dialog, $upload } from '../../components/common'
-import { ToolType } from '../../types'
 import { useId } from '../../utils/common'
 import { computed, onMounted, ref, provide, reactive } from 'vue'
 import {
@@ -47,14 +42,17 @@ const props = defineProps({
   store: {
     type: Object as PropType<EditorState>,
     required: true
+  },
+  theme: {
+    type: String as PropType<'light' | 'dark'>
   }
 })
 
 const store = reactive<EditorState>(props.store)
-store.theme = props.store.theme || 'light'
+const theme = computed(() => props.theme)
 provide(EditorStoreKey, store)
+provide('theme', theme)
 
-const title = 'ES Drager Editor 开发中...'
 const mainRef = ref<HTMLElement>()
 const { commands } = useCommand(store)
 const tools: ToolType[] = [
@@ -167,24 +165,21 @@ function init() {
 onMounted(() => {
   init()
 })
+
+defineExpose({
+  tools
+})
 </script>
 
 <style lang="scss">
-.es-layout {
-  width: 100%;
-  height: 100%;
-  color: var(--es-color);
-  background-color: var(--es-color-bg);
-  transition: background-color 0.2s;
-  &-container {
-    display: flex;
-    height: calc(100% - var(--es-header-height));
-  }
-  .es-layout-main {
-    flex: 1;
-    position: relative;
-    margin: 20px;
-    overflow: auto;
-  }
+.es-layout-container {
+  display: flex;
+  height: calc(100% - var(--es-header-height));
+}
+.es-layout-main {
+  flex: 1;
+  position: relative;
+  margin: 20px;
+  overflow: auto;
 }
 </style>

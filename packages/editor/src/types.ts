@@ -46,7 +46,6 @@ export interface EditorState {
   data: EditorType
   current: ComponentType
   preview: Boolean
-  theme?: 'light' | 'dark'
 }
 
 export const EditorStoreKey: InjectionKey<EditorState> = Symbol('checkboxGroupContextKey')
