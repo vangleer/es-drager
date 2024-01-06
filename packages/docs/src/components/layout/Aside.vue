@@ -12,5 +12,6 @@
   width: 200px;
   height: 100%;
   border-right: var(--es-border);
+  background-color: var(--es-color-bg);
 }
 </style>

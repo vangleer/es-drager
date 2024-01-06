@@ -154,6 +154,7 @@ watch(
     position: relative;
     height: calc(100%);
     min-width: 400px;
+    background-color: var(--es-bg-color-page);
     .es-sidebar {
       padding: 24px 6px;
       .es-sidebar-item {

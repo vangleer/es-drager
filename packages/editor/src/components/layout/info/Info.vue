@@ -32,6 +32,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   height: 100%;
   border-left: var(--es-border);
   overflow-y: auto;
+  background-color: var(--es-color-bg);
   .es-info-tabs {
     .el-tabs__nav-scroll {
       padding-left: 20px;

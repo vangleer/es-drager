@@ -14,6 +14,9 @@
         :grid-y="gridSize"
         :scaleRatio="scaleRatio"
         boundary
+        markline
+        snap
+        :snap-threshold="data.container.gridSize"
         @drag-start="onDragstart(item)"
         @drag-end="onDragend"
         @drag="onDrag"
@@ -42,8 +45,6 @@
       </ESDrager>
     </template>
 
-    <MarkLine v-if="showMarkline" v-bind="markLine" />
-
     <GridRect
       v-if="data.container.snapToGrid"
       :grid="data.container.gridSize"
@@ -61,10 +62,9 @@ import 'es-drager/lib/style.css'
 import { omit, events, pickStyle } from '../../utils'
 import { EditorType, ComponentType, EditorStoreKey } from '../../types'
 import GridRect from './GridRect.vue'
-import MarkLine from './MarkLine.vue'
 import Area from './Area.vue'
 import TextEditor from './TextEditor.vue'
-import { useMarkline, useArea, CommandStateType, useActions } from '../../hooks'
+import { useArea, CommandStateType, useActions } from '../../hooks'
 
 const store = inject(EditorStoreKey)!
 const props = defineProps({
@@ -83,9 +83,7 @@ const data = computed({
   get: () => props.modelValue,
   set: () => {}
 })
-const showMarkline = computed(
-  () => data.value.container.markline && data.value.container.markline.show
-)
+
 const gridSize = computed(() => props.modelValue.container?.gridSize || 10)
 const scaleRatio = computed(() => props.modelValue.container?.scaleRatio || 1)
 const editorStyle = computed(() => {
@@ -112,7 +110,6 @@ const current = computed<ComponentType>({
     store.current = val
   }
 })
-const { markLine, updateLines, updateMarkline } = useMarkline(data, current)
 const areaRef = ref()
 const { areaSelected, onEditorMouseDown, onAreaMove, onAreaUp } = useArea(
   data,
@@ -140,25 +137,18 @@ function onDragstart(element: ComponentType) {
   extraDragData.value.startX = current.value.left!
   extraDragData.value.startY = current.value.top!
 
-  // 更新辅助线的可能性
-  showMarkline.value && updateLines()
   events.emit('dragstart')
 }
 
 function onDragend() {
   events.emit('dragend')
-  markLine.left = null
-  markLine.top = null
 }
 function onDrag(dragData: DragData) {
   const disX = dragData.left - extraDragData.value.startX
   const disY = dragData.top - extraDragData.value.startY
 
-  // 更新是否显示markeline
-  showMarkline.value && updateMarkline(dragData)
-
   // 如果选中了多个
-  data.value.elements.forEach((item: ComponentType, index: number) => {
+  data.value.elements.forEach((item: ComponentType) => {
     if (item.selected && current.value?.id !== item.id) {
       item.left! += disX
       item.top! += disY

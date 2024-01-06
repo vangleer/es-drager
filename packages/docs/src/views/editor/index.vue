@@ -46,7 +46,7 @@ onMounted(() => {
   color: var(--es-color);
   background-color: var(--es-color-bg);
   transition: background-color 0.2s;
-
+  min-width: 1118px;
   .es-header-toolbar {
     flex: 1;
     display: flex;

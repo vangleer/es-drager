@@ -175,11 +175,14 @@ defineExpose({
 .es-layout-container {
   display: flex;
   height: calc(100% - var(--es-header-height));
+  background-color: var(--es-bg-color-page);
 }
 .es-layout-main {
   flex: 1;
   position: relative;
   margin: 20px;
   overflow: auto;
+  box-shadow: var(--el-box-shadow);
+  background-color: var(--es-color-bg);
 }
 </style>
