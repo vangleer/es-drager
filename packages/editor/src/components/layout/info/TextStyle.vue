@@ -64,10 +64,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, CSSProperties, computed, inject } from 'vue'
+import { ref, CSSProperties, computed } from 'vue'
 import { getIcon } from '../../../assets/images/icons/index'
-import { EditorStoreKey } from '../../../types'
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '@es-drager/editor/src/store'
+const store = useEditorStore()
 
 const titles = [
   { label: '正常', value: 'normal' },

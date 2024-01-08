@@ -22,12 +22,13 @@ import Aside from './Aside.vue'
 import Info from './info/Info.vue'
 import Editor from '../../components/editor/index.vue'
 import Preview from '../../components/common/Preview.vue'
-import { ComponentType, EditorState, EditorStoreKey, ToolType } from '../../types'
+import { ComponentType, EditorDataType, ToolType } from '../../types'
 import { events } from '../../utils/events'
 import { useCommand } from '../../hooks/useCommand'
 import { $dialog, $upload } from '../../components/common'
 import { useId } from '../../utils/common'
-import { computed, onMounted, ref, provide, reactive } from 'vue'
+import { computed, onMounted, ref, provide } from 'vue'
+import { useEditorStore } from '../../store'
 import {
   RefreshLeft,
   RefreshRight,
@@ -37,10 +38,11 @@ import {
   View
 } from '@element-plus/icons-vue'
 import { PropType } from 'vue'
+import { watch } from 'vue'
 
 const props = defineProps({
-  store: {
-    type: Object as PropType<EditorState>,
+  data: {
+    type: Object as PropType<EditorDataType>,
     required: true
   },
   theme: {
@@ -48,9 +50,9 @@ const props = defineProps({
   }
 })
 
-const store = reactive<EditorState>(props.store)
+const store = useEditorStore()
 const theme = computed(() => props.theme)
-provide(EditorStoreKey, store)
+
 provide('theme', theme)
 
 const mainRef = ref<HTMLElement>()
@@ -162,12 +164,20 @@ function init() {
   store.data.container.style.width = mainRect.value.width - 1
   store.data.container.style.height = mainRect.value.height - 4
 }
+function getData() {
+  return { ...store.data }
+}
+
+watch(() => props.data, () => {
+  store.update(props.data)
+}, { immediate: true })
 onMounted(() => {
   init()
 })
 
 defineExpose({
-  tools
+  tools,
+  getData
 })
 </script>
 

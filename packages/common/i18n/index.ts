@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import zh from './locales/zh.json'
 import en from './locales/en.json'
-
+export * from './store'
 // 获取浏览器界面语言，默认语言
 // https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/language
 let currentLanguage = navigator.language.replace(/-(\S*)/, '')

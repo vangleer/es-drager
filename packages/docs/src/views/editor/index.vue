@@ -11,20 +11,65 @@
         </div>
       </div>
     </Header>
-    <ESEditor ref="editorRef" :store="editorStore" :theme="appStore.theme" />
+    <ESEditor ref="editorRef" :data="data" :theme="appStore.theme" />
   </div>
 </template>
 
 <script setup lang="ts">
 import Header from '@/components/layout/Header.vue'
-import { useAppStore, useEditorStore } from '@/store'
-import { ESEditor, ToolType } from '@es-drager/editor'
+import { useAppStore } from '@/store'
+import { ESEditor, ToolType, EditorDataType } from '@es-drager/editor'
 import { onMounted } from 'vue';
 import { computed, ref } from 'vue'
 const title = 'ES Drager Editor 开发中...'
+
+// editorRef.value?.getData() // 获取最新数据
 const editorRef = ref<InstanceType<typeof ESEditor> | null>(null)
-const editorStore = useEditorStore()
+  
 const appStore = useAppStore()
+
+// 初始数据
+const data: EditorDataType = {
+  container: {
+    markline: {
+      show: true,
+      color: ''
+    },
+    snapToGrid: true,
+    gridSize: 10,
+    gridColor: '',
+    style: {},
+    scaleRatio: 1
+  },
+  elements: [
+    {
+      id: '1',
+      component: 'div',
+      width: 100,
+      height: 100,
+      left: 100,
+      top: 100,
+      text: 'div1',
+      style: {
+        border: '1px solid red',
+        background: 'blue'
+      }
+    },
+    {
+      id: '1',
+      component: 'div',
+      width: 100,
+      height: 100,
+      left: 300,
+      top: 150,
+      text: 'div2',
+      style: {
+        border: '1px solid red',
+        background: 'pink'
+      }
+    }
+  ]
+}
 
 const tools = computed(() => (editorRef.value as any)?.tools || [])
 

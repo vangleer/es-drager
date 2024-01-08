@@ -90,10 +90,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, CSSProperties, inject } from 'vue'
+import { ref, CSSProperties } from 'vue'
 import TextStyle from './TextStyle.vue'
-import { EditorStoreKey } from '../../../types'
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '@es-drager/editor/src/store'
+const store = useEditorStore()
 const collapseList = ref(['style'])
 const itemList = ref<CSSProperties[][]>([
   [

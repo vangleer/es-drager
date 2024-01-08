@@ -56,20 +56,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, PropType, onMounted, onBeforeMount, inject } from 'vue'
+import { computed, ref, PropType, onMounted, onBeforeMount } from 'vue'
 import ESDrager, { DragData } from 'es-drager'
 import 'es-drager/lib/style.css'
 import { omit, events, pickStyle } from '../../utils'
-import { EditorType, ComponentType, EditorStoreKey } from '../../types'
+import { EditorDataType, ComponentType } from '../../types'
 import GridRect from './GridRect.vue'
 import Area from './Area.vue'
 import TextEditor from './TextEditor.vue'
 import { useArea, CommandStateType, useActions } from '../../hooks'
-
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '../../store'
+const store = useEditorStore()
 const props = defineProps({
   modelValue: {
-    type: Object as PropType<EditorType>,
+    type: Object as PropType<EditorDataType>,
     required: true,
     default: () => ({})
   },

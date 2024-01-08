@@ -2,18 +2,18 @@
   <div class="es-layout-info">
     <el-tabs v-model="activeName" class="es-info-tabs" @tab-click="handleClick">
       <el-tab-pane :label="title" name="style">
-        <Style />
+        <MyStyle />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject } from 'vue'
+import { computed, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import Style from './Style.vue'
-import { EditorStoreKey } from '../../../types'
-const store = inject(EditorStoreKey)!
+import MyStyle from './Style.vue'
+import { useEditorStore } from '@es-drager/editor/src/store'
+const store = useEditorStore()
 
 const title = computed(() =>
   store.current && store.current.selected ? '元素属性' : '画布属性'

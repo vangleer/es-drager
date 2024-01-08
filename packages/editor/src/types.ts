@@ -1,4 +1,4 @@
-import { CSSProperties, ExtractPropTypes, InjectionKey } from 'vue'
+import { CSSProperties, ExtractPropTypes } from 'vue'
 import { DragerProps } from 'es-drager'
 
 type DragerType = Partial<ExtractPropTypes<typeof DragerProps>>
@@ -13,7 +13,7 @@ export type ComponentType = DragerType & {
   style?: CSSProperties
   editable?: boolean
 }
-export type EditorType = {
+export type EditorDataType = {
   container: {
     snapToGrid: boolean
     markline: {
@@ -43,9 +43,7 @@ export type ToolType = {
 }
 
 export interface EditorState {
-  data: EditorType
+  data: EditorDataType
   current: ComponentType
   preview: Boolean
 }
-
-export const EditorStoreKey: InjectionKey<EditorState> = Symbol('checkboxGroupContextKey')

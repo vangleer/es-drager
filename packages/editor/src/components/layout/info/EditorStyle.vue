@@ -53,9 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import { EditorStoreKey } from '@es-drager/editor/src/types'
-import { ref, computed, inject } from 'vue'
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '@es-drager/editor/src/store'
+import { ref, computed } from 'vue'
+const store = useEditorStore()
 
 const scaleRatio = ref(100)
 const editorSize = computed({

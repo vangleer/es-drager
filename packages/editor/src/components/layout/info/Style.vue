@@ -6,11 +6,10 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
 import EditorStyle from './EditorStyle.vue'
 import ElementStyle from './ElementStyle.vue'
-import { EditorStoreKey } from '../../../types'
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '@es-drager/editor/src/store'
+const store = useEditorStore()
 </script>
 
 <style lang="scss">

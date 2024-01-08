@@ -37,13 +37,13 @@
 
 <script setup lang="ts">
 import TextEditor from '../editor/TextEditor.vue'
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import html2canvas from 'html2canvas'
 import JsPdf from 'jspdf'
 import { dayjs } from 'element-plus'
 import { pickStyle } from '../../utils'
-import { EditorStoreKey } from '../../types'
-const store = inject(EditorStoreKey)!
+import { useEditorStore } from '../../store'
+const store = useEditorStore()
 const editorRef = ref<HTMLElement>()
 const editorStyle = computed(() => {
   const { width, height } = store.data.container.style
