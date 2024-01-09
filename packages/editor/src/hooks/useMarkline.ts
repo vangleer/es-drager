@@ -1,10 +1,10 @@
-import { ComponentType, EditorType } from '@es-drager/editor'
+import { ComponentType, EditorDataType } from '@es-drager/editor'
 import { calcLines } from '@es-drager/editor/src/utils'
 import { DragData } from 'es-drager'
 import { reactive, Ref, ref } from 'vue'
 
 export function useMarkline(
-  data: Ref<EditorType>,
+  data: Ref<EditorDataType>,
   current: Ref<ComponentType | null>
 ) {
   const markLine = reactive({

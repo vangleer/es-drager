@@ -1,9 +1,9 @@
-import { ComponentType, EditorType } from '../types'
+import { ComponentType, EditorDataType } from '../types'
 import Area from '../components/editor/Area.vue'
 import { DragData } from 'es-drager'
 import { ref, Ref } from 'vue'
 // .value.elements
-export function useArea(data: Ref<EditorType>, areaRef: Ref<typeof Area>) {
+export function useArea(data: Ref<EditorDataType>, areaRef: Ref<typeof Area>) {
   const areaSelected = ref()
   // 编辑器鼠标按下事件
   function onEditorMouseDown(e: MouseEvent) {

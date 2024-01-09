@@ -1,5 +1,5 @@
 import { $contextmenu, ActionType, MenuItem } from '../components/common'
-import { ComponentType, EditorType } from '../types'
+import { ComponentType, EditorDataType } from '../types'
 import { cancelGroup, deepCopy, makeGroup, useId } from '../utils'
 import { computed, onBeforeMount, onMounted, Ref } from 'vue'
 type ActionMethods = {
@@ -15,7 +15,7 @@ const keyboardMap = {
   ['ctrl+d']: 'duplicate'
 }
 export function useActions(
-  data: Ref<EditorType>,
+  data: Ref<EditorDataType>,
   editorRef: Ref<HTMLElement | null>
 ) {
   const editorRect = computed(() => {

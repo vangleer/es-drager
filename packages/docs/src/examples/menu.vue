@@ -40,11 +40,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Drager, { DragData } from 'es-drager'
-import { ComponentType, EditorType, ToolType, GridRect, useActions } from '@es-drager/editor'
+import { ComponentType, EditorDataType, ToolType, GridRect, useActions } from '@es-drager/editor'
 import { useId } from '@es-drager/editor/src/utils'
 import { $dialog, $upload } from '@es-drager/editor/src/components/common'
 import { t } from '@es-drager/common/i18n'
-const data = ref<EditorType>({
+const data = ref<EditorDataType>({
   container: {
     gridSize: 10,
     markline: {},
