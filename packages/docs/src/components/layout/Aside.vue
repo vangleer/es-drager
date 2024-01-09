@@ -9,7 +9,7 @@
 <style lang="scss">
 .es-layout-aside {
   flex-shrink: 0;
-  width: 200px;
+  width: var(--es-layout-aside-width);;
   height: 100%;
   border-right: var(--es-border);
   background-color: var(--es-color-bg);

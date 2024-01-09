@@ -2,7 +2,7 @@
   <div class="es-layout-container">
     <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
     <div ref="mainRef" class="es-layout-main">
-      <el-scrollbar :height="mainRect.height">
+      <div class="es-editor-container" :style="editorContainerStyle">
         <Editor
           v-model="store.data"
           :commands="commands"
@@ -10,7 +10,7 @@
           @drop="drop"
           @dragover.prevent
         />
-      </el-scrollbar>
+      </div>
     </div>
     <Info v-model="store.current" />
   </div>
@@ -27,7 +27,7 @@ import { events } from '../../utils/events'
 import { useCommand } from '../../hooks/useCommand'
 import { $dialog, $upload } from '../../components/common'
 import { useId } from '../../utils/common'
-import { computed, onMounted, ref, provide } from 'vue'
+import { computed, onMounted, ref, provide, CSSProperties } from 'vue'
 import { useEditorStore } from '../../store'
 import {
   RefreshLeft,
@@ -125,6 +125,26 @@ const tools: ToolType[] = [
   { label: '预览', icon: View, handler: () => (store.preview = true) }
 ]
 
+const editorContainerStyle = computed(() => {
+  const { width, height } = store.data.container.style
+  const style: CSSProperties = {}
+  const x = store.initWidth > +width!, y = store.initHeight > +height!
+  if (x) {
+    style.position = 'absolute'
+    style.left = '50%'
+    style.transform = 'translateX(-50%)'
+  }
+  if (y) {
+    style.position = 'absolute'
+    style.top = '50%'
+    style.transform = 'translateY(-50%)'
+  }
+  if (x && y) {
+    style.transform = 'translate(-50%, -50%)'
+  }
+  return style
+})
+
 const mainRect = computed(() => {
   return mainRef.value?.getBoundingClientRect() || ({} as DOMRect)
 })
@@ -161,8 +181,10 @@ function drop(e: DragEvent) {
 }
 
 function init() {
-  store.data.container.style.width = mainRect.value.width - 1
-  store.data.container.style.height = mainRect.value.height - 4
+  store.initWidth = Math.floor(mainRect.value.width)
+  store.initHeight = Math.floor(mainRect.value.height - 7)
+  store.data.container.style.width = store.initWidth
+  store.data.container.style.height = store.initHeight
 }
 function getData() {
   return { ...store.data }
@@ -192,7 +214,23 @@ defineExpose({
   position: relative;
   margin: 20px;
   overflow: auto;
-  box-shadow: var(--el-box-shadow);
-  background-color: var(--es-color-bg);
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 6px;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(69,90,100,.2);
+    }
+  }
+  .es-editor-container {
+    box-shadow: var(--el-box-shadow);
+    background-color: var(--es-color-bg);
+  }
 }
 </style>

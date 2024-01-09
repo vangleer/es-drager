@@ -1,11 +1,12 @@
 import { ComponentType, EditorDataType } from '../types'
-import { useId } from '../utils'
 import { defineStore } from 'pinia'
 
 interface EditorState {
   data: EditorDataType
   current: ComponentType
   preview: Boolean
+  initWidth: number
+  initHeight: number
 }
 
 const defaultData = {
@@ -27,7 +28,9 @@ export const useEditorStore = defineStore('editor', {
     return {
       data: defaultData,
       current: {},
-      preview: false
+      preview: false,
+      initWidth: 1180,
+      initHeight: 960
     }
   },
   actions: {

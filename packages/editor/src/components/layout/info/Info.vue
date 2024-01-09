@@ -28,7 +28,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 <style lang="scss">
 .es-layout-info {
   flex-shrink: 0;
-  width: 230px;
+  width: var(--es-layout-aside-width);
   height: 100%;
   border-left: var(--es-border);
   overflow-y: auto;
