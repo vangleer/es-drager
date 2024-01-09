@@ -10,6 +10,7 @@
           <el-button :icon="item.icon">{{ item.label }}</el-button>
         </div>
       </div>
+      <el-button>修改数据</el-button>
     </Header>
     <ESEditor ref="editorRef" :data="data" :theme="appStore.theme" />
   </div>
@@ -29,7 +30,7 @@ const editorRef = ref<InstanceType<typeof ESEditor> | null>(null)
 const appStore = useAppStore()
 
 // 初始数据
-const data: EditorDataType = {
+const data = ref<EditorDataType>({
   container: {
     markline: {
       show: true,
@@ -69,7 +70,7 @@ const data: EditorDataType = {
       }
     }
   ]
-}
+})
 
 const tools = computed(() => (editorRef.value as any)?.tools || [])
 
