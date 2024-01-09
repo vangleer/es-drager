@@ -89,6 +89,7 @@ async function publishPackage(pkgName, version) {
   const pkgRoot = getPkgRoot(pkgName)
   const pkgPath = path.resolve(pkgRoot, 'package.json')
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'))
+
   if (pkg.private) {
     return
   }
@@ -101,9 +102,15 @@ async function publishPackage(pkgName, version) {
 
     // execSync(`git commit -m "chore: release v${version}"`, { stdio: 'inherit' })
     // execSync(`git tag -a v${version} -m "v${version}"`, { stdio: 'inherit' })
+
+    // copy README.md
+    step(`copy README.md...`)
+    fs.cpSync(path.resolve(__dirname, '../README.md'), path.resolve(pkgRoot, 'README.md'))
+    
     execSync('npm publish', { cwd: pkgRoot, stdio: 'inherit' })
 
     console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
+    fs.unlinkSync(path.resolve(pkgRoot, 'README.md'))
   } catch (e) {
     if (e.stderr.match(/previously published/)) {
       console.log(chalk.red(`Skipping already published: ${pkgName}`))

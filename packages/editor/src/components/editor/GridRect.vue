@@ -42,9 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import MColor from 'color'
 import { useId } from '../../utils'
+import { useEditorStore } from '../../store'
+const store = useEditorStore()
 const props = defineProps({
   grid: {
     // 小网格的大小
@@ -67,7 +69,6 @@ const props = defineProps({
   smallGridId: String,
   gridId: String
 })
-const theme = inject('theme')!
 
 const smallGridId = computed(() => props.smallGridId || useId('smallGrid'))
 const gridId = computed(() => props.gridId || useId('grid'))
@@ -87,7 +88,7 @@ const color = computed(() => {
     ['#e4e7ed', '#ebeef5'],
     ['#414243', '#363637']
   ]
-  const [bigGrid, grid] = colors[(theme as any).value === 'light' ? 0 : 1]
+  const [bigGrid, grid] = colors[store.theme === 'light' ? 0 : 1]
   return { bigGrid, grid }
 })
 

@@ -7,6 +7,7 @@ interface EditorState {
   preview: Boolean
   initWidth: number
   initHeight: number
+  theme: string
 }
 
 const defaultData = {
@@ -23,6 +24,7 @@ const defaultData = {
   },
   elements: []
 }
+
 export const useEditorStore = defineStore('editor', {
   state: (): EditorState => {
     return {
@@ -30,7 +32,8 @@ export const useEditorStore = defineStore('editor', {
       current: {},
       preview: false,
       initWidth: 1180,
-      initHeight: 960
+      initHeight: 960,
+      theme: localStorage.getItem('theme') || 'light'
     }
   },
   actions: {

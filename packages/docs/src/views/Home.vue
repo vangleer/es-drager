@@ -179,6 +179,10 @@ watch(
     .es-content {
       position: relative;
       flex: 1;
+      margin: 20px;
+      background-color: var(--es-color-bg);
+      box-shadow: var(--el-box-shadow);
+      height: calc(100% - var(--es-header-height) - 40px);
     }
   }
 }

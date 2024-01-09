@@ -51,9 +51,6 @@ const props = defineProps({
 })
 
 const store = useEditorStore()
-const theme = computed(() => props.theme)
-
-provide('theme', theme)
 
 const mainRef = ref<HTMLElement>()
 const { commands } = useCommand(store)
@@ -192,6 +189,11 @@ function getData() {
 
 watch(() => props.data, () => {
   store.update(props.data)
+}, { immediate: true })
+watch(() => props.theme, () => {
+  if (props.theme) {
+    store.theme = props.theme
+  }
 }, { immediate: true })
 onMounted(() => {
   init()
