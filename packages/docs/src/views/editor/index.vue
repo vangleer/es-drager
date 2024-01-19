@@ -57,7 +57,7 @@ const data = ref<EditorDataType>({
       }
     },
     {
-      id: '1',
+      id: '2',
       component: 'div',
       width: 100,
       height: 100,

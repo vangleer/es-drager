@@ -27,7 +27,7 @@ import { events } from '../../utils/events'
 import { useCommand } from '../../hooks/useCommand'
 import { $dialog, $upload } from '../../components/common'
 import { useId } from '../../utils/common'
-import { computed, onMounted, ref, provide, CSSProperties } from 'vue'
+import { computed, onMounted, ref, CSSProperties } from 'vue'
 import { useEditorStore } from '../../store'
 import {
   RefreshLeft,
