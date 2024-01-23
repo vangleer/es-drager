@@ -1,8 +1,6 @@
 import {
   Ref,
-  ExtractPropTypes,
-  watch,
-  onBeforeUnmount
+  ExtractPropTypes
 } from 'vue'
 import { DragerProps, DragData } from '../drager'
 type UtilFN = {
@@ -78,21 +76,8 @@ export function useKeyEvent(
     oldTop = 0
   }
 
-  watch(selected, val => {
-    if (props.disabledKeyEvent) return
-    // 每次选中注册键盘事件
-    if (val) {
-      document.addEventListener('keydown', onKeydown)
-      document.addEventListener('keyup', onKeyup)
-    } else {
-      // 不是选中移除
-      document.removeEventListener('keydown', onKeydown)
-      document.removeEventListener('keyup', onKeyup)
-    }
-  })
-
-  onBeforeUnmount(() => {
-    document.removeEventListener('keydown', onKeydown)
-    document.removeEventListener('keyup', onKeyup)
-  })
+  return {
+    onKeydown,
+    onKeyup
+  }
 }

@@ -3,7 +3,9 @@ import {
   onMounted,
   ref,
   ExtractPropTypes,
-  nextTick
+  nextTick,
+  watch,
+  onBeforeUnmount
 } from 'vue'
 import { DragerProps, DragData } from './drager'
 import {
@@ -102,7 +104,6 @@ export function useDrager(
       }
       mouseSet.clear()
       isMousedown.value = false
-      document.addEventListener('click', clickOutsize, { once: true })
       marklineEmit('drag-end')
       emit && emit('drag-end', dragData.value)
     })
@@ -159,13 +160,11 @@ export function useDrager(
       if (flag) return true
     }
   }
-
   const clickOutsize = () => {
     selected.value = false
   }
-
   // 键盘事件
-  useKeyEvent(
+  const { onKeydown, onKeyup } = useKeyEvent(
     props,
     dragData,
     selected,
@@ -176,7 +175,28 @@ export function useDrager(
       emit
     }
   )
-  
+  watch(selected, val => {
+    // 聚焦/失焦
+    if (val) {
+      emit('focus', val)
+      // 点击其它区域
+      document.addEventListener('click', clickOutsize, { once: true })
+    } else {
+      emit('blur', val)
+    }
+
+    if (props.disabledKeyEvent) return
+    // 每次选中注册键盘事件
+    if (val) {
+      document.addEventListener('keydown', onKeydown)
+      document.addEventListener('keyup', onKeyup)
+    } else {
+      // 不是选中移除
+      document.removeEventListener('keydown', onKeydown)
+      document.removeEventListener('keyup', onKeyup)
+    }
+  })
+
   onMounted(() => {
     if (!targetRef.value) return
     // 没传宽高使用元素默认
@@ -194,6 +214,12 @@ export function useDrager(
     targetRef.value.addEventListener('touchstart', onMousedown, {
       passive: true
     })
+  })
+
+  onBeforeUnmount(() => {
+    document.removeEventListener('click', clickOutsize)
+    document.removeEventListener('keydown', onKeydown)
+    document.removeEventListener('keyup', onKeyup)
   })
   return {
     isMousedown,

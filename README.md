@@ -184,6 +184,8 @@ import Drager from 'es-drager'
 | rotate | 旋转中 | ^[Function]`(dragData) => void` |
 | rotate-start | 旋转开始 | ^[Function]`(dragData) => void` |
 | rotate-end | 旋转结束 | ^[Function]`(dragData) => void` |
+| focus | 获取焦点/选中 | ^[Function]`(selected) => void` |
+| blur | 失去焦点/非选中 | ^[Function]`(selected) => void` |
 
 - dragData 类型
 

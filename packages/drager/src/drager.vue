@@ -64,6 +64,7 @@ import {
   MouseTouchEvent
 } from './utils'
 import Rotate from './rotate.vue'
+import { onUnmounted } from 'vue'
 
 const props = defineProps(DragerProps)
 const emit = defineEmits([
@@ -76,7 +77,9 @@ const emit = defineEmits([
   'resize-end',
   'rotate',
   'rotate-start',
-  'rotate-end'
+  'rotate-end',
+  'focus',
+  'blur'
 ])
 const emitFn = (type: EventType, ...args: any) => {
   emit(type, ...args)
@@ -306,6 +309,7 @@ watch(
   },
   { immediate: true }
 )
+
 </script>
 
 <style lang="scss">

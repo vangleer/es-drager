@@ -15,6 +15,8 @@
     @rotate="onRotate"
     @rotate-start="onRotateStart"
     @rotate-end="onRotateEnd"
+    @focus="onFocus"
+    @blur="onBlur"
   />
 </template>
 
@@ -64,5 +66,14 @@ const onRotateStart = (dragData: DragData) => {
 // resize end
 const onRotateEnd = (dragData: DragData) => {
   console.log('onRotateEnd', dragData)
+}
+
+// focus/selected
+function onFocus(val: boolean) {
+  console.log('onFocus', val)
+}
+// blur/unselected
+function onBlur(val: boolean) {
+  console.log('onBlur', val)
 }
 </script>

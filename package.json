@@ -22,7 +22,7 @@
     "url": "https://github.com/vangleer/es-drager.git"
   },
   "scripts": {
-    "dev": "pnpm --filter ./packages/docs docs:dev",
+    "dev": "pnpm build && pnpm --filter ./packages/docs docs:dev",
     "build": "pnpm --filter ./packages/drager build",
     "docs:build": "pnpm build && pnpm --filter ./packages/docs docs:build",
     "release": "pnpm build && node ./scripts/release.js",
