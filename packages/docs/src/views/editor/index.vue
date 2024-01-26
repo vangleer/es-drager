@@ -1,5 +1,5 @@
 <template>
-  <div class="es-layout">
+  <div class="es-layout" @click.stop>
     <Header :title="title">
       <div class="es-header-toolbar">
         <div

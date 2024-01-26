@@ -27,41 +27,28 @@ registerConfig.registerCommon({
   text: '按钮'
 })
 registerConfig.registerCommon({
-  component: 'v-rect',
-  text: '按钮'
+  component: 'div',
+  text: '矩形',
+  style: { border: '1px solid var(--el-text-color-primary)' }
+})
+registerConfig.registerCommon({
+  component: 'div',
+  text: '圆形',
+  width: 100,
+  height: 100,
+  style: { border: '1px solid var(--el-text-color-primary)', borderRadius: '50%' }
 })
 
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Plus' }
+registerConfig.registerCommon({
+  component: 'es-chart',
+  text: '图表'
 })
 
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Minus' }
-})
-
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'CirclePlus' }
-})
-
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Search' }
-})
-
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Female' }
-})
-
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Male' }
-})
-
-registerConfig.registerIcon({
-  component: 'es-icon',
-  props: { icon: 'Male' }
+// 注册icons
+const icons = ['Plus', 'Minus', 'CirclePlus', 'Search', 'Female', 'Male']
+icons.forEach(icon => {
+  registerConfig.registerIcon({
+    component: 'es-icon',
+    props: { icon }
+  })
 })

@@ -4,8 +4,6 @@
 
 <style>
 .es-basic-rect {
-  width: 50px;
-  height: 30px;
-  border: 1px solid red;
+  border: var(--el-border);
 }
 </style>

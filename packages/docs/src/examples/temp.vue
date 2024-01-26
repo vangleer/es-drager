@@ -5,21 +5,29 @@
     :left="100"
     :top="100"
     rotatable
-    @focus="onFocus"
-    @blur="onBlur"
+    @drag-start="onDragStart"
+    @drag-end="onDragEnd"
+    @click="handleClick"
   >
-    测试
+    按钮
   </Drager>
 
 </template>
 
 <script setup lang="ts">
 import Drager from 'es-drager/index'
-function onFocus(val: boolean) {
-  console.log('onFocus')
+let timer = 0
+function onDragStart() {
+  timer = Date.now()
 }
-function onBlur(val: boolean) {
-  console.log('onBlur')
+function onDragEnd() {
+  timer = Date.now() - timer
+}
+
+const handleClick = () => {
+  if (timer <= 300) {
+    console.log('emit click')
+  }
 }
 </script>
 

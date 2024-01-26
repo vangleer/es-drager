@@ -11,15 +11,12 @@
               @dragstart="dragstart($event, item)"
               @dragend="dragend"
             >
-              <component v-if="item.component" :is="item.component">{{
-                item.text
-              }}</component>
-              <template v-else>{{ item.text }}</template>
+              <Icon :name="item.text" />
+              <span class="block-text">{{ item.text }}</span>
             </div>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="杂项" name="2"></el-collapse-item>
-        <el-collapse-item title="图标" name="3">
+        <el-collapse-item title="图标" name="2">
           <div class="collapse-content">
             <div
               class="es-block"
@@ -46,17 +43,17 @@
 import { ref } from 'vue'
 import { registerConfig as config } from '../../utils/editor-config'
 import { ComponentType } from '../../types'
-
+import Icon from '../common/svgIcon/Icon.vue'
 const emit = defineEmits(['dragstart', 'dragend'])
 
-const activeNames = ref(['1'])
+const activeNames = ref(['1', '2'])
 
 function dragstart(e: DragEvent, component: ComponentType) {
   let width = 50,
     height = 50
   if (component.component !== 'es-icon') {
-    width = (e.target as HTMLElement).offsetWidth
-    height = (e.target as HTMLElement).offsetHeight
+    width = component.width || (e.target as HTMLElement).offsetWidth
+    height = component.height || (e.target as HTMLElement).offsetHeight
   }
   emit('dragstart', {
     ...component,
@@ -92,6 +89,10 @@ function dragend() {
       border: var(--es-border);
       margin-bottom: 10px;
       cursor: grab;
+      background-color: var(--el-bg-color);
+      .block-text {
+        margin-left: 6px;
+      }
     }
   }
 }
