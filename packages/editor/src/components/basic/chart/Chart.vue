@@ -3,15 +3,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, PropType } from 'vue'
 import * as echarts from 'echarts'
 import { t } from '@es-drager/common/i18n'
+import { ComponentType } from '@es-drager/editor'
 const props = defineProps({
   element: {
     type: Object as PropType<ComponentType>,
     default: () => ({})
   },
-  option: Object
+  option: Object as PropType<any>
 })
 const chartRef = ref()
 let chart: echarts.ECharts | null = null
