@@ -10,7 +10,6 @@
           <el-button :icon="item.icon">{{ item.label }}</el-button>
         </div>
       </div>
-      <el-button>修改数据</el-button>
     </Header>
     <ESEditor ref="editorRef" :data="data" :theme="appStore.theme" />
   </div>
