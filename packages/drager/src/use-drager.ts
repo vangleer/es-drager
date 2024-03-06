@@ -114,10 +114,16 @@ export function useDrager(
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.offsetParent || document.body
     const parentElRect = parentEl!.getBoundingClientRect()
-    if (angle && props.scaleRatio === 1) {
+    
+    // if (angle && props.scaleRatio === 1) {
+    //   const rect = targetRef.value!.getBoundingClientRect()
+    //   minX = Math.abs(rect.left - (left + parentElRect.left))
+    //   minY = Math.abs(rect.top - (top + parentElRect.top))
+    // }
+    if (angle) {
       const rect = targetRef.value!.getBoundingClientRect()
-      minX = Math.abs(rect.left - (left + parentElRect.left))
-      minY = Math.abs(rect.top - (top + parentElRect.top))
+      minX = rect.left / props.scaleRatio  - Math.floor(left - (rect.width / props.scaleRatio - width) + parentElRect.left / props.scaleRatio)
+      minY = rect.top / props.scaleRatio  - Math.floor(top - (rect.height / props.scaleRatio - height) + parentElRect.top / props.scaleRatio)
     }
 
     // 最大x
