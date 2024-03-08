@@ -13,7 +13,8 @@ import {
   MouseTouchEvent,
   calcGrid,
   getXY,
-  checkCollision
+  checkCollision,
+  getBoundingClientRectByScale
 } from './utils'
 import { useMarkline, useKeyEvent } from './hooks'
 export function useDrager(
@@ -113,24 +114,19 @@ export function useDrager(
       minY = 0
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.offsetParent || document.body
-    const parentElRect = parentEl!.getBoundingClientRect()
+    const parentElRect = getBoundingClientRectByScale(parentEl!,props.scaleRatio)
     
-    // if (angle && props.scaleRatio === 1) {
-    //   const rect = targetRef.value!.getBoundingClientRect()
-    //   minX = Math.abs(rect.left - (left + parentElRect.left))
-    //   minY = Math.abs(rect.top - (top + parentElRect.top))
-    // }
     if (angle) {
-      const rect = targetRef.value!.getBoundingClientRect()
-      minX = rect.left / props.scaleRatio  - Math.floor(left - (rect.width / props.scaleRatio - width) + parentElRect.left / props.scaleRatio)
-      minY = rect.top / props.scaleRatio  - Math.floor(top - (rect.height / props.scaleRatio - height) + parentElRect.top / props.scaleRatio)
+      const rect = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
+      minX = rect.left  - Math.floor(left - (rect.width - width) + parentElRect.left )
+      minY = rect.top - Math.floor(top - (rect.height - height) + parentElRect.top )
     }
 
     // 最大x
-    const maxX = parentElRect.width / props.scaleRatio - width
+    const maxX = parentElRect.width - width
     // 最大y
-    const maxY = parentElRect.height / props.scaleRatio - height
-    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width / props.scaleRatio, parentElRect.height / props.scaleRatio]
+    const maxY = parentElRect.height - height
+    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width , parentElRect.height ]
   }
   /**
    * @param moveX 移动的X
@@ -162,7 +158,7 @@ export function useDrager(
     })
     for (let i = 0; i < broList.length; i++) {
       const item = broList[i]
-      const flag = checkCollision(targetRef.value!, item)
+      const flag = checkCollision(targetRef.value!, item, props.scaleRatio)
       if (flag) return true
     }
   }
@@ -207,7 +203,7 @@ export function useDrager(
     if (!targetRef.value) return
     // 没传宽高使用元素默认
     if (!dragData.value.width && !dragData.value.height) {
-      const { width, height } = targetRef.value.getBoundingClientRect()
+      const { width, height } = getBoundingClientRectByScale(targetRef.value,props.scaleRatio)
       // 获取默认宽高
       dragData.value = {
         ...dragData.value,
