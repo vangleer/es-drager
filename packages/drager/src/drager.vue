@@ -31,7 +31,6 @@
       v-if="showRotate"
       v-model="dragData.angle"
       :element="dragRef"
-      :scaleRatio="props.scaleRatio"
       @rotate="emitFn('rotate', dragData)"
       @rotate-start="emitFn('rotate-start', dragData)"
       @rotate-end="handleRotateEnd"

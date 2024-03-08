@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref, computed, PropType } from 'vue'
-import { getXY, MouseTouchEvent, setupMove,getBoundingClientRectByScale } from './utils'
+import { getXY, MouseTouchEvent, setupMove } from './utils'
 
 const props = defineProps({
   modelValue: {
@@ -29,10 +29,6 @@ const props = defineProps({
   },
   element: {
     type: Object as PropType<HTMLElement | null>
-  },
-  scaleRatio:{
-    type: Number,
-    default : 1
   }
 })
 
@@ -62,7 +58,7 @@ function onRotateMousedown(e: MouseTouchEvent) {
     )
   e.stopPropagation()
 
-  const { width, height, left, top } = getBoundingClientRectByScale(props.element,props.scaleRatio)
+  const { width, height, left, top } = props.element.getBoundingClientRect()
   // 旋转中心位置
   const centerX = left + width / 2
   const centerY = top + height / 2
