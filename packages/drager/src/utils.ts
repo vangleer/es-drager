@@ -384,10 +384,10 @@ export function calcGrid(diff: number, grid: number) {
  * @param element2 碰撞对象
  * @returns
  */
-export function checkCollision(element1: Element, element2: Element) {
+export function checkCollision(element1: Element, element2: Element,scaleRatio : number) {
   if (!element1 || !element2) return false
-  const rect1 = element1.getBoundingClientRect()
-  const rect2 = element2.getBoundingClientRect()
+  const rect1 = getBoundingClientRectByScale(element1,scaleRatio)
+  const rect2 = getBoundingClientRectByScale(element2,scaleRatio)
 
   if (
     rect1.left < rect2.left + rect2.width &&
@@ -399,4 +399,20 @@ export function checkCollision(element1: Element, element2: Element) {
   }
 
   return false // 未发生碰撞
+}
+
+/**
+ * 获取缩放后得Rect
+ */
+export const getBoundingClientRectByScale = (el : HTMLElement | Element,scaleRatio : number)=>{
+  var curRect = el.getBoundingClientRect()
+  return {
+    ...curRect,
+    left : curRect.left / scaleRatio,
+    top : curRect.top / scaleRatio,
+    right : curRect.right / scaleRatio,
+    bottom : curRect.bottom / scaleRatio,
+    width: curRect.width / scaleRatio,
+    height: curRect.height / scaleRatio
+  } as DOMRect
 }

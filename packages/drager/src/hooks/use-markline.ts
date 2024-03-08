@@ -1,5 +1,6 @@
 import { ExtractPropTypes, Ref, computed, onMounted, ref } from 'vue'
 import { DragerProps, MarklineData } from '../drager'
+import { getBoundingClientRectByScale } from '../utils'
 type MarklineEvent = 'drag-start' | 'drag' | 'drag-end'
 const isFn = (value: any): value is Function => typeof value === 'function'
 export function useMarkline(
@@ -9,7 +10,7 @@ export function useMarkline(
   let lineX: HTMLElement | null = null
   let lineY: HTMLElement | null = null
   const parent = computed(() => targetRef.value!.offsetParent || document.body)
-  const parentRect = computed(() => parent.value.getBoundingClientRect())
+  const parentRect = computed(() => getBoundingClientRectByScale(parent.value,props.scaleRatio))
   
   const lines = ref<any>({ x: [], y: [] })
   const init = () => {
@@ -48,13 +49,13 @@ export function useMarkline(
   }
   // 吸附
   const handleDragStart = () => {
-    const source = targetRef.value!.getBoundingClientRect()
+    const source = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
     const elList = document.querySelectorAll('.es-drager')
     const targets = []
     for (let i = 0; i < elList.length; i++) {
       const el = elList[i]
       if (el !== targetRef.value) {
-        targets.push(el.getBoundingClientRect())
+        targets.push(getBoundingClientRectByScale(el,props.scaleRatio))
       }
     }
 
@@ -68,7 +69,7 @@ export function useMarkline(
       diffX: 0,
       diffY: 0
     }
-    const source = targetRef.value!.getBoundingClientRect()
+    const source = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
     for (let i = 0; i < lines.value.y.length; i++) {
       const { top, showTop } = lines.value.y[i]
 
