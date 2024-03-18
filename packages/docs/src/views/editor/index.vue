@@ -51,8 +51,8 @@ const data = ref<EditorDataType>({
       top: 100,
       text: 'div1',
       style: {
-        border: '1px solid red',
-        background: 'blue'
+        background: '#ff4500',
+        color: '#fff'
       }
     },
     {
@@ -64,8 +64,8 @@ const data = ref<EditorDataType>({
       top: 150,
       text: 'div2',
       style: {
-        border: '1px solid red',
-        background: 'pink'
+        background: '#00ced1',
+        color: '#fff'
       }
     }
   ]

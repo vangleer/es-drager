@@ -1,71 +1,95 @@
 <template>
   <div>
-    <el-form-item label="字体颜色">
-      <el-color-picker v-model="textStyle.color" />
-    </el-form-item>
+    <el-row v-for="(block, index) in fontStyleListFormat">
+      <el-button-group style="display: inline-flex;">
+        <el-tooltip v-for="item in block" placement="top" :show-after="300" :content="item.label">
+          <el-button
+            :type="item.selected ? 'primary' : ''"
+            style="flex: 1;"
+            :style="index === 0 ? { [item.key]: item.value } : {}"
+            @click="handleFontStyleClick(item)"
+          >
+            <template v-if="index === 0">{{ item.icon }}</template>
+            <SvgIcon v-else :name="item.icon" :size="20" />
+          </el-button>
+        </el-tooltip>
+      </el-button-group>
+    </el-row>
 
-    <el-form-item label="标题">
-      <el-select
-        v-model="titleValue"
-        placeholder="标题"
-        @change="handleTitleChange"
-      >
-        <el-option
-          v-for="item in titles"
-          :label="item.label"
-          :value="item.value"
+    <el-divider />
+
+    <el-row :gutter="10">
+      <el-col :span="10">字体颜色:</el-col>
+      <el-col :span="14">
+        <ColorPicker v-model="textStyle.color" />
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="10">
+      <el-col :span="10">标题:</el-col>
+      <el-col :span="14">
+        <el-select
+          v-model="titleValue"
+          placeholder="标题"
+          @change="handleTitleChange"
         >
-          <span :style="{ fontSize: item.value, fontWeight: 'bold' }">{{
-            item.label
-          }}</span>
-        </el-option>
-      </el-select>
-    </el-form-item>
+          <el-option
+            v-for="item in titles"
+            :label="item.label"
+            :value="item.value"
+          >
+            <span :style="{ fontSize: item.value, fontWeight: 'bold' }">{{
+              item.label
+            }}</span>
+          </el-option>
+        </el-select>
+      </el-col>
+    </el-row>
 
-    <el-form-item label="字体">
-      <el-select v-model="textStyle.fontFamily" placeholder="字体">
-        <el-option
-          v-for="item in fontFamilyList"
-          :label="item.label"
-          :value="item.label"
-        >
-          <span :style="{ fontFamily: item.label }">{{ item.label }}</span>
-        </el-option>
-      </el-select>
-    </el-form-item>
+    <el-row :gutter="10">
+      <el-col :span="10">字体:</el-col>
+      <el-col :span="14">
+        <el-select v-model="textStyle.fontFamily" placeholder="字体">
+          <el-option
+            v-for="item in fontFamilyList"
+            :label="item.label"
+            :value="item.label"
+          >
+            <span :style="{ fontFamily: item.label }">{{ item.label }}</span>
+          </el-option>
+        </el-select>
+      </el-col>
+    </el-row>
 
-    <el-form-item label="字体大小">
-      <el-input v-model="textStyle.fontSize" />
-    </el-form-item>
+    <el-row :gutter="10">
+      <el-col :span="10">字体大小:</el-col>
+      <el-col :span="14">
+        <el-input v-model="textStyle.fontSize" />
+      </el-col>
+    </el-row>
 
-    <el-form-item label="行高">
-      <el-input-number v-model="textStyle.lineHeight" />
-    </el-form-item>
+    <el-row :gutter="10">
+      <el-col :span="10">行高:</el-col>
+      <el-col :span="14">
+        <InputNumber v-model="textStyle.lineHeight" />
+      </el-col>
+    </el-row>
 
-    <el-form-item label="文本">
-      <el-input type="textarea" v-model="store.current.text" />
-    </el-form-item>
-
-    <div class="text-block-box">
-      <div
-        class="text-style-block"
-        v-for="(block, index) in fontStyleListFormat"
-      >
-        <div
-          v-for="item in block"
-          :style="index === 0 ? { [item.key]: item.value } : {}"
-          :class="['block-item', { active: item.selected }]"
-          @click="handleFontStyleClick(item)"
-          v-html="item.label"
-        ></div>
-      </div>
-    </div>
+    <el-row :gutter="10">
+      <el-col :span="10">文本:</el-col>
+      <el-col :span="14">
+        <el-input type="textarea" v-model="store.current.text" />
+      </el-col>
+    </el-row>
+    
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, CSSProperties, computed } from 'vue'
-import { getIcon } from '../../../assets/images/icons/index'
+import ColorPicker from '../components/ColorPicker.vue'
+import InputNumber from '../components/InputNumber.vue'
+import SvgIcon from '../components/svgIcon/SvgIcon.vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
 const store = useEditorStore()
 
@@ -80,18 +104,18 @@ const titles = [
 ]
 const titleValue = ref('')
 const defaultList = [
-  { label: 'B', key: 'fontWeight', value: 'bold' },
-  { label: 'I', key: 'fontStyle', value: 'italic' },
-  { label: 'U', key: 'textDecoration', value: 'underline' },
-  { label: 'S', key: 'textDecoration', value: 'line-through' },
+  { label: '加粗', icon: 'B', key: 'fontWeight', value: 'bold' },
+  { label: '斜体', icon: 'I', key: 'fontStyle', value: 'italic' },
+  { label: '下划线', icon: 'U', key: 'textDecoration', value: 'underline' },
+  { label: '中划线', icon: 'S', key: 'textDecoration', value: 'line-through' },
 
-  { label: getIcon('left'), key: 'justifyContent', value: 'flex-start' },
-  { label: getIcon('center'), key: 'justifyContent', value: 'center' },
-  { label: getIcon('right'), key: 'justifyContent', value: 'flex-end' },
+  { label: '左对齐', icon: 'left', key: 'justifyContent', value: 'flex-start' },
+  { label: '水平居中', icon: 'center', key: 'justifyContent', value: 'center' },
+  { label: '右对齐', icon: 'right', key: 'justifyContent', value: 'flex-end' },
 
-  { label: getIcon('top'), key: 'alignItems', value: 'flex-start' },
-  { label: getIcon('middle'), key: 'alignItems', value: 'center' },
-  { label: getIcon('bottom'), key: 'alignItems', value: 'flex-end' }
+  { label: '上对齐', icon: 'top', key: 'alignItems', value: 'flex-start' },
+  { label: '垂直居中', icon: 'middle', key: 'alignItems', value: 'center' },
+  { label: '下对齐', icon: 'bottom', key: 'alignItems', value: 'flex-end' }
 ]
 const fontStyleList = computed(() => {
   return [...defaultList].map(item => {

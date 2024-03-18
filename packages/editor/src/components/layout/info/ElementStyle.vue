@@ -5,83 +5,72 @@
     label-position="left"
     v-if="store.current && store.current.selected"
   >
-    <div class="info-color-map">
-      <div class="color-list" v-for="item in itemList">
-        <div
-          class="color-item"
-          v-for="style in item"
-          :style="style"
-          @click="handleColorClick(style)"
-        ></div>
-      </div>
+    <div class="color-list">
+      <div
+        v-for="style in itemList"
+        class="color-item"
+        :style="style"
+        @click="handleColorClick(style)"
+      ></div>
     </div>
 
     <el-divider />
-    
-    <el-form-item label="透明度">
-      <el-slider
-        :modelValue="1"
-        :step="0.01"
-        :min="0"
-        :max="1"
-        @input="onChange('opacity', $event)"
-      />
-    </el-form-item>
 
     <template v-if="store.current.style">
-      <el-form-item label="背景颜色">
-        <el-color-picker v-model="store.current.style.backgroundColor" />
-      </el-form-item>
-      <el-form-item label="边框颜色">
-        <el-color-picker v-model="store.current.style.borderColor" />
-      </el-form-item>
-      <el-form-item label="边框宽度">
-        <el-input-number v-model="store.current.style.borderWidth" />
-      </el-form-item>
-      <el-form-item label="边框风格">
-        <el-select v-model="store.current.style.borderStyle">
-          <el-option
-            v-for="item in borderStyleList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
+      <Background v-model="elementBg" />
+      <el-divider />
 
-      <el-form-item label="边框半径">
-        <el-input-number v-model="store.current.style.borderRadius" />
-      </el-form-item>
+      <el-row :gutter="10">
+        <el-col :span="10">透明度:</el-col>
+        <el-col :span="14" style="padding: 0 15px;width: 100%;">
+          <el-slider
+            :modelValue="1"
+            :step="0.01"
+            :min="0"
+            :max="1"
+            size="small"
+            @input="onChange('opacity', $event)"
+          />
+        </el-col>
+      </el-row>
+      <el-divider />
+
+      <Border />
+
     </template>
 
     <el-divider />
 
+    <div style="margin-bottom: 10px;">文本: </div>
     <TextStyle />
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref, CSSProperties } from 'vue'
+import { ref, CSSProperties, computed } from 'vue'
 import TextStyle from './TextStyle.vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
+import Background from '../components/Background.vue'
+import Border from '../components/Border.vue'
+
 const store = useEditorStore()
-const itemList = ref<CSSProperties[][]>([
-  [
-    { backgroundColor: '#18141d', borderColor: '#ffffff' },
-    { backgroundColor: '#f5f5f5', borderColor: '#666666' },
-    { backgroundColor: '#dae8fc', borderColor: '#6b8ebf' },
-    { backgroundColor: '#d5e8d4', borderColor: '#82b366' },
-    { backgroundColor: '#ffe6cc', borderColor: '#d79b00' },
-    { backgroundColor: '#fff2cc', borderColor: '#d6b656' },
-    { backgroundColor: '#f8cecc', borderColor: '#b85450' },
-    { backgroundColor: '#e1d5e7', borderColor: '#9673a6' }
-  ]
+const itemList = ref<CSSProperties[]>([
+  { backgroundColor: '#ff4500' },
+  { backgroundColor: '#ff8c00' },
+  { backgroundColor: '#ffd700' },
+  { backgroundColor: '#90ee90' },
+  { backgroundColor: '#00ced1' },
+  { backgroundColor: '#1e90ff' },
+  { backgroundColor: '#c71585' },
+  { backgroundColor: 'rgba(255, 69, 0, 0.68)' }
 ])
-const borderStyleList = [
-  { label: '实线', value: 'solid' },
-  { label: '虚线', value: 'dashed' },
-  { label: '点线', value: 'dotted' }
-]
+
+const elementBg = computed({
+  get: () => store.current.style.background || store.current.style.backgroundColor,
+  set: (val) => {
+    store.current.style.background = val
+  }
+})
 
 const handleColorClick = (style: CSSProperties) => {
   if (!store.current.selected) return
@@ -100,10 +89,8 @@ function onChange(key: string, value: any) {
   justify-content: space-around;
   .color-item {
     width: 22%;
-    height: 24px;
-    border-width: 2px;
-    border-style: solid;
-    margin-bottom: 10px;
+    height: 28px;
+    margin-top: 10px;
   }
 }
 .es-col {
@@ -132,6 +119,10 @@ function onChange(key: string, value: any) {
     width: 100%;
   }
   .el-checkbox-group, .el-checkbox-button__inner {
+    width: 100%;
+  }
+  .el-color-picker.el-tooltip__trigger,
+  .el-color-picker__trigger {
     width: 100%;
   }
 }

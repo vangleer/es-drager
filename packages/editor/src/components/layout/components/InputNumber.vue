@@ -2,7 +2,7 @@
   <div class="es-input-number">
     <div class="es-input-number-prefix">
       <slot name="prefix">
-        {{ prefix }}:
+        <template v-if="prefix">{{ prefix }}:</template>
       </slot>
     </div>
     <el-input-number v-bind="$attrs" controls-position="right" />
