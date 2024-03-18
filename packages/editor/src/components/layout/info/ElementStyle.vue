@@ -65,10 +65,10 @@ const itemList = ref<CSSProperties[]>([
   { backgroundColor: 'rgba(255, 69, 0, 0.68)' }
 ])
 
-const elementBg = computed({
-  get: () => store.current.style.background || store.current.style.backgroundColor,
+const elementBg = computed<any>({
+  get: () => store.current.style!.background || store.current.style!.backgroundColor,
   set: (val) => {
-    store.current.style.background = val
+    store.current.style!.background = val
   }
 })
 

@@ -75,7 +75,7 @@ const gradientRotate = computed({
 })
 
 function getGradientValue(type: string) {
-  const gradientString = value.value
+  const gradientString = value.value || ''
   let gradientRegex = /gradient\((\d+deg),\s*(rgba?\([^)]+\)),\s*(rgba?\([^)]+\))\)/
   const isRadial = gradientType.value === 'radial'
   if (isRadial) {
@@ -98,13 +98,12 @@ function getGradientValue(type: string) {
   return defaultValue
 }
 
-function handleGradientColorChange(rotate: number, startColor: string, endColor: string) {
+function handleGradientColorChange(rotate: string | number, startColor: string | number, endColor: string | number) {
   let val = `linear-gradient(${rotate}deg, ${startColor}, ${endColor})`
   if (gradientType.value === 'radial') {
     val = `radial-gradient(${startColor}, ${endColor})`
   }
 
-  console.log(val)
   emit('update:modelValue', val)
 }
 </script>
