@@ -5,87 +5,58 @@
     label-position="left"
     v-if="store.current && store.current.selected"
   >
-    <el-collapse v-model="collapseList">
-      <el-collapse-item title="布局/样式" name="style">
-        <div class="info-color-map">
-          <div class="color-list" v-for="item in itemList">
-            <div
-              class="color-item"
-              v-for="style in item"
-              :style="style"
-              @click="handleColorClick(style)"
-            ></div>
-          </div>
-        </div>
-        <el-form-item label="left">
-          <el-input-number v-model="store.current.left" />
-        </el-form-item>
-        <el-form-item label="top">
-          <el-input-number v-model="store.current.top" />
-        </el-form-item>
-        <el-form-item label="width">
-          <el-input-number v-model="store.current.width" />
-        </el-form-item>
-        <el-form-item label="height">
-          <el-input-number v-model="store.current.height" />
-        </el-form-item>
-        <el-form-item label="angle">
-          <el-input-number v-model="store.current.angle" />
-        </el-form-item>
-        <el-form-item label="color">
-          <el-color-picker v-model="store.current.color" />
-        </el-form-item>
+    <div class="info-color-map">
+      <div class="color-list" v-for="item in itemList">
+        <div
+          class="color-item"
+          v-for="style in item"
+          :style="style"
+          @click="handleColorClick(style)"
+        ></div>
+      </div>
+    </div>
 
-        <el-form-item label="disabled">
-          <el-checkbox v-model="store.current.disabled" />
-        </el-form-item>
-        <el-form-item label="resizable">
-          <el-checkbox v-model="store.current.resizable" :checked="true" />
-        </el-form-item>
-        <el-form-item label="rotatable">
-          <el-checkbox v-model="store.current.rotatable" :checked="true" />
-        </el-form-item>
+    <el-divider />
+    
+    <el-form-item label="透明度">
+      <el-slider
+        :modelValue="1"
+        :step="0.01"
+        :min="0"
+        :max="1"
+        @input="onChange('opacity', $event)"
+      />
+    </el-form-item>
 
-        <el-form-item label="透明度">
-          <el-slider
-            :modelValue="1"
-            :step="0.01"
-            :min="0"
-            :max="1"
-            @input="onChange('opacity', $event)"
+    <template v-if="store.current.style">
+      <el-form-item label="背景颜色">
+        <el-color-picker v-model="store.current.style.backgroundColor" />
+      </el-form-item>
+      <el-form-item label="边框颜色">
+        <el-color-picker v-model="store.current.style.borderColor" />
+      </el-form-item>
+      <el-form-item label="边框宽度">
+        <el-input-number v-model="store.current.style.borderWidth" />
+      </el-form-item>
+      <el-form-item label="边框风格">
+        <el-select v-model="store.current.style.borderStyle">
+          <el-option
+            v-for="item in borderStyleList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           />
-        </el-form-item>
+        </el-select>
+      </el-form-item>
 
-        <template v-if="store.current.style">
-          <el-form-item label="背景颜色">
-            <el-color-picker v-model="store.current.style.backgroundColor" />
-          </el-form-item>
-          <el-form-item label="边框颜色">
-            <el-color-picker v-model="store.current.style.borderColor" />
-          </el-form-item>
-          <el-form-item label="边框宽度">
-            <el-input-number v-model="store.current.style.borderWidth" />
-          </el-form-item>
-          <el-form-item label="边框风格">
-            <el-select v-model="store.current.style.borderStyle">
-              <el-option
-                v-for="item in borderStyleList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
+      <el-form-item label="边框半径">
+        <el-input-number v-model="store.current.style.borderRadius" />
+      </el-form-item>
+    </template>
 
-          <el-form-item label="边框半径">
-            <el-input-number v-model="store.current.style.borderRadius" />
-          </el-form-item>
-        </template>
-      </el-collapse-item>
-      <el-collapse-item title="文本" name="text">
-        <TextStyle />
-      </el-collapse-item>
-    </el-collapse>
+    <el-divider />
+
+    <TextStyle />
   </el-form>
 </template>
 
@@ -94,7 +65,6 @@ import { ref, CSSProperties } from 'vue'
 import TextStyle from './TextStyle.vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
 const store = useEditorStore()
-const collapseList = ref(['style'])
 const itemList = ref<CSSProperties[][]>([
   [
     { backgroundColor: '#18141d', borderColor: '#ffffff' },
@@ -107,7 +77,6 @@ const itemList = ref<CSSProperties[][]>([
     { backgroundColor: '#e1d5e7', borderColor: '#9673a6' }
   ]
 ])
-
 const borderStyleList = [
   { label: '实线', value: 'solid' },
   { label: '虚线', value: 'dashed' },
@@ -135,6 +104,35 @@ function onChange(key: string, value: any) {
     border-width: 2px;
     border-style: solid;
     margin-bottom: 10px;
+  }
+}
+.es-col {
+  display: flex;
+  align-items: center;
+}
+.text-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--el-fill-color-light);
+  }
+  :deep(.es-icon) {
+    margin-right: 4px;
+  }
+}
+:deep(.el-row) {
+  margin-bottom: 10px;
+  .el-button-group, .el-checkbox-group {
+    display: inline-flex;
+    width: 100%;
+  }
+  .el-checkbox-group, .el-checkbox-button__inner {
+    width: 100%;
   }
 }
 </style>

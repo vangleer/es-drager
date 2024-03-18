@@ -1,34 +1,50 @@
 <template>
   <div class="es-layout-info">
-    <el-tabs v-model="activeName" class="es-info-tabs" @tab-click="handleClick">
-      <el-tab-pane :label="title" name="style">
-        <MyStyle />
-      </el-tab-pane>
-    </el-tabs>
+    <div class="es-info-tabs">
+      <div
+        v-for="item in tabs"
+        :class="['es-info-tab', { active: item === activeName }]"
+        @click="activeName = item"
+      >
+        {{ item }}
+      </div>
+    </div>
+    <div class="es-info-style" @click.stop>
+      <component :is="currentComponent" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
-import MyStyle from './Style.vue'
+import { computed, ref, watch } from 'vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
+import EditorStyle from './EditorStyle.vue'
+import ElementStyle from './ElementStyle.vue'
+import Position from './Position.vue'
+import Animation from './Animation.vue'
 const store = useEditorStore()
-
-const title = computed(() =>
-  store.current && store.current.selected ? '元素属性' : '画布属性'
-)
-
-const activeName = ref('style')
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
+const componentMap = {
+  '样式': ElementStyle,
+  '位置': Position,
+  '动画': Animation,
+  '画布属性': EditorStyle
 }
+const elementTabs = ['样式', '位置', '动画']
+const editorTabs = ['画布属性']
+const activeName = ref<string>('画布属性')
+
+const tabs = computed(() => store.current && store.current.selected ? elementTabs : editorTabs)
+const currentComponent = computed(() => (componentMap as any)[activeName.value as string])
+
+watch(() => store.current.selected, () => {
+  activeName.value = store.current.selected ? elementTabs[0] : editorTabs[0]
+}, { immediate: true })
 </script>
 
 <style lang="scss">
 .es-layout-info {
   flex-shrink: 0;
-  width: var(--es-layout-aside-width);
+  width: calc(var(--es-layout-aside-width) + 30px);
   height: 100%;
   border-left: var(--es-border);
   overflow-y: auto;
@@ -36,6 +52,25 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   .es-info-tabs {
     .el-tabs__nav-scroll {
       padding-left: 20px;
+    }
+  }
+}
+.es-info-style {
+  padding: 10px;
+}
+.es-info-tabs {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  background-color: var(--el-bg-color-page);
+  .es-info-tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    cursor: pointer;
+    &.active {
+      background-color: var(--el-bg-color);
     }
   }
 }
