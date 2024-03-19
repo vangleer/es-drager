@@ -14,7 +14,7 @@
         :grid-y="gridSize"
         :scaleRatio="scaleRatio"
         boundary
-        markline
+        :markline="data.container.markline.show as any"
         snap
         :snap-threshold="data.container.gridSize"
         @drag-start="onDragstart(item)"

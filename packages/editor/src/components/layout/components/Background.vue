@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="12">
-      <el-select v-model="type">
+      <el-select v-model="type" @change="handleTypeChange">
         <el-option v-for="item in typeList" v-bind="item" />
       </el-select>
     </el-col>
     <el-col :span="12">
-      <ColorPicker v-if="type === 1" v-model="value" />
+      <ColorPicker v-if="type === 1" v-model="value" color-format="rgb" />
       <el-select v-else v-model="gradientType" @change="handleGradientColorChange(gradientRotate, startColor, endColor)">
         <el-option v-for="item in gradientTypeList" v-bind="item" />
       </el-select>
@@ -31,17 +31,26 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
 import ColorPicker from './ColorPicker.vue'
+import color from 'color'
+
 const props = defineProps({
   modelValue: {
     type: String
   }
 })
 const emit = defineEmits(['update:modelValue'])
+const defaultValueMap: any = {
+  startColor: 'rgba(255, 255, 255, 1)',
+  endColor: 'rgba(255, 255, 255, 1)',
+  gradientRotate: 90
+}
 const value = computed({
-  get: () => props.modelValue,
+  get: () => {
+    return (props.modelValue || '').includes('gradient') ? getGradientValue('startColor') : props.modelValue
+  },
   set: (val) => {
     emit('update:modelValue', val)
-  } 
+  }
 })
 const typeList = [
   { label: '纯色背景', value: 1 },
@@ -74,16 +83,31 @@ const gradientRotate = computed({
   }
 })
 
+function handleTypeChange() {
+  if (type.value === 1) {
+    emit('update:modelValue', value.value)
+  } else {
+    handleGradientColorChange(gradientRotate.value, startColor.value, endColor.value)
+  }
+}
+
 function getGradientValue(type: string) {
-  const gradientString = value.value || ''
+  const gradientString = props.modelValue || 'rgba(255, 255, 255, 1)'
+
+  // 判断是否是渐变
+  const isgradient = gradientString.includes('gradient')
+  if (!isgradient) { // 不是渐变
+    return type === 'startColor' ? color(gradientString).rgb().string() : defaultValueMap[type]
+  }
+
   let gradientRegex = /gradient\((\d+deg),\s*(rgba?\([^)]+\)),\s*(rgba?\([^)]+\))\)/
-  const isRadial = gradientType.value === 'radial'
+  const isRadial = gradientString.includes('radial')
   if (isRadial) {
     gradientRegex = /(gradient)\(.*(rgba?\([^)]+\)),\s*(rgba?\([^)]+\))\)/
   }
 
   const match = gradientString.match(gradientRegex)
-  const defaultValue = type === 'gradientRotate' ? 90 : 'rgba(255, 255, 255, 1)'
+  const defaultValue = defaultValueMap[type]
   if (!match) {
     return defaultValue
   }

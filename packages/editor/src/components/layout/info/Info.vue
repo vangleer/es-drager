@@ -59,6 +59,40 @@ watch(() => store.current.selected, () => {
   padding: 10px;
   height: calc(100% - 40px);
   overflow-y: auto;
+  .el-row {
+    margin-bottom: 10px;
+    .el-button-group, .el-checkbox-group {
+      display: inline-flex;
+      width: 100%;
+    }
+    .el-checkbox-group, .el-checkbox-button__inner {
+      width: 100%;
+    }
+    .el-color-picker.el-tooltip__trigger {
+      width: 100%;
+    }
+    .el-color-picker__trigger {
+      justify-content: flex-start;
+      width: 100%;
+      &:after {
+        content: '';
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url('../../../assets/images/color.svg') no-repeat;
+        background-size: contain;
+        margin-left: 4px;
+      }
+      .el-color-picker__color {
+        width: calc(100% - 10px);
+      }
+    }
+
+    .el-slider {
+      padding-right: 10px;
+      --el-slider-button-size: 13px;
+    }
+  }
 }
 .es-info-tabs {
   display: flex;
@@ -76,4 +110,5 @@ watch(() => store.current.selected, () => {
     }
   }
 }
+
 </style>
