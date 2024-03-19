@@ -57,6 +57,8 @@ watch(() => store.current.selected, () => {
 }
 .es-info-style {
   padding: 10px;
+  height: calc(100% - 40px);
+  overflow-y: auto;
 }
 .es-info-tabs {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <div class="es-input-number">
+  <div class="es-input-number" :class="{ 'has-prefix': prefix || $slots.prefix }">
     <div class="es-input-number-prefix">
       <slot name="prefix">
         <template v-if="prefix">{{ prefix }}:</template>
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang='ts'>
-const props = defineProps({
+defineProps({
   prefix: {
     type: String
   }
@@ -22,11 +22,15 @@ const props = defineProps({
   position: relative;
   :deep(.el-input-number) {
     width: 100%;
+  }
+}
+.has-prefix {
+  :deep(.el-input-number) {
     .el-input__inner {
       padding-left: 20px;
     }
   }
-  &-prefix {
+  .es-input-number-prefix {
     display: flex;
     align-items: center;
     left: 0;

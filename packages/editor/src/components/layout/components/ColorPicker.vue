@@ -1,8 +1,12 @@
 <template>
-  <el-color-picker show-alpha :predefine="predefineColors" />
+  <el-color-picker :popper-class="popperClassName" show-alpha :predefine="predefineColors" />
 </template>
 
 <script setup lang='ts'>
+import { onMounted } from 'vue'
+import { useId } from '../../../utils'
+
+const popperClassName = useId() + '-picker'
 const predefineColors = [
   '#ff4500',
   '#ff8c00',
@@ -19,5 +23,13 @@ const predefineColors = [
   'hsla(209, 100%, 56%, 0.73)',
   '#c7158577',
 ]
+
+onMounted(() => {
+  const popper = document.querySelector(`.${popperClassName}`)
+  if (popper) {
+    // 阻止popper点击事件冒泡
+    popper.addEventListener('click', (e) => e.stopPropagation())
+  }
+})
 </script>
 

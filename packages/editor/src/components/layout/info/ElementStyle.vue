@@ -22,7 +22,7 @@
 
       <el-row :gutter="10">
         <el-col :span="10">透明度:</el-col>
-        <el-col :span="14" style="padding: 0 15px;width: 100%;">
+        <el-col :span="14">
           <el-slider
             :modelValue="1"
             :step="0.01"
@@ -33,16 +33,16 @@
           />
         </el-col>
       </el-row>
-      <el-divider />
 
+      <el-divider />
+      <TextStyle />
+
+      <el-divider />
       <Border />
 
+      <el-divider />
+      <Shadow />
     </template>
-
-    <el-divider />
-
-    <div style="margin-bottom: 10px;">文本: </div>
-    <TextStyle />
   </el-form>
 </template>
 
@@ -52,6 +52,7 @@ import TextStyle from './TextStyle.vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
 import Background from '../components/Background.vue'
 import Border from '../components/Border.vue'
+import Shadow from '../components/Shadow.vue'
 
 const store = useEditorStore()
 const itemList = ref<CSSProperties[]>([
@@ -121,9 +122,29 @@ function onChange(key: string, value: any) {
   .el-checkbox-group, .el-checkbox-button__inner {
     width: 100%;
   }
-  .el-color-picker.el-tooltip__trigger,
-  .el-color-picker__trigger {
+  .el-color-picker.el-tooltip__trigger {
     width: 100%;
+  }
+  .el-color-picker__trigger {
+    justify-content: flex-start;
+    width: 100%;
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url('../../../assets/images/color.svg') no-repeat;
+      background-size: contain;
+      margin-left: 4px;
+    }
+    .el-color-picker__color {
+      width: calc(100% - 10px);
+    }
+  }
+
+  .el-slider {
+    padding-right: 10px;
+    --el-slider-button-size: 13px;
   }
 }
 </style>
