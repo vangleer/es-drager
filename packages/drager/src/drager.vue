@@ -64,7 +64,6 @@ import {
   MouseTouchEvent
 } from './utils'
 import Rotate from './rotate.vue'
-import { onUnmounted } from 'vue'
 
 const props = defineProps(DragerProps)
 const emit = defineEmits([

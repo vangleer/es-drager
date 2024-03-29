@@ -8,7 +8,7 @@
         t('examples.unGroup')
       }}</el-button>
     </div>
-    <div ref="editorRef" class="es-editor" @mousedown="onEditorMouseDown">
+    <div ref="editorRef" class="es-editor" @mousedown="onEditorMouseDown" @click.stop>
       <Drager
         v-for="(item, index) in data.elements"
         v-bind="item"
@@ -130,7 +130,7 @@ function onChange(dragData: DragData, item: ComponentType) {
     item[key as keyof DragData] = dragData[key as keyof DragData]
   })
 }
-
+ 
 function handleMakeGroup() {
   data.value.elements = makeGroup(data.value.elements, editorRect.value)
 }
