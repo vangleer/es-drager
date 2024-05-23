@@ -35,6 +35,35 @@
 - 支持缩放
 - 旋转
 - 网格拖拽缩放
+- 拖拽编辑器
+
+### 运行项目
+
+```sh
+# 拉取项目
+git clone https://github.com/vangleer/es-drager.git
+
+# 安装依赖
+pnpm install
+
+# 运行项目
+pnpm dev
+
+# 打包drager组件
+pnpm build
+
+# 打包文档
+pnpm docs:build
+```
+
+### 主要目录介绍
+
+| 目录            | 功能说明    |
+| -------------   | ---------- |
+| packages/docs   | 项目示例文档、编辑器展示 |
+| packages/editor | 编辑器核心代码 |
+| packages/drager | es-drager组件 |
+
 
 ## 综合案例
 
@@ -53,6 +82,7 @@
 [元素组合与拆分](https://juejin.cn/post/7258337246024843319)
 
 [菜单操作栏、json数据导入导出](https://juejin.cn/post/7269603447673880636)
+
 
 ## ⚡ 使用说明
 
