@@ -214,7 +214,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     if (props.boundary) {
       d = fixResizeBoundary(d, boundaryInfo, ratio)
     }
-
+    
     dragData.value = d
     emitFn('resize', dragData.value)
   }
@@ -231,43 +231,60 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
 
 function fixResizeBoundary(d: DragData, boundaryInfo: number[], ratio: number | undefined) {
   const [minX, maxX, minY, maxY, parentWidth, parentHeight] = boundaryInfo
-  // 如果left小于最小x
-  if (d.left < minX) { 
+
+  const isMinLeft = d.left < minX // 如果left小于最小x
+  const isMaxLeft = d.left + d.width > parentWidth // 如果left+width超过了父元素的宽度
+
+  const isMinTop = d.top < minY // top的做法与上面类似，如果小于最小y
+  const isMaxTop = d.top + d.height > parentHeight // 如果top+height超过了父元素的高度
+
+  if (isMinLeft) {
     // 则将left赋值为最小x
     d.left = minX
     // 宽度保持原来的不变
     d.width = dragData.value.width
-    // 如果设置等比则相应的高度也无需改变
-    if (ratio) d.height = dragData.value.height
   }
 
-  // 如果left+width超过了父元素的宽度
-  if (d.left + d.width > parentWidth) {
-    // 将left赋值为老的left
-    d.left = dragData.value.left
-    // 宽度变为parentWidth减去left，这样元素的left+width的和刚好等于parentWidth
-    d.width = parentWidth - d.left
-
-    if (ratio) d.height = dragData.value.height
-  }
-
-  // top的做法与上面类似，如果小于最小y
-  if (d.top < minY) {
+  if (isMinTop) {
     // 则将top赋值为最小y
     d.top = minY
     // 高度保持原来的不变
     d.height = dragData.value.height
-
-    if (ratio) d.width = dragData.value.width
   }
-  // 如果top+height超过了父元素的高度
-  if (d.top + d.height > parentHeight) {
-    // 将top赋值为老的top
-    d.top = dragData.value.top
-    // 宽度变为parentHeight减去top，这样元素的top+height的和刚好等于parentHeight
-    d.height = parentHeight - d.top
+  
+  if (isMaxLeft || isMaxTop) {
+    // 解决issue:#39
+    if (isMaxLeft) {
+      // 将left赋值为老的left
+      d.left = dragData.value.left
+    }
 
-    if (ratio) d.width = dragData.value.width
+    if (isMaxTop) {
+      // 将top赋值为老的top
+      d.top = dragData.value.top
+    }
+
+    if (!isMaxTop) {
+      // 宽度变为parentWidth减去left，这样元素的left+width的和刚好等于parentWidth
+      d.width = parentWidth - d.left
+    }
+
+    if (!isMaxLeft) {
+      // 宽度变为parentHeight减去top，这样元素的top+height的和刚好等于parentHeight
+      d.height = parentHeight - d.top
+    }
+  }
+
+  if ((isMaxTop || isMinTop) && ratio) { // top超出并且等比缩放
+    // width、left需要复原
+    d.width = dragData.value.width
+    d.left = dragData.value.left
+  }
+
+  if ((isMaxLeft || isMinLeft) && ratio) { // left超出并且等比缩放
+    // height、top需要复原
+    d.height = dragData.value.height
+    d.top = dragData.value.top
   }
   return d
 }
