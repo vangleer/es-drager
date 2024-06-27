@@ -2,8 +2,8 @@ import { ComponentType } from '../types'
 
 let uid = 1
 
-export function useId(prefix = 'drager') {
-  return `${prefix}${uid++}`
+export function useId(prefix = 'es-drager') {
+  return `${prefix}-${Date.now()}-${uid++}`
 }
 
 export function deepCopy(obj: any) {
