@@ -51,7 +51,7 @@ const data = ref<EditorDataType>({
   },
   elements: [
     {
-      id: '1',
+      id: 'one',
       component: 'div',
       width: 100,
       height: 100,
@@ -64,7 +64,7 @@ const data = ref<EditorDataType>({
       }
     },
     {
-      id: '2',
+      id: 'two',
       component: 'div',
       width: 100,
       height: 100,

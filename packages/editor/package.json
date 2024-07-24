@@ -2,5 +2,8 @@
   "name": "@es-drager/editor",
   "private": true,
   "version": "0.0.0",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "gsap": "^3.12.5"
+  }
 }
