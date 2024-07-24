@@ -80,7 +80,6 @@ const selectedAnimation = ref<string | null>(null)
 const animationDuration = ref(2)
 const animationDelay = ref(0)
 const animationRepeat = ref(0)
-const animationHistory = ref<string[]>([])
 
 const applyAnimation = () => {
   const options = {
@@ -153,7 +152,6 @@ const applyAnimation = () => {
     default:
       break
   }
-  animationHistory.value.push(selectedAnimation.value!)
 }
 
 const stopAnimation = () => {
