@@ -1,21 +1,68 @@
 <template>
   <div class="animation-container">
     <div class="animation-options">
-      <el-radio-group v-model="selectedAnimation" class="animation-radio-group">
-        <el-radio
-          v-for="animation in animations"
-          :key="animation.value"
-          :label="animation.value"
+      <el-row :gutter="10">
+        <el-radio-group
+          v-model="selectedAnimation"
+          class="animation-radio-group"
         >
-          {{ animation.label }}
-        </el-radio>
-      </el-radio-group>
+          <el-radio
+            v-for="animation in animations"
+            :key="animation.value"
+            :label="animation.value"
+          >
+            {{ animation.label }}
+          </el-radio>
+        </el-radio-group>
+      </el-row>
+
+      <el-divider />
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="持续时间" label-width="90px">
+            <el-input-number
+              v-model="animationDuration"
+              :min="0.1"
+              controls-position="right"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="延迟时间" label-width="90px">
+            <el-input-number
+              v-model="animationDelay"
+              :min="0"
+              controls-position="right"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="重复次数" label-width="90px">
+            <el-input-number
+              v-model="animationRepeat"
+              :min="-1"
+              controls-position="right"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-divider />
       <div class="button-group">
         <el-button class="action-button" @click="applyAnimation"
-          >应用动画</el-button
+          >开始</el-button
         >
         <el-button class="action-button danger" @click="stopAnimation"
-          >停止动画</el-button
+          >停止</el-button
         >
       </div>
     </div>
@@ -29,104 +76,78 @@ import { useEditorStore } from '@es-drager/editor/src/store'
 
 const store = useEditorStore()
 
+const selectedAnimation = ref<string | null>(null)
+const animationDuration = ref(2)
+const animationDelay = ref(0)
+const animationRepeat = ref(0)
+
 const applyAnimation = () => {
+  const options = {
+    duration: animationDuration.value,
+    delay: animationDelay.value,
+    repeat: animationRepeat.value,
+    ease: 'power1.inOut'
+  }
+
   switch (selectedAnimation.value) {
     case 'from':
       gsap.from(`#${store.current.id!}`, {
+        ...options,
         x: 250,
-        repeat: -1,
-        yoyo: true,
         rotation: 360,
-        duration: 2,
-        ease: 'power1.inOut'
+        yoyo: true
       })
       break
     case 'fromTo':
       gsap.fromTo(
         `#${store.current.id!}`,
-        {
-          x: 0,
-          rotation: 0,
-          borderRadius: '0%'
-        },
-        {
-          x: 250,
-          repeat: -1,
-          yoyo: true,
-          rotation: 360,
-          duration: 2,
-          borderRadius: '100%',
-          ease: 'bounce.out'
-        }
+        { x: 0, rotation: 0 },
+        { ...options, x: 250, rotation: 360, borderRadius: '100%', yoyo: true }
       )
       break
     case 'scrollTrigger':
       gsap.to(`#${store.current.id!}`, {
+        ...options,
         x: 150,
         rotation: 360,
         borderRadius: '100%',
         scale: 1.5,
         scrollTrigger: {
           trigger: `#${store.current.id!}`,
-          start: 'bottom, bottom',
+          start: 'bottom bottom',
           end: 'top 10%',
           scrub: true
-        },
-        ease: 'power1.inOut'
+        }
       })
       break
     case 'stagger':
       gsap.to(`#${store.current.id!}`, {
+        ...options,
         y: 250,
         rotation: 360,
         yoyo: true,
-        repeat: -1,
-        borderRadius: '100%',
         stagger: {
           amount: 1.5,
           grid: [2, 1],
           axis: 'y',
-          ease: 'circ.inOut',
           from: 'center'
         }
       })
       break
     case 'to':
       gsap.to(`#${store.current.id!}`, {
+        ...options,
         x: 250,
-        repeat: -1,
-        yoyo: true,
         rotation: 360,
-        duration: 2,
-        ease: 'elastic'
+        yoyo: true
       })
       break
     case 'timeline':
       const tl = gsap.timeline()
-      tl.to(`#${store.current.id!}`, {
-        x: 250,
-        rotation: 360,
-        duration: 2,
-        ease: 'power1.inOut'
-      })
-        .to(`#${store.current.id!}`, {
-          x: 0,
-          rotation: 0,
-          duration: 2,
-          ease: 'power1.inOut'
-        })
-        .to(`#${store.current.id!}`, {
-          x: -250,
-          rotation: -360,
-          duration: 2,
-          ease: 'power1.inOut'
-        })
-        .to(`#${store.current.id!}`, {
-          x: 0,
-          rotation: 0,
-          duration: 2,
-          ease: 'power1.inOut'
-        })
+      tl.to(`#${store.current.id!}`, { x: 250, rotation: 360, duration: 2 })
+        .to(`#${store.current.id!}`, { x: 0, rotation: 0, duration: 2 })
+        .to(`#${store.current.id!}`, { x: -250, rotation: -360, duration: 2 })
+        .to(`#${store.current.id!}`, { x: 0, rotation: 0, duration: 2 })
       break
     default:
       break
@@ -136,8 +157,6 @@ const applyAnimation = () => {
 const stopAnimation = () => {
   gsap.killTweensOf(`#${store.current.id!}`)
 }
-
-const selectedAnimation = ref<string | null>(null)
 
 const animations = [
   { label: 'GsapFrom', value: 'from' },
@@ -153,40 +172,28 @@ const animations = [
 .animation-container {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 100%;
-  background-color: #f0f0f0;
-  padding: 20px;
 
   .animation-options {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: white;
-    padding: 20px;
+    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
 
     .animation-radio-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
 
       .el-radio {
         margin-bottom: 10px;
-        align-self: flex-start;
       }
     }
 
     .button-group {
       display: flex;
-      justify-content: center;
-      width: 100%;
-      gap: 10px;
+      justify-content: space-between;
     }
 
     .action-button {
+      width: 45%;
       padding: 10px;
       background-color: #00ced1;
       color: #fff;
@@ -194,10 +201,33 @@ const animations = [
       border-radius: 4px;
       cursor: pointer;
       font-size: 16px;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #007b83;
+      }
     }
 
     .danger {
       background-color: #ff4500;
+
+      &:hover {
+        background-color: #e03d00;
+      }
+    }
+  }
+
+  .el-form-item {
+    margin-bottom: 10px;
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .el-input-number {
+      width: 100%;
     }
   }
 }
