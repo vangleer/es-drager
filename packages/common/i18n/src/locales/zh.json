@@ -12,7 +12,9 @@
   },
   "common": {
     "code": "代码",
-    "editorDemo": "编辑器案例"
+    "editorDemo": "编辑器案例",
+    "copy": "复制",
+    "basicDemo": "基础案例"
   },
   "examples": {
     "move": "移动",

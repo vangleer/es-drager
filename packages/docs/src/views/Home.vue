@@ -45,6 +45,23 @@
       </div>
 
       <el-drawer v-model="showCode" :title="t('common.code')">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div />
+          <el-tooltip :content="t('common.copy')" placement="top">
+            <el-button
+              type="text"
+              :icon="CopyDocument"
+              @click="copyCode"
+              style="color: #aabbcc; font-size: 20px"
+            />
+          </el-tooltip>
+        </div>
         <pre><code v-html="codeHtml"></code></pre>
       </el-drawer>
     </div>
@@ -58,9 +75,11 @@ import { menuRoutes } from '@/router'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
 import { langs, t, useLocaleStore } from '@es-drager/common/i18n'
+import { CopyDocument } from '@element-plus/icons-vue'
 
 import Header from '@/components/layout/Header.vue'
 import Aside from '@/components/layout/Aside.vue'
+import { ElMessage } from 'element-plus'
 const examplesSource = import.meta.glob('../examples/*.vue', {
   eager: true,
   as: 'raw'
@@ -69,6 +88,21 @@ const examplesSource = import.meta.glob('../examples/*.vue', {
 const router = useRouter()
 const route = useRoute()
 const useLocale = useLocaleStore()
+
+// copy code set
+const copyCode = async () => {
+  try {
+    const tempElement = document.createElement('div')
+    tempElement.innerHTML = codeHtml.value
+    const plainText = tempElement.innerText
+
+    await navigator.clipboard.writeText(plainText)
+    ElMessage.success('复制成功')
+  } catch (err) {
+    ElMessage.error(err as string)
+  }
+}
+
 // set lang
 let curLocale = useLocale.locale
 let currentLan = ref(langs.find(cur => cur.key === curLocale)?.title || '')
@@ -187,4 +221,3 @@ watch(
   }
 }
 </style>
-
