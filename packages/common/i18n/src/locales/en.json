@@ -12,7 +12,9 @@
   },
   "common": {
     "code": "Code",
-    "editorDemo": "ES Drager Editor"
+    "editorDemo": "ES Drager Editor",
+    "copy": "Copy",
+    "basicDemo": "Basic Demo"
   },
   "examples": {
     "move": "Move",

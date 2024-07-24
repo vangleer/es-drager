@@ -10,6 +10,10 @@
           <el-button :icon="item.icon">{{ item.label }}</el-button>
         </div>
       </div>
+      <!-- todo -->
+      <a class="es-header-cube" @click.prevent="router.push('/basic')">{{
+        t('common.basicDemo')
+      }}</a>
     </Header>
     <ESEditor ref="editorRef" :data="data" :theme="appStore.theme" />
   </div>
@@ -17,15 +21,19 @@
 
 <script setup lang="ts">
 import Header from '@/components/layout/Header.vue'
+import { t } from '@es-drager/common/i18n'
 import { useAppStore } from '@/store'
 import { ESEditor, ToolType, EditorDataType } from '@es-drager/editor'
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 const title = 'ES Drager Editor 开发中...'
+
+const router = useRouter()
 
 // editorRef.value?.getData() // 获取最新数据
 const editorRef = ref<InstanceType<typeof ESEditor> | null>(null)
-  
+
 const appStore = useAppStore()
 
 // 初始数据
@@ -71,7 +79,11 @@ const data = ref<EditorDataType>({
   ]
 })
 
-const tools = computed(() => (editorRef.value as any)?.tools || [])
+const returnToBasic = () => {
+  router.push('/basic')
+}
+
+const tools = computed(() => [...((editorRef.value as any)?.tools || [])])
 
 function handleToolClick(item: ToolType) {
   if (typeof item.handler === 'function') {

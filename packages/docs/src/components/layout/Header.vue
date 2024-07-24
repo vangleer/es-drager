@@ -1,7 +1,7 @@
 <template>
   <div class="es-header">
     <h1 class="es-logo">
-      <img class="es-logo-img" src="/logo/logo4.png" alt="ES Drager">
+      <img class="es-logo-img" src="/logo/logo4.png" alt="ES Drager" />
       <span @click="router.replace('/')">{{ title }}</span>
     </h1>
     <slot />
@@ -67,8 +67,8 @@ watch(
   padding: 0 24px;
   border-bottom: var(--es-border);
   transition:
-  border-color 0.2s,
-  background-color 0.2s;
+    border-color 0.2s,
+    background-color 0.2s;
   .es-logo {
     display: flex;
     align-items: center;
