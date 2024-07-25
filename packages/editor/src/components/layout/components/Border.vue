@@ -33,11 +33,10 @@
         <InputNumber v-model="store.current.style.borderRadius" />
       </el-col>
     </el-row>
-
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { computed } from 'vue'
 import InputNumber from './InputNumber.vue'
 import ColorPicker from './ColorPicker.vue'
@@ -50,12 +49,13 @@ const borderStyleList = [
 ]
 const borderStyle = computed({
   get: () => {
-    if (!store.current.style!.borderStyle) {
-      store.current.style!.borderStyle = 'solid'
-    }
+    // don't need to set border style
+    // if (!store.current.style!.borderStyle) {
+    //   store.current.style!.borderStyle = 'solid'
+    // }
     return store.current.style!.borderStyle || 'solid'
   },
-  set: (val) => {
+  set: val => {
     store.current.style!.borderStyle = val
   }
 })
