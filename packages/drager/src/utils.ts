@@ -164,12 +164,13 @@ export const getNewStyle = (
       const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
       if (ratio) {
-        deltaW = deltaH * ratio
-        width = height * ratio
+        height = width / ratio
+        deltaH = height - rect.height
+      } else {
+        const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+        height = heightAndDeltaH.height
+        deltaH = heightAndDeltaH.deltaH
       }
       centerX +=
         (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
@@ -181,17 +182,16 @@ export const getNewStyle = (
       const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
       if (ratio) {
-        deltaW = deltaH * ratio
-        width = height * ratio
+        height = width / ratio
+        deltaH = height - rect.height
+      } else {
+        const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+        height = heightAndDeltaH.height
+        deltaH = heightAndDeltaH.deltaH
       }
-      centerX +=
-        (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
-      centerY +=
-        (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
+      centerX += (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
+      centerY += (deltaW / 2) * sin(rotateAngle) + (deltaH / 2) * cos(rotateAngle)
       break
     }
     case 'bottom': {
@@ -218,12 +218,13 @@ export const getNewStyle = (
       const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
       if (ratio) {
         height = width / ratio
-        deltaH = deltaW / ratio
+        deltaH = height - rect.height
+      } else {
+        const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+        height = heightAndDeltaH.height
+        deltaH = heightAndDeltaH.deltaH
       }
       centerX -=
         (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
@@ -257,12 +258,13 @@ export const getNewStyle = (
       const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
       width = widthAndDeltaW.width
       deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
       if (ratio) {
-        width = height * ratio
-        deltaW = deltaH * ratio
+        height = width / ratio
+        deltaH = height - rect.height
+      } else {
+        const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+        height = heightAndDeltaH.height
+        deltaH = heightAndDeltaH.deltaH
       }
       centerX -=
         (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
@@ -384,10 +386,10 @@ export function calcGrid(diff: number, grid: number) {
  * @param element2 碰撞对象
  * @returns
  */
-export function checkCollision(element1: Element, element2: Element,scaleRatio : number) {
+export function checkCollision(element1: Element, element2: Element, scaleRatio: number) {
   if (!element1 || !element2) return false
-  const rect1 = getBoundingClientRectByScale(element1,scaleRatio)
-  const rect2 = getBoundingClientRectByScale(element2,scaleRatio)
+  const rect1 = getBoundingClientRectByScale(element1, scaleRatio)
+  const rect2 = getBoundingClientRectByScale(element2, scaleRatio)
 
   if (
     rect1.left < rect2.left + rect2.width &&
@@ -404,14 +406,14 @@ export function checkCollision(element1: Element, element2: Element,scaleRatio :
 /**
  * 获取缩放后得Rect
  */
-export const getBoundingClientRectByScale = (el : HTMLElement | Element,scaleRatio : number)=>{
+export const getBoundingClientRectByScale = (el: HTMLElement | Element, scaleRatio: number) => {
   var curRect = el.getBoundingClientRect()
   return {
     ...curRect,
-    left : curRect.left / scaleRatio,
-    top : curRect.top / scaleRatio,
-    right : curRect.right / scaleRatio,
-    bottom : curRect.bottom / scaleRatio,
+    left: curRect.left / scaleRatio,
+    top: curRect.top / scaleRatio,
+    right: curRect.right / scaleRatio,
+    bottom: curRect.bottom / scaleRatio,
     width: curRect.width / scaleRatio,
     height: curRect.height / scaleRatio
   } as DOMRect
