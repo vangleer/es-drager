@@ -8,6 +8,7 @@
     ]"
     :style="dragStyle"
     @click.stop
+    @mousedown.stop
   >
     <slot />
 

@@ -13,6 +13,10 @@
       {{ t(item.text) }}
     </Drager>
   </template>
+
+  <Drager v-bind="nested">
+    <Drager v-for="item in nested.children" v-bind="item">{{ item.text }}</Drager>
+  </Drager>
 </template>
 
 <script setup lang="ts">
@@ -41,7 +45,21 @@ const dragList = ref([
   [
     { color: '#31eff6', text: 'examples.snap', boundary: true, snap: true },
     { color: '#f46619', text: 'examples.markline', boundary: true, markline: true },
-    { color: '#6bf419', text: 'examples.snapAndMarkline', boundary: true, snap: true, markline: true }
+    { color: '#6bf419', text: 'examples.snapAndMarkline', boundary: true, snap: true, markline: true },
   ]
 ])
+
+const nested = ref({
+  boundary: true,
+  snap: true,
+  markline: true,
+  width: 550,
+  height: 100,
+  left: 30,
+  top: 3 * 150 + 30,
+  children: [
+    { text: 'Child1', width: 100, height: 100, boundary: true, zIndex: 1 },
+    { text: 'Child2', width: 100, height: 100, boundary: true, zIndex: 1, left: 110 },
+  ]
+})
 </script>
