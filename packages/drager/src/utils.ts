@@ -125,6 +125,7 @@ export const degToRadian = (deg: number) => (deg * Math.PI) / 180
 export const getLength = (x: number, y: number) => Math.sqrt(x * x + y * y)
 const cos = (deg: number) => Math.cos(degToRadian(deg))
 const sin = (deg: number) => Math.sin(degToRadian(deg))
+
 export const getNewStyle = (
   type: string,
   rect: any,
@@ -139,6 +140,36 @@ export const getNewStyle = (
   const heightFlag = height < 0 ? -1 : 1
   width = Math.abs(width)
   height = Math.abs(height)
+
+  if (['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(type)) {
+    if (type === 'top-right') {
+      deltaH = -deltaH
+    } else if (type === 'bottom-left') {
+      deltaW = -deltaW
+    } else if (type === 'top-left') {
+      deltaW = -deltaW
+      deltaH = -deltaH
+    }
+    
+    const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
+    width = widthAndDeltaW.width
+    deltaW = widthAndDeltaW.deltaW
+    const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
+    height = heightAndDeltaH.height
+    deltaH = heightAndDeltaH.deltaH
+
+    if (ratio) {
+      if (Math.abs(deltaH) > Math.abs(deltaW)) {
+        deltaW = deltaH * ratio
+        width = height * ratio
+      } else {
+        deltaH = deltaW / ratio
+        height = width / ratio
+      }
+    }
+    
+  }
+
   switch (type) {
     case 'right': {
       const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
@@ -160,17 +191,6 @@ export const getNewStyle = (
       break
     }
     case 'top-right': {
-      deltaH = -deltaH
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
-      width = widthAndDeltaW.width
-      deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
-      if (ratio) {
-        deltaW = deltaH * ratio
-        width = height * ratio
-      }
       centerX +=
         (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
       centerY +=
@@ -178,16 +198,6 @@ export const getNewStyle = (
       break
     }
     case 'bottom-right': {
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
-      width = widthAndDeltaW.width
-      deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
-      if (ratio) {
-        deltaW = deltaH * ratio
-        width = height * ratio
-      }
       centerX +=
         (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
       centerY +=
@@ -214,17 +224,6 @@ export const getNewStyle = (
       break
     }
     case 'bottom-left': {
-      deltaW = -deltaW
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
-      width = widthAndDeltaW.width
-      deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
-      if (ratio) {
-        height = width / ratio
-        deltaH = deltaW / ratio
-      }
       centerX -=
         (deltaW / 2) * cos(rotateAngle) + (deltaH / 2) * sin(rotateAngle)
       centerY -=
@@ -252,18 +251,6 @@ export const getNewStyle = (
       break
     }
     case 'top-left': {
-      deltaW = -deltaW
-      deltaH = -deltaH
-      const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
-      width = widthAndDeltaW.width
-      deltaW = widthAndDeltaW.deltaW
-      const heightAndDeltaH = setHeightAndDeltaH(height, deltaH, minHeight)
-      height = heightAndDeltaH.height
-      deltaH = heightAndDeltaH.deltaH
-      if (ratio) {
-        width = height * ratio
-        deltaW = deltaH * ratio
-      }
       centerX -=
         (deltaW / 2) * cos(rotateAngle) - (deltaH / 2) * sin(rotateAngle)
       centerY -=
