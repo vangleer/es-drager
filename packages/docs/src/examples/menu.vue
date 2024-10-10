@@ -4,6 +4,8 @@
       <el-button v-for="item in tools" type="primary" @click="item.handler">{{
         item.label
       }}</el-button>
+
+      <el-button type="primary" @click="() => console.log(data.elements)">查看数据</el-button>
     </div>
     <div
       ref="editorRef"
@@ -114,6 +116,8 @@ const tools: ToolType[] = [
               src: e,
               width: 160,
               onLoad(e: Event) {
+                // 避免多次执行
+                if (newElement.props.loaded) return
                 // 图片加载完毕，得到原始宽高
                 const { naturalHeight, naturalWidth } = e.target as any
                 const cur = data.value.elements.find(
@@ -122,6 +126,8 @@ const tools: ToolType[] = [
 
                 cur.width = naturalWidth
                 cur.height = naturalHeight
+
+                newElement.props.loaded = true
               }
             }
           }
