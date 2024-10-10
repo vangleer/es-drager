@@ -5,7 +5,6 @@
         item.label
       }}</el-button>
 
-      <el-button type="primary" @click="() => console.log(data.elements)">查看数据</el-button>
     </div>
     <div
       ref="editorRef"
