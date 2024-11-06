@@ -1,7 +1,7 @@
 import { $contextmenu, ActionType, MenuItem } from '../components/common'
 import { ComponentType, EditorDataType } from '../types'
 import { cancelGroup, deepCopy, makeGroup, useId } from '../utils'
-import { computed, onBeforeMount, onMounted, Ref } from 'vue'
+import { computed, onUnmounted, onMounted, Ref } from 'vue'
 type ActionMethods = {
   [key in ActionType]?: (element: ComponentType, ...args: any[]) => void
 }
@@ -201,6 +201,41 @@ export function useActions(
     })
   }
 
+  // 鼠标滚动（ctrl+滚动）
+  const onWheel = (e: WheelEvent) => {
+    // 检查 Ctrl 键是否被按下
+    if (!e.ctrlKey) return
+
+    e.preventDefault() // 阻止默认的滚动行为
+
+    const { deltaY } = e
+    let scale = data.value.container.scaleRatio || 1
+    // 根据滚轮方向调整缩放比例
+    if (deltaY < 0) {
+      scale += 0.1 // 向上滚动，放大
+    } else {
+      scale -= 0.1 // 向下滚动，缩小
+    }
+
+    // 确保缩放比例在合理范围内
+    if (scale < 0.5) {
+      scale = 0.5
+    } else if (scale > 2) {
+      scale = 2
+    }
+
+    // 应用缩放样式
+    data.value.container.scaleRatio = scale
+  }
+
+  // 检查当前是否有表单元素聚焦
+  const isCheckFocus = () => {
+    let activeElement = document.activeElement || { tagName: '' }
+    return (
+      activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA'
+    )
+  }
+
   // 监听键盘事件
   const onKeydown = (e: KeyboardEvent) => {
     const { ctrlKey, key } = e
@@ -213,11 +248,14 @@ export function useActions(
     const action = (keyboardMap as any)[keyStr]! as ActionType
     // 如果actions中有具体的操作则执行
     if (actions[action]) {
-      e.preventDefault()
-      // 找到当前选中的元素
-      currentMenudownElement =
-        data.value.elements.find(item => item.selected) || null
-      actions[action]!(currentMenudownElement!)
+      // 检查当前是否有表单元素聚焦,没有聚焦状态才执行自定义事件
+      if (!isCheckFocus()) {
+        e.preventDefault()
+        // 找到当前选中的元素
+        currentMenudownElement =
+          data.value.elements.find(item => item.selected) || null
+        actions[action]!(currentMenudownElement!)
+      }
     }
   }
 
@@ -225,13 +263,14 @@ export function useActions(
     window.addEventListener('keydown', onKeydown)
   })
 
-  onBeforeMount(() => {
+  onUnmounted(() => {
     window.removeEventListener('keydown', onKeydown)
   })
 
   return {
     editorRect,
     onContextmenu,
-    onEditorContextMenu
+    onEditorContextMenu,
+    onWheel
   }
 }

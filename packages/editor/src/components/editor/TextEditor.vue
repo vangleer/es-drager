@@ -3,14 +3,14 @@
     ref="textRef"
     :class="['es-text', { editable }]"
     :contenteditable="editable"
+    @blur="textBlur"
   >
-    <slot>{{ text }}</slot>
+    {{ text }}
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-
 const props = defineProps({
   editable: {
     type: Boolean,
@@ -20,6 +20,13 @@ const props = defineProps({
     type: String
   }
 })
+
+/** text文本 双向绑定 */
+const emit = defineEmits(['update:text'])
+const textBlur = (e: { target: { innerText: any } }) => {
+  const val = e.target.innerText
+  emit('update:text', val)
+}
 
 const textRef = ref()
 

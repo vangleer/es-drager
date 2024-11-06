@@ -5,6 +5,7 @@
     :style="editorStyle"
     @mousedown="onEditorMouseDown"
     @contextmenu.prevent="onEditorContextMenu"
+    @wheel="onWheel"
   >
     <template v-for="item in data.elements">
       <ESDrager
@@ -38,7 +39,7 @@
           <TextEditor
             v-if="item.text"
             :editable="item.editable"
-            :text="item.text"
+            v-model:text="item.text"
             :style="pickStyle(item.style)"
           />
         </component>
@@ -116,7 +117,7 @@ const { areaSelected, onEditorMouseDown, onAreaMove, onAreaUp } = useArea(
   areaRef
 )
 
-const { editorRect, onContextmenu, onEditorContextMenu } = useActions(
+const { onWheel, onContextmenu, onEditorContextMenu } = useActions(
   data,
   editorRef
 )
@@ -202,6 +203,8 @@ onBeforeMount(() => {
   position: relative;
   width: 100%;
   height: 100%;
+  background: #fff;
+  box-shadow: var(--el-box-shadow);
 }
 .es-drager {
   &.border {
