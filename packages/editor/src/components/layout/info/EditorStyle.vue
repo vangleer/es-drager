@@ -27,9 +27,11 @@
     <el-row :gutter="10">
       <el-col :span="10">缩放比例:</el-col>
       <el-col :span="14">
-        <el-input v-model.number="scaleRatio" @change="handleScaleRatioChange">
-          <template #suffix>%</template>
-        </el-input>
+        <el-input-number
+          v-model="scaleRatio"
+          controls-position="right"
+          style="width: 100%"
+        />
       </el-col>
     </el-row>
 
@@ -62,7 +64,9 @@
     <el-row :gutter="10">
       <el-col :span="10">画布网格:</el-col>
       <el-col :span="14">
-        <div style="display: flex; justify-content: flex-end;"><el-switch v-model="store.data.container.snapToGrid" /></div>
+        <div style="display: flex; justify-content: flex-end">
+          <el-switch v-model="store.data.container.snapToGrid" />
+        </div>
       </el-col>
     </el-row>
 
@@ -87,10 +91,11 @@
     <el-row :gutter="10">
       <el-col :span="10">参考线:</el-col>
       <el-col :span="14">
-        <div style="display: flex; justify-content: flex-end;"><el-switch v-model="store.data.container.markline.show" /></div>
+        <div style="display: flex; justify-content: flex-end">
+          <el-switch v-model="store.data.container.markline.show" />
+        </div>
       </el-col>
     </el-row>
-    
   </el-form>
 </template>
 
@@ -102,7 +107,16 @@ import ColorPicker from '../components/ColorPicker.vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
 const store = useEditorStore()
 
-const scaleRatio = ref(100)
+const scaleRatio = computed({
+  get: () => {
+    const sRatio = store.data.container.scaleRatio || 1
+    return Math.round(sRatio * 100)
+  },
+  set: val => {
+    store.data.container.scaleRatio = val / 100
+  }
+})
+
 const editorSize = computed({
   get: () => {
     const { width, height } = store.data.container.style
@@ -135,13 +149,19 @@ const screenSize = [
 ]
 
 const elementBg = computed<any>({
-  get: () => store.data.container.style.background || store.data.container.style.backgroundColor,
-  set: (val) => {
+  get: () =>
+    store.data.container.style.background ||
+    store.data.container.style.backgroundColor,
+  set: val => {
     store.data.container.style.background = val
   }
 })
 
-const handleScaleRatioChange = (val: number) => {
-  store.data.container.scaleRatio = val / 100
-}
+// const handleScaleRatioChange = (val: number) => {
+//   console.log(val, 'val')
+//   // store.data.container.scaleRatio = val / 100
+//   store.data.container.scaleRatio = Math.round(
+//     store.data.container.scaleRatio / 100
+//   )
+// }
 </script>

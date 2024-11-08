@@ -231,8 +231,8 @@ defineExpose({
     }
   }
   .es-editor-container {
-    box-shadow: var(--el-box-shadow);
-    background-color: var(--es-color-bg);
+    //box-shadow: var(--el-box-shadow);
+    //background-color: var(--es-color-bg);
   }
 }
 </style>
