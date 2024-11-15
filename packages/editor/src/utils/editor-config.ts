@@ -36,7 +36,11 @@ export const registerConfig = createEditorConfig()
 
 registerConfig.registerCommon({
   component: 'span',
-  text: '文本'
+  text: '文本',
+  style: {
+    fontSize: 18,
+    color: '#333'
+  }
 })
 registerConfig.registerCommon({
   component: 'el-button',
