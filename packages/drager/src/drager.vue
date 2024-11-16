@@ -14,7 +14,7 @@
 
     <template v-if="showResize">
       <div
-        v-for="(item, index) in dotList"
+        v-for="(item, index) in dots"
         :key="index"
         class="es-drager-dot"
         :data-side="item.side"
@@ -97,18 +97,35 @@ const showRotate = computed(
   () => props.rotatable && !props.disabled && selected.value
 )
 
+const dots = computed(() => {
+  return props.type != 'text' ? dotList.value : dotList.value.filter(d => !['top', 'bottom'].includes(d.side))
+})
+
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
   const style: CSSProperties = {}
+  
   if (width) style.width = withUnit(width)
-  if (height) style.height = withUnit(height)
+  if (height) {
+    if (props.type === 'text') {
+      style.fontSize = height + 'px'
+    } else {
+      style.height = withUnit(height)
+    }
+  }
+  let transform: string[] = [
+    `translateX(${withUnit(left)})`,
+    `translateY(${withUnit(top)})`,
+    `rotate(${angle}deg)`,
+  ]
+
   return {
     ...style,
-    left: withUnit(left),
-    top: withUnit(top),
+    // left: withUnit(left),
+    // top: withUnit(top),
     zIndex: props.zIndex,
-    transform: `rotate(${angle}deg)`,
-    '--es-drager-color': props.color
+    transform: transform.join(' '),
+    '--es-drager-color': props.color,
   }
 })
 function setRef(el: ComponentPublicInstance | HTMLElement) {
@@ -147,18 +164,27 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   }
   const type = dotInfo.side
 
-  const { minWidth, minHeight, aspectRatio, equalProportion } = props
-  emitFn('resize-start', dragData.value)
+  let { minWidth, minHeight, aspectRatio, equalProportion } = props
+  emitFn('resize-start', dragData.value, type)
   let boundaryInfo: number[] = []
   if (props.boundary) {
     boundaryInfo = getBoundary()
   }
 
+  if (['text', 'image'].includes(props.type) && type.includes('-')) {
+    aspectRatio = rect.width / rect.height
+    console.log(aspectRatio, 'aspectRatio')
+  }
+
+  console.log(rect, {...dragData.value})
+
   const onMousemove = (e: MouseTouchEvent) => {
+    
     const { clientX, clientY } = getXY(e)
     // 距离
     let deltaX = (clientX - downX) / props.scaleRatio
     let deltaY = (clientY - downY) / props.scaleRatio
+
     // 开启网格缩放
     if (props.snapToGrid) {
       deltaX = calcGrid(deltaX, props.gridX)
@@ -172,6 +198,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     const beta = alpha - degToRadian(rect.rotateAngle)
     const deltaW = deltaL * Math.cos(beta)
     const deltaH = deltaL * Math.sin(beta)
+
     const ratio =
       (equalProportion || isShiftKey) && !aspectRatio
         ? rect.width / rect.height
@@ -217,7 +244,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     }
     
     dragData.value = d
-    emitFn('resize', dragData.value)
+    emitFn('resize', dragData.value, type)
   }
 
   setupMove(onMousemove, () => {
@@ -226,7 +253,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
       // 发生碰撞回到原来位置
       dragData.value = { ...dragData.value, width, height, left, top }
     }
-    emitFn('resize-end', dragData.value)
+    emitFn('resize-end', dragData.value, type)
   })
 }
 
@@ -346,7 +373,7 @@ watch(
     transition: none;
     user-select: none;
     &::after {
-      display: block;
+      display: none;
       outline: 1px dashed var(--es-drager-color);
     }
     .es-drager-dot {
@@ -369,6 +396,29 @@ watch(
     z-index: 1;
     transform: translate(-50%, -50%);
     cursor: se-resize;
+    &-handle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--es-drager-color);
+    }
+
+    &[data-side='left'], &[data-side='right'] {
+      .es-drager-dot-handle {
+        width: 8px;
+        height: 16px;
+        border-radius: 8px;
+      }
+    }
+
+    &[data-side='top'], &[data-side='bottom'] {
+      .es-drager-dot-handle {
+        width: 16px;
+        height: 8px;
+        border-radius: 8px;
+      }
+    }
+
     &[data-side*='right'] {
       transform: translate(50%, -50%);
     }
@@ -377,13 +427,6 @@ watch(
     }
     &[data-side='bottom-right'] {
       transform: translate(50%, 50%);
-    }
-
-    &-handle {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: var(--es-drager-color);
     }
   }
 }

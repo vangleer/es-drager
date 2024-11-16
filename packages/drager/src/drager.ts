@@ -33,6 +33,10 @@ export interface MarklineData {
 }
 
 export const DragerProps = {
+  type: {
+    type: String as PropType<'rect' | 'text' | 'image'>,
+    default: 'rect'
+  },
   tag: {
     type: [String, Object] as PropType<string | Component>,
     default: 'div'
