@@ -129,6 +129,7 @@ Directly import `es-drager` using the HTML script tag, then you can use the glob
 | Property Name         | Description               | Type                 | Default |
 | --------------------- | ------------------------- | -------------------- | ------- |
 | tag                   | Component's `is` attribute | ^[string]            | div     |
+| type                   | `rect`, `text`, `image` | ^[string]            | rect     |
 | width                 | Width                     | ^[number]            | 100     |
 | height                | Height                    | ^[number]            | 100     |
 | left                  | Horizontal offset         | ^[number]            | 0       |
