@@ -150,7 +150,8 @@ let currentComponent: ComponentType | null = null
 
 function handleAsideDragstart(component: ComponentType) {
   events.emit('dragstart')
-  currentComponent = component
+  // 拷贝
+  currentComponent = JSON.parse(JSON.stringify(component));
 }
 function handleAsideDragend() {
   events.emit('dragend')
