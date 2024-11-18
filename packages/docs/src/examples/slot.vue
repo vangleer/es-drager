@@ -1,6 +1,11 @@
 <template>
-  <Drager :width="200" :height="120" :left="100" :top="100" rotatable>
+  <Drager type="image" :width="200" :height="120" :left="100" :top="100" rotatable>
+    <span style="position: absolute;">图片类型</span>
     <img class="img" style="width: 100%; height: 100%" :src="imgUrl" />
+  </Drager>
+
+  <Drager class="drager-text" type="text" :left="350" :top="100">
+    <div :contenteditable="true">文本类型</div>
   </Drager>
 
   <Drager :width="100" :height="100" :left="100" :top="300" rotatable>
@@ -41,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import Drager from 'es-drager'
+import Drager from 'es-drager/index'
 import imgUrl from '../assets/demo.png'
 </script>
 
@@ -56,5 +61,8 @@ import imgUrl from '../assets/demo.png'
   font-size: 20px;
   font-weight: 700;
   color: #0ec3b8;
+}
+.drager-text {
+  font-size: 30px;
 }
 </style>
