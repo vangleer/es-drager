@@ -1,7 +1,7 @@
 # ES Drager Drag Component
 
 - [Chinese](https://github.com/vangleer/es-drager)
-- [English](https://github.com/vangleer/es-drager/blob/main/README.en.md)
+- [English](https://github.com/vangleer/es-drager/blob/main/README_en.md)
 
 <p align="middle" ><img width="100" src="https://vangleer.github.io/es-drager/logo/logo.png"/></p>
 
