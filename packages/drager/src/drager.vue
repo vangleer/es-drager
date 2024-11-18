@@ -4,6 +4,7 @@
     :ref="setRef"
     :class="[
       'es-drager',
+      `es-drager-${type}`,
       { disabled, dragging: isMousedown, selected, border }
     ]"
     :style="dragStyle"
@@ -150,7 +151,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   const downX = clientX
   const downY = clientY
   const { width, height, left, top } = dragData.value
-
+  
   // 中心点
   const centerX = left + width / 2
   const centerY = top + height / 2
@@ -173,10 +174,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
 
   if (['text', 'image'].includes(props.type) && type.includes('-')) {
     aspectRatio = rect.width / rect.height
-    console.log(aspectRatio, 'aspectRatio')
   }
-
-  console.log(rect, {...dragData.value})
 
   const onMousemove = (e: MouseTouchEvent) => {
     
@@ -371,9 +369,9 @@ watch(
   }
   &.selected {
     transition: none;
-    user-select: none;
-    &::after {
-      display: none;
+    &:not(.es-drager-text)::after {
+      user-select: none;
+      display: block;
       outline: 1px dashed var(--es-drager-color);
     }
     .es-drager-dot {
