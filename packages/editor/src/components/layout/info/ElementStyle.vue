@@ -24,7 +24,7 @@
         <el-col :span="10">透明度:</el-col>
         <el-col :span="14">
           <el-slider
-            :modelValue="1"
+            :modelValue="store.current.style.opacity"
             :step="0.01"
             :min="0"
             :max="1"
