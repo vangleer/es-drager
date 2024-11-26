@@ -44,8 +44,8 @@
     <el-divider />
 
     <el-row>
-      <el-checkbox-group v-model="options1Value" size="small" @change="handleOptions1Change">
-        <el-tooltip v-for="item in options1" placement="top" :show-after="300" :content="item.label">
+      <el-checkbox-group v-model="operateValue" size="small" @change="handleOperateChange">
+        <el-tooltip v-for="item in operateOptions" placement="top" :show-after="300" :content="item.label">
           <el-checkbox-button style="flex: 1;" :label="item.value" :value="item.value">
             <SvgIcon :name="item.value" :size="20" />
           </el-checkbox-button>
@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useEditorStore } from '@es-drager/editor/src/store'
 import InputNumber from '../components/InputNumber.vue'
 import SvgIcon from '../components/svgIcon/SvgIcon.vue'
@@ -75,8 +75,23 @@ const alignY = [
   { label: '下对齐', value: 'align-bottom' },
 ]
 
-const options1Value = ref(['resizable', 'rotatable'])
-const options1 = [
+// 操作显示配置
+const extractKeys = (item:any) => {
+  const keysToCheck = ['disabled', 'resizable', 'rotatable'];
+  const result:any = [];
+
+  keysToCheck.forEach((key:string) => {
+    if (item[key] === true || (key !== 'disabled' && !item.hasOwnProperty(key))) {
+      result.push(key);
+    }
+  });
+  return result;
+};
+
+const operateValue = computed(() => {
+  return extractKeys(store.current);
+});
+const operateOptions = [
   { label: '禁用', value: 'disabled' },
   { label: '可缩放', value: 'resizable' },
   { label: '可旋转', value: 'rotatable' },
@@ -86,8 +101,8 @@ function handleUpdateAngle(num: number) {
   store.current.angle = (store.current.angle || 0) + num
 }
 
-function handleOptions1Change(val: string[]) {
-  const keys = options1.map(item => item.value)
+function handleOperateChange(val: string[]) {
+  const keys = operateOptions.map(item => item.value)
   keys.forEach(key => {
     if (val.includes(key)) {
       (store.current as any)[key] = true

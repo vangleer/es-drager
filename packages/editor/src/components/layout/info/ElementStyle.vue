@@ -24,7 +24,7 @@
         <el-col :span="10">透明度:</el-col>
         <el-col :span="14">
           <el-slider
-            :modelValue="1"
+            :modelValue="opacity"
             :step="0.01"
             :min="0"
             :max="1"
@@ -72,6 +72,13 @@ const elementBg = computed<any>({
     store.current.style!.background = val
   }
 })
+
+const opacity = computed<any>({
+  get: () => (store.current.style!.hasOwnProperty('opacity') ? store.current.style!.opacity : 1),
+  set: (val) => {
+    store.current.style!.opacity = val;
+  }
+});
 
 const handleColorClick = (style: CSSProperties) => {
   if (!store.current.selected) return
