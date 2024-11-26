@@ -159,13 +159,15 @@ export const getNewStyle = (
     deltaH = heightAndDeltaH.deltaH
 
     if (ratio) {
-      if (Math.abs(deltaH) > Math.abs(deltaW)) {
-        deltaW = deltaH * ratio
-        width = height * ratio
-      } else {
-        deltaH = deltaW / ratio
-        height = width / ratio
-      }
+      // if (Math.abs(deltaH) > Math.abs(deltaW)) {
+      //   deltaW = deltaH * ratio
+      //   width = height * ratio
+      // } else {
+      //   deltaH = deltaW / ratio
+      //   height = width / ratio
+      // }
+      deltaH = deltaW / ratio
+      height = width / ratio
     }
     
   }

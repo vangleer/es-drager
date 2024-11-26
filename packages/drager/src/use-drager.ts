@@ -202,13 +202,14 @@ export function useDrager(
   onMounted(() => {
     if (!targetRef.value) return
     // 没传宽高使用元素默认
+    
     if (!dragData.value.width && !dragData.value.height) {
       const { width, height } = getBoundingClientRectByScale(targetRef.value,props.scaleRatio)
       // 获取默认宽高
       dragData.value = {
         ...dragData.value,
-        width: width || 100,
-        height: height || 100
+        width: width + 2,
+        height: height + 2
       }
     }
 
@@ -216,6 +217,11 @@ export function useDrager(
     targetRef.value.addEventListener('touchstart', onMousedown, {
       passive: true
     })
+
+    if (props.type === 'text') {
+      const style = window.getComputedStyle(targetRef.value)
+      dragData.value.height = parseInt(style.fontSize)
+    }
   })
 
   onBeforeUnmount(() => {

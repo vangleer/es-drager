@@ -1,7 +1,7 @@
 # ES Drager Drag Component
 
 - [Chinese](https://github.com/vangleer/es-drager)
-- [English](https://github.com/vangleer/es-drager/blob/main/README.en.md)
+- [English](https://github.com/vangleer/es-drager/blob/main/README_en.md)
 
 <p align="middle" ><img width="100" src="https://vangleer.github.io/es-drager/logo/logo.png"/></p>
 
@@ -129,6 +129,7 @@ Directly import `es-drager` using the HTML script tag, then you can use the glob
 | Property Name         | Description               | Type                 | Default |
 | --------------------- | ------------------------- | -------------------- | ------- |
 | tag                   | Component's `is` attribute | ^[string]            | div     |
+| type                   | `rect`, `text`, `image` | ^[string]            | rect     |
 | width                 | Width                     | ^[number]            | 100     |
 | height                | Height                    | ^[number]            | 100     |
 | left                  | Horizontal offset         | ^[number]            | 0       |
