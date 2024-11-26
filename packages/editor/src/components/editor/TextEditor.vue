@@ -23,8 +23,8 @@ const props = defineProps({
 
 /** text文本 双向绑定 */
 const emit = defineEmits(['update:text'])
-const textBlur = (e: { target: { innerText: any } }) => {
-  const val = e.target.innerText
+const textBlur = (e: Event) => {
+  const val = (e.target as HTMLDivElement).innerText
   emit('update:text', val)
 }
 

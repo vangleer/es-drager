@@ -171,6 +171,7 @@ import Drager from 'es-drager'
 | 属性名                   | 说明           | 类型                                         | 默认    |
 | --------------------- | ------------ | ------------------------------------------ | ----- |
 | tag | component组件的is属性       | ^[string]         | div     |
+| type | 类型，`rect`, `text`, `image`       | ^[string]         | rect     |
 | width | 宽度       | ^[number]         | 100     |
 | height | 高度       | ^[number]         | 100     |
 | left | 横坐标偏移       | ^[number]         | 0     |
