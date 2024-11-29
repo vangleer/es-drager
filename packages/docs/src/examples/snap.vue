@@ -112,6 +112,7 @@ const canvasStyle = computed(() => {
   return {
     width: `${post.canvasWidth}px`,
     height: `${post.canvasHeight}px`,
+    position: 'relative',
     background: store.isLight ? '#eff2f5' : '#333333'
   }
 })
