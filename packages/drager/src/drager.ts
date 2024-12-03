@@ -32,11 +32,6 @@ export interface MarklineData {
   diffY?: number
 }
 
-interface LineType {
-  h: number[]
-  v: number[]
-}
-
 export const DragerProps = {
   type: {
     type: String as PropType<'rect' | 'text' | 'image'>,
@@ -144,14 +139,8 @@ export const DragerProps = {
   },
   markline: [Boolean, Function] as PropType<
     boolean | ((e: MarklineData) => void)
-  >, // 辅助线
-  guideline: {
-    type: Object as PropType<LineType>,
-    default: () => ({
-      h: [],
-      v: []
-    })
-  }
+  >,
+  extraLines: Function as PropType<(target: DOMRect) => Element[] | Array<{ showTop?: number, top?: number, showLeft?: number, left?: number }>>
 }
 
 export interface DragData {

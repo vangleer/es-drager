@@ -49,17 +49,31 @@ export function useMarkline(
   }
   // 吸附
   const handleDragStart = () => {
-    const source = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
-    const elList = document.querySelectorAll('.es-drager')
-    const targets = []
+    const source = getBoundingClientRectByScale(targetRef.value!, props.scaleRatio)
+    const elList = Array.from(document.querySelectorAll('.es-drager')) as any[]
+    if (props.extraLines) {
+      const extras = props.extraLines(source) || []
+      elList.push(...extras)
+    }
+    
+    const targets = [], x = [], y = []
     for (let i = 0; i < elList.length; i++) {
       const el = elList[i]
-      if (el !== targetRef.value) {
-        targets.push(getBoundingClientRectByScale(el,props.scaleRatio))
+      if (el.nodeType === 1) {
+        if (el !== targetRef.value) {
+          targets.push(getBoundingClientRectByScale(el, props.scaleRatio))
+        }
+      } else if (el.showTop || el.showTop === 0) {
+        y.push(el)
+      } else if (el.showLeft || el.showLeft === 0) {
+        x.push(el)
       }
+      
     }
 
     lines.value = calcLines(targets, source)
+    lines.value.x.push(...x)
+    lines.value.y.push(...y)
   }
 
   const handleDrag = () => {

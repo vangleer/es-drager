@@ -15,6 +15,7 @@
         snap
         :snap-threshold="10"
         markline
+        :extraLines="extraLines"
         @change="onChange($event, item)"
         @drag-end="onDragend"
       >
@@ -28,6 +29,7 @@
         :top="200"
         snap
         :markline="onMarkline"
+        :extraLines="extraLines"
       >
         custom markline
       </Drager>
@@ -43,6 +45,7 @@
         :style="{ top: markLineData.top + 'px' }"
       ></div>
       <GridRect class="grid-rect" />
+      <div class="editor-center"></div>
     </div>
   </div>
 </template>
@@ -50,7 +53,7 @@
 <script setup lang="ts">
 import { ref, CSSProperties, Ref, onBeforeUnmount } from 'vue'
 import { GridRect } from '@es-drager/editor'
-import Drager, { DragData, MarklineData } from 'es-drager'
+import Drager, { DragData, MarklineData } from 'es-drager/index'
 import { t } from '@es-drager/common/i18n'
 // 组件类型
 type ComponentType = {
@@ -163,6 +166,27 @@ function deepCopy(obj: any) {
 function onMarkline(data: MarklineData) {
   markLineData.value = data
 }
+
+// 添加其它对齐线
+function extraLines(targetRect: DOMRect) {
+  // 可以是dom元素列表，这里只有中心点
+  return [document.querySelector('.editor-center')!]
+
+
+  // 也可以是计算好的位置，以editor的中心点为例
+  // const editorRect = document.querySelector('.es-editor')!.getBoundingClientRect()
+  // const centerY = editorRect.height / 2 + editorRect.top
+  // const centerX = editorRect.width / 2 + editorRect.left
+  // return [
+  //   { showTop: centerY, top: centerY }, // 顶
+  //   { showTop: centerY, top: centerY - targetRect.height / 2 }, // 中
+  //   { showTop: centerY, top: centerY - targetRect.height }, // 底
+
+  //   { showLeft: centerX, left: centerX }, // 左
+  //   { showLeft: centerX, left: centerX - targetRect.width / 2 }, // 中
+  //   { showLeft: centerX, left: centerX - targetRect.width }, // 右
+  // ]
+}
 </script>
 
 <style lang="scss" scoped>
@@ -202,5 +226,12 @@ function onMarkline(data: MarklineData) {
   width: 100%;
   height: 1px;
   left: 0;
+}
+
+.editor-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

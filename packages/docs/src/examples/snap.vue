@@ -7,7 +7,7 @@
     >
       <sketch-rule ref="sketchruleRef" v-model:scale="post.scale" v-bind="post">
         <template #default>
-          <div data-type="page" :style="canvasStyle">
+          <div ref="dragParentRef" data-type="page" :style="canvasStyle">
             <Drager
               v-for="item in data.componentList"
               v-bind="item"
@@ -16,8 +16,8 @@
               :scaleRatio="post.scale"
               class="dragerItem"
               :snap-threshold="10"
-              :guideline="post.lines"
               markline
+              :extraLines="extraLines"
               @change="onChange($event, item)"
             >
               <component :is="item.component">{{ item.text }}</component>
@@ -39,11 +39,12 @@
 import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
-import Drager, { DragData } from 'es-drager'
+import Drager, { DragData } from 'es-drager/index'
 import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const sketchruleRef = ref()
-const post = reactive({
+const dragParentRef = ref<HTMLElement>()
+const post = reactive<any>({
   scale: 1,
   thick: 20,
   width: 1470,
@@ -110,7 +111,7 @@ const rectStyle = computed(() => {
   }
 })
 
-const canvasStyle = computed(() => {
+const canvasStyle = computed<CSSProperties>(() => {
   return {
     width: `${post.canvasWidth}px`,
     height: `${post.canvasHeight}px`,
@@ -131,6 +132,34 @@ const onChange = (dragData: DragData, item: any) => {
   Object.keys(dragData).forEach(key => {
     ;(item as any)[key] = dragData[key as keyof DragData]
   })
+}
+
+const extraLines = (targetRect: DOMRect) => {
+  // 可以返回dom元素列表
+  return Array.from(document.querySelectorAll('.sketch-ruler .lines .line'))
+
+
+  // 也可以根据 targetRect 显示位置
+  // const pRect = dragParentRef.value!.getBoundingClientRect()
+  // const hLines = post.lines.h.reduce((arr: any[], item: number) => {
+  //   const hTop = pRect.top / post.scale + item
+  //   // 顶部对齐
+  //   arr.push({ showTop: hTop, top: hTop })
+  //   // 底部对齐
+  //   arr.push({ showTop: hTop, top: hTop - targetRect.height })
+  //   return arr
+  // }, [])
+
+  // const vLines = post.lines.v.reduce((arr: any[], item: number) => {
+  //   const vLeft = pRect.left / post.scale + item
+  //   // 顶部对齐
+  //   arr.push({ showLeft: vLeft, left: vLeft })
+  //   // 底部对齐
+  //   arr.push({ showLeft: vLeft, left: vLeft - targetRect.width })
+  //   return arr
+  // }, [])
+
+  // return hLines.concat(vLines)
 }
 </script>
 
