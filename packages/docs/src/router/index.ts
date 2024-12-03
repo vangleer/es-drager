@@ -72,13 +72,13 @@ export const menuRoutes: RouteRecordRaw[] = [
       title: 'snap'
     }
   },
-  {
-    path: 'temp',
-    component: () => import('@/examples/temp.vue'),
-    meta: {
-      title: 'temp'
-    }
-  }
+  // {
+  //   path: 'temp',
+  //   component: () => import('@/examples/temp.vue'),
+  //   meta: {
+  //     title: 'temp'
+  //   }
+  // }
 ]
 
 const routes: RouteRecordRaw[] = [

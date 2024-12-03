@@ -132,7 +132,6 @@ export function useDrager(
         if (props.snap) {
           if (markLine.diffX) {
             dragData.value.left += markLine.diffX
-            console.log(dragData.value.left, ' dragData.value.left')
           }
 
           if (markLine.diffY) {
