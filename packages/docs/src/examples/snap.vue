@@ -5,7 +5,7 @@
       :class="[!store.isLight ? 'blackwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <sketch-rule ref="sketchruleRef" v-bind="post">
+      <sketch-rule ref="sketchruleRef" v-model:scale="post.scale" v-bind="post">
         <template #default>
           <div data-type="page" :style="canvasStyle">
             <Drager
@@ -13,6 +13,7 @@
               v-bind="item"
               :key="item.id"
               snap
+              :scaleRatio="post.scale"
               class="dragerItem"
               :snap-threshold="10"
               :guideline="post.lines"
@@ -35,7 +36,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, reactive, CSSProperties } from 'vue'
+import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import Drager, { DragData } from 'es-drager'
@@ -43,6 +44,7 @@ import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const sketchruleRef = ref()
 const post = reactive({
+  scale: 1,
   thick: 20,
   width: 1470,
   height: 700,
@@ -118,13 +120,14 @@ const canvasStyle = computed(() => {
 })
 
 const onChange = (dragData: DragData, item: any) => {
-  post.shadow = {
-    x: item.left,
-    y: item.top,
-    width: item.width,
-    height: item.height
-  }
-
+  nextTick(() => {
+    post.shadow = {
+      x: item.left,
+      y: item.top,
+      width: item.width,
+      height: item.height
+    }
+  })
   Object.keys(dragData).forEach(key => {
     ;(item as any)[key] = dragData[key as keyof DragData]
   })

@@ -40,7 +40,7 @@ export function useDrager(
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
-    const { left, top , width, height} = dragData.value
+    const { left, top, width, height } = dragData.value
     let minX = 0,
       maxX = 0,
       minY = 0,
@@ -75,9 +75,7 @@ export function useDrager(
         const guideSnapsV = props.guideline.v.slice()
         // 检查 left 是否接近 guideSnapsV 中的某个值
         for (const snap of guideSnapsV) {
-          console.log(Math.abs(snap - moveX))
           if (Math.abs(snap - moveX) < props.snapThreshold / props.scaleRatio) {
-            console.log('kaojing')
             moveX = snap
             break
           }
@@ -134,6 +132,7 @@ export function useDrager(
         if (props.snap) {
           if (markLine.diffX) {
             dragData.value.left += markLine.diffX
+            console.log(dragData.value.left, ' dragData.value.left')
           }
 
           if (markLine.diffY) {
@@ -162,19 +161,34 @@ export function useDrager(
       minY = 0
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.offsetParent || document.body
-    const parentElRect = getBoundingClientRectByScale(parentEl!,props.scaleRatio)
+    const parentElRect = getBoundingClientRectByScale(
+      parentEl!,
+      props.scaleRatio
+    )
 
     if (angle) {
-      const rect = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
-      minX = rect.left  - Math.floor(left - (rect.width - width) + parentElRect.left )
-      minY = rect.top - Math.floor(top - (rect.height - height) + parentElRect.top )
+      const rect = getBoundingClientRectByScale(
+        targetRef.value!,
+        props.scaleRatio
+      )
+      minX =
+        rect.left - Math.floor(left - (rect.width - width) + parentElRect.left)
+      minY =
+        rect.top - Math.floor(top - (rect.height - height) + parentElRect.top)
     }
 
     // 最大x
     const maxX = parentElRect.width - width
     // 最大y
     const maxY = parentElRect.height - height
-    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width , parentElRect.height ]
+    return [
+      minX,
+      maxX - minX,
+      minY,
+      maxY - minY,
+      parentElRect.width,
+      parentElRect.height
+    ]
   }
   /**
    * @param moveX 移动的X
@@ -214,17 +228,12 @@ export function useDrager(
     selected.value = false
   }
   // 键盘事件
-  const { onKeydown, onKeyup } = useKeyEvent(
-    props,
-    dragData,
-    selected,
-    {
-      getBoundary,
-      fixBoundary,
-      checkDragerCollision,
-      emit
-    }
-  )
+  const { onKeydown, onKeyup } = useKeyEvent(props, dragData, selected, {
+    getBoundary,
+    fixBoundary,
+    checkDragerCollision,
+    emit
+  })
   watch(selected, val => {
     // 聚焦/失焦
     if (val) {
@@ -252,7 +261,10 @@ export function useDrager(
     // 没传宽高使用元素默认
 
     if (!dragData.value.width && !dragData.value.height) {
-      const { width, height } = getBoundingClientRectByScale(targetRef.value,props.scaleRatio)
+      const { width, height } = getBoundingClientRectByScale(
+        targetRef.value,
+        props.scaleRatio
+      )
       // 获取默认宽高
       dragData.value = {
         ...dragData.value,
