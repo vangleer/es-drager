@@ -61,6 +61,7 @@
     "chalk": "4.1.0",
     "enquirer": "^2.4.1",
     "minimist": "^1.2.8",
+    "vue3-sketch-ruler": "^2.2.7",
     "semver": "^7.5.4"
   }
 }

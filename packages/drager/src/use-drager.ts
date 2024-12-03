@@ -40,7 +40,7 @@ export function useDrager(
     isMousedown.value = true
     selected.value = true
     let { clientX: downX, clientY: downY } = getXY(e)
-    const { left, top } = dragData.value
+    const { left, top, width, height } = dragData.value
     let minX = 0,
       maxX = 0,
       minY = 0,
@@ -57,7 +57,7 @@ export function useDrager(
       const { clientX, clientY } = getXY(e)
       let moveX = (clientX - downX) / props.scaleRatio + left
       let moveY = (clientY - downY) / props.scaleRatio + top
-      
+
       // 是否开启网格对齐
       if (props.snapToGrid) {
         // 当前位置
@@ -71,10 +71,56 @@ export function useDrager(
         moveY = curY + calcGrid(diffY, props.gridY)
       }
 
+      if (props.guideline.v && props.guideline.v.length) {
+        const guideSnapsV = props.guideline.v.slice()
+        // 检查 left 是否接近 guideSnapsV 中的某个值
+        for (const snap of guideSnapsV) {
+          if (Math.abs(snap - moveX) < props.snapThreshold / props.scaleRatio) {
+            moveX = snap
+            break
+          }
+        }
+
+        // 检查 left + width 是否接近 guideSnapsV 中的某个值
+        const rightEdge = moveX + width
+        for (const snap of guideSnapsV) {
+          if (
+            Math.abs(snap - rightEdge) <
+            props.snapThreshold / props.scaleRatio
+          ) {
+            moveX = snap - width
+            break
+          }
+        }
+      }
+
+      if (props.guideline.h && props.guideline.h.length) {
+        // 水平方向吸附,两个y方向吸附, top和 top+height 都吸附
+        const guideSnapsH = props.guideline.h.slice()
+        // 检查 top 是否接近 guideSnapsH 中的某个值
+        for (const snap of guideSnapsH) {
+          if (Math.abs(snap - moveY) < props.snapThreshold / props.scaleRatio) {
+            moveY = snap
+            break
+          }
+        }
+        // 检查 top + height 是否接近 guideSnapsH 中的某个值
+        const bottomEdge = moveY + height
+        for (const snap of guideSnapsH) {
+          if (
+            Math.abs(snap - bottomEdge) <
+            props.snapThreshold / props.scaleRatio
+          ) {
+            moveY = snap - height
+            break
+          }
+        }
+      }
+
       if (props.boundary) {
         ;[moveX, moveY] = fixBoundary(moveX, moveY, minX, maxX, minY, maxY)
       }
-      
+
       dragData.value.left = moveX
       dragData.value.top = moveY
 
@@ -86,8 +132,9 @@ export function useDrager(
         if (props.snap) {
           if (markLine.diffX) {
             dragData.value.left += markLine.diffX
+            console.log(dragData.value.left, ' dragData.value.left')
           }
-    
+
           if (markLine.diffY) {
             dragData.value.top += markLine.diffY
           }
@@ -114,19 +161,34 @@ export function useDrager(
       minY = 0
     const { left, top, height, width, angle } = dragData.value
     const parentEl = targetRef.value!.offsetParent || document.body
-    const parentElRect = getBoundingClientRectByScale(parentEl!,props.scaleRatio)
-    
+    const parentElRect = getBoundingClientRectByScale(
+      parentEl!,
+      props.scaleRatio
+    )
+
     if (angle) {
-      const rect = getBoundingClientRectByScale(targetRef.value!,props.scaleRatio)
-      minX = rect.left  - Math.floor(left - (rect.width - width) + parentElRect.left )
-      minY = rect.top - Math.floor(top - (rect.height - height) + parentElRect.top )
+      const rect = getBoundingClientRectByScale(
+        targetRef.value!,
+        props.scaleRatio
+      )
+      minX =
+        rect.left - Math.floor(left - (rect.width - width) + parentElRect.left)
+      minY =
+        rect.top - Math.floor(top - (rect.height - height) + parentElRect.top)
     }
 
     // 最大x
     const maxX = parentElRect.width - width
     // 最大y
     const maxY = parentElRect.height - height
-    return [minX, maxX - minX, minY, maxY - minY, parentElRect.width , parentElRect.height ]
+    return [
+      minX,
+      maxX - minX,
+      minY,
+      maxY - minY,
+      parentElRect.width,
+      parentElRect.height
+    ]
   }
   /**
    * @param moveX 移动的X
@@ -166,17 +228,12 @@ export function useDrager(
     selected.value = false
   }
   // 键盘事件
-  const { onKeydown, onKeyup } = useKeyEvent(
-    props,
-    dragData,
-    selected,
-    {
-      getBoundary,
-      fixBoundary,
-      checkDragerCollision,
-      emit
-    }
-  )
+  const { onKeydown, onKeyup } = useKeyEvent(props, dragData, selected, {
+    getBoundary,
+    fixBoundary,
+    checkDragerCollision,
+    emit
+  })
   watch(selected, val => {
     // 聚焦/失焦
     if (val) {
@@ -202,9 +259,12 @@ export function useDrager(
   onMounted(() => {
     if (!targetRef.value) return
     // 没传宽高使用元素默认
-    
+
     if (!dragData.value.width && !dragData.value.height) {
-      const { width, height } = getBoundingClientRectByScale(targetRef.value,props.scaleRatio)
+      const { width, height } = getBoundingClientRectByScale(
+        targetRef.value,
+        props.scaleRatio
+      )
       // 获取默认宽高
       dragData.value = {
         ...dragData.value,

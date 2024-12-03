@@ -8,7 +8,8 @@
     "chart": "ECharts 图表",
     "markline": "辅助线",
     "group": "组合与拆分",
-    "menu": "菜单操作栏"
+    "menu": "菜单操作栏",
+    "snap": "参考线吸附"
   },
   "common": {
     "code": "代码",

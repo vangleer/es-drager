@@ -200,6 +200,8 @@ import Drager from 'es-drager'
 | aspectRatio | 宽高缩放比     | ^[number]        | -     |
 | equalProportion | 宽高等比缩放(该属性和aspectRatio互斥，同时使用会存在问题)     | ^[boolean]        | -     |
 | resizeList |  显示的缩放handle列表，`top`, `bottom`, `left`, `right`, `top-left`, `top-right`, `bottom-left`, `bottom-right`   | ^[string[]]        | -  |
+| guideline | 吸附参考线    | object<Array> | {h:[],v:[]} |
+
 
 ### Drager 事件
 
@@ -238,4 +240,3 @@ export type DragData = {
 | default | 自定义默认内容 |
 | resize | 缩放handle |
 | rotate | 旋转handle |
-
