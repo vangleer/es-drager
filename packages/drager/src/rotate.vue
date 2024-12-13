@@ -20,9 +20,17 @@
 
 <script setup lang="ts">
 import { ref, computed, PropType } from 'vue'
-import { getXY, MouseTouchEvent, setupMove } from './utils'
+import { getXY, MouseTouchEvent, setupMove, getRotatedBounds } from './utils'
+import { DragData } from './drager'
 
 const props = defineProps({
+  getBoundary: {
+    type: Function as PropType<() => number[]>
+  },
+  dragData: {
+    type: Object as PropType<DragData>
+  },
+  boundary: Boolean,
   modelValue: {
     type: Number,
     default: 0
@@ -39,6 +47,7 @@ const emit = defineEmits([
   'rotate-end'
 ])
 
+const currentRotate = ref(0)
 const rotateRef = ref<HTMLElement | null>(null)
 const angle = computed({
   get: () => props.modelValue,
@@ -46,6 +55,40 @@ const angle = computed({
     emit('update:modelValue', val)
   }
 })
+
+const fixRotateBoundary = (
+  d: DragData,
+  boundaryInfo: number[],
+  newAngle: number
+): number => {
+  const [minX, widthBound, minY, heightBound, parentWidth, parentHeight] =
+    boundaryInfo
+  const maxX = parentWidth
+  const maxY = parentHeight
+
+  // 检查是否越界
+  const isOutOfBoundary = (angle: number) => {
+    // 获取旋转后的边界
+    const { rotatedMinX, rotatedMaxX, rotatedMinY, rotatedMaxY } =
+      getRotatedBounds(d, angle)
+    // 这里要使用旧的angle
+    const radian = (d.angle * Math.PI) / 180
+    // 检查是否在边界内
+    const isXWithinBounds =
+      rotatedMinX >= minX * Math.sin(radian) && rotatedMaxX <= maxX
+    const isYWithinBounds =
+      rotatedMinY >= minY * Math.sin(radian) && rotatedMaxY <= maxY
+    return !(isXWithinBounds && isYWithinBounds)
+  }
+
+  if (!isOutOfBoundary(newAngle)) {
+    // 旋转角度在范围内, 就记住当前角度
+    currentRotate.value = newAngle
+  } else {
+    // console.log('越界')
+  }
+  return currentRotate.value
+}
 
 /**
  * 旋转
@@ -74,7 +117,12 @@ function onRotateMousedown(e: MouseTouchEvent) {
       const radians = Math.atan2(diffY, diffX)
 
       const deg = (radians * 180) / Math.PI - 90
-      angle.value = (deg + 360) % 360
+      let newAngle = (deg + 360) % 360
+      if (props.boundary) {
+        let boundaryInfo = props.getBoundary!()
+        newAngle = fixRotateBoundary(props.dragData!, boundaryInfo, newAngle)
+      }
+      angle.value = newAngle
       emit('rotate', angle.value)
     },
     () => {
@@ -98,3 +146,6 @@ function onRotateMousedown(e: MouseTouchEvent) {
   }
 }
 </style>
+
+function getBoundary() { throw new Error('Function not implemented.') } function
+getBoundary() { throw new Error('Function not implemented.') }
