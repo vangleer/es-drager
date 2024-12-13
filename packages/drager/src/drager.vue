@@ -32,6 +32,9 @@
     <Rotate
       v-if="showRotate"
       v-model="dragData.angle"
+      :dragData="dragData"
+      :boundary="props.boundary"
+      :getBoundary="getBoundary"
       :element="dragRef"
       @rotate="emitFn('rotate', dragData)"
       @rotate-start="emitFn('rotate-start', dragData)"
@@ -105,7 +108,7 @@ const dots = computed(() => {
 const dragStyle = computed(() => {
   const { width, height, left, top, angle } = dragData.value
   const style: CSSProperties = {}
-  
+
   if (width) style.width = withUnit(width)
   if (height) {
     if (props.type === 'text') {
@@ -151,7 +154,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   const downX = clientX
   const downY = clientY
   const { width, height, left, top } = dragData.value
-  
+
   // 中心点
   const centerX = left + width / 2
   const centerY = top + height / 2
@@ -177,7 +180,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
   }
 
   const onMousemove = (e: MouseTouchEvent) => {
-    
+
     const { clientX, clientY } = getXY(e)
     // 距离
     let deltaX = (clientX - downX) / props.scaleRatio
@@ -240,7 +243,7 @@ function onDotMousedown(dotInfo: any, e: MouseTouchEvent) {
     if (props.boundary) {
       d = fixResizeBoundary(d, boundaryInfo, ratio)
     }
-    
+
     dragData.value = d
     emitFn('resize', dragData.value, type)
   }
@@ -277,7 +280,7 @@ function fixResizeBoundary(d: DragData, boundaryInfo: number[], ratio: number | 
     // 高度保持原来的不变
     d.height = dragData.value.height
   }
-  
+
   if (isMaxLeft || isMaxTop) {
     // 解决issue:#39
     if (isMaxLeft) {

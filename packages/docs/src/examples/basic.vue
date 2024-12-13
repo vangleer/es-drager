@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '@es-drager/common/i18n'
-import Drager from 'es-drager'
+import Drager from 'es-drager/index'
 
 const dragList = ref([
   [
@@ -37,7 +37,7 @@ const dragList = ref([
     { color: '#f44336', text: 'examples.rotateAndResize', rotatable: true }
   ],
   [
-    { color: '#6A00FF', text: 'examples.boundary', boundary: true },
+    { color: '#6A00FF', text: 'examples.boundary', boundary: true, rotatable: true },
     { color: '#A20025', text: 'examples.disabled', disabled: true },
     { color: '#D80073', text: 'examples.checkCollision', checkCollision: true },
     { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 }

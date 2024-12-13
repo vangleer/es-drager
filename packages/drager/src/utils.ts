@@ -150,7 +150,7 @@ export const getNewStyle = (
       deltaW = -deltaW
       deltaH = -deltaH
     }
-    
+
     const widthAndDeltaW = setWidthAndDeltaW(width, deltaW, minWidth)
     width = widthAndDeltaW.width
     deltaW = widthAndDeltaW.deltaW
@@ -169,7 +169,6 @@ export const getNewStyle = (
       deltaH = deltaW / ratio
       height = width / ratio
     }
-    
   }
 
   switch (type) {
@@ -373,10 +372,14 @@ export function calcGrid(diff: number, grid: number) {
  * @param element2 碰撞对象
  * @returns
  */
-export function checkCollision(element1: Element, element2: Element,scaleRatio : number) {
+export function checkCollision(
+  element1: Element,
+  element2: Element,
+  scaleRatio: number
+) {
   if (!element1 || !element2) return false
-  const rect1 = getBoundingClientRectByScale(element1,scaleRatio)
-  const rect2 = getBoundingClientRectByScale(element2,scaleRatio)
+  const rect1 = getBoundingClientRectByScale(element1, scaleRatio)
+  const rect2 = getBoundingClientRectByScale(element2, scaleRatio)
 
   if (
     rect1.left < rect2.left + rect2.width &&
@@ -393,15 +396,54 @@ export function checkCollision(element1: Element, element2: Element,scaleRatio :
 /**
  * 获取缩放后得Rect
  */
-export const getBoundingClientRectByScale = (el : HTMLElement | Element,scaleRatio : number)=>{
+export const getBoundingClientRectByScale = (
+  el: HTMLElement | Element,
+  scaleRatio: number
+) => {
   var curRect = el.getBoundingClientRect()
   return {
     ...curRect,
-    left : curRect.left / scaleRatio,
-    top : curRect.top / scaleRatio,
-    right : curRect.right / scaleRatio,
-    bottom : curRect.bottom / scaleRatio,
+    left: curRect.left / scaleRatio,
+    top: curRect.top / scaleRatio,
+    right: curRect.right / scaleRatio,
+    bottom: curRect.bottom / scaleRatio,
     width: curRect.width / scaleRatio,
     height: curRect.height / scaleRatio
   } as DOMRect
+}
+
+// 计算旋转矩阵，围绕元素中心旋转
+const rotateMatrix = (
+  x: number,
+  y: number,
+  centerX: number,
+  centerY: number,
+  angle: number
+) => {
+  const radian = (angle * Math.PI) / 180
+  const translatedX = x - centerX
+  const translatedY = y - centerY
+  return [
+    translatedX * Math.cos(radian) - translatedY * Math.sin(radian) + centerX,
+    translatedX * Math.sin(radian) + translatedY * Math.cos(radian) + centerY
+  ]
+}
+
+// 获取旋转后的边界
+export const getRotatedBounds = (d: DragData, angle: number) => {
+  const centerX = d.left + d.width / 2
+  const centerY = d.top + d.height / 2
+  const corners = [
+    rotateMatrix(d.left, d.top, centerX, centerY, angle),
+    rotateMatrix(d.left + d.width, d.top, centerX, centerY, angle),
+    rotateMatrix(d.left, d.top + d.height, centerX, centerY, angle),
+    rotateMatrix(d.left + d.width, d.top + d.height, centerX, centerY, angle)
+  ]
+
+  const rotatedMinX = Math.min(...corners.map(corner => corner[0]))
+  const rotatedMaxX = Math.max(...corners.map(corner => corner[0]))
+  const rotatedMinY = Math.min(...corners.map(corner => corner[1]))
+  const rotatedMaxY = Math.max(...corners.map(corner => corner[1]))
+
+  return { rotatedMinX, rotatedMaxX, rotatedMinY, rotatedMaxY }
 }
