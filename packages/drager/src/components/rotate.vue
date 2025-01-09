@@ -2,7 +2,7 @@
   <div
     ref="rotateRef"
     class="es-drager-rotate"
-    @mousedown="onRotateMousedown"
+    @mousedown.stop="onRotateMousedown"
     @touchstart.passive="onRotateMousedown"
   >
     <slot>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref, computed, PropType } from 'vue'
-import { getXY, MouseTouchEvent, setupMove } from './utils'
+import { getXY, MouseTouchEvent, setupMove } from '../utils'
 
 const props = defineProps({
   modelValue: {
@@ -84,7 +84,7 @@ function onRotateMousedown(e: MouseTouchEvent) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .es-drager-rotate {
   position: absolute;
   top: 0;

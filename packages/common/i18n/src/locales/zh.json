@@ -23,6 +23,7 @@
     "rotate": "旋转",
     "rotateAndResize": "旋转+缩放",
     "boundary": "边界",
+    "skew": "倾斜",
     "disabled": "禁用",
     "checkCollision": "碰撞检测",
     "minSzie": "最小宽高",

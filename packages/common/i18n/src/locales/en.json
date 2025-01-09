@@ -23,6 +23,7 @@
     "rotate": "Rotate",
     "rotateAndResize": "Rotate+Resize",
     "boundary": "Boundary",
+    "skew": "Skew",
     "disabled": "disabled",
     "checkCollision": "Collision",
     "minSzie": "min width and min height",

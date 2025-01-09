@@ -13,16 +13,20 @@
 <td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Draggable</strong></a></td>
 <td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Resizable</strong></a></td>
 <td align="center"><a href="https://vangleer.github.io/es-drager"><strong>Rotatable</strong></a></td>
+<td align="center"><a href="https://vangleer.github.io/es-drager"><strong>skewable</strong></a></td>
 </tr>
 <tr>
 <td align="center">
-<img src="https://vangleer.github.io/es-drager/static/draggable.gif" />
+<img src="https://vangleer.github.io/es-drager/static/draggable.gif"  />
 </td>
 <td align="center">
 <img src="https://vangleer.github.io/es-drager/static/resizable.gif" />
 </td>
 <td align="center">
 <img src="https://vangleer.github.io/es-drager/static/rotatable.gif" />
+</td>
+<td align="center">
+<img src="https://vangleer.github.io/es-drager/static/skewable.gif" style="width: 185px;height: 158px;" />
 </td>
 </tr>
 </table>
@@ -177,9 +181,11 @@ import Drager from 'es-drager'
 | left | 横坐标偏移       | ^[number]         | 0     |
 | top | 纵坐标偏移       | ^[number]         | 0     |
 | angle | 旋转角度       | ^[number]         | 0     |
+| skew | 倾斜角度       | ^[Array<number>]         | [0, 0]     |
 | color | 颜色       | ^[string]         |   #3a7afe   |
 | resizable | 是否可缩放       | ^[boolean]        | true     |
 | rotatable | 是否可旋转       | ^[boolean]        | -     |
+| skewable | 是否可倾斜       | ^[boolean]        | -     |
 | boundary | 是否判断边界(最近定位父节点，考虑性能谨慎使用)     | ^[boolean]        | -     |
 | disabled | 是否禁用     | ^[boolean]        | -     |
 | minWidth | 最小宽度     | ^[number]        | -     |
@@ -218,6 +224,9 @@ import Drager from 'es-drager'
 | rotate | 旋转中 | ^[Function]`(dragData) => void` |
 | rotate-start | 旋转开始 | ^[Function]`(dragData) => void` |
 | rotate-end | 旋转结束 | ^[Function]`(dragData) => void` |
+| skew | 倾斜中 | ^[Function]`(dragData) => void` |
+| skew-start | 倾斜开始 | ^[Function]`(dragData) => void` |
+| skew-end | 倾斜结束 | ^[Function]`(dragData) => void` |
 | focus | 获取焦点/选中 | ^[Function]`(selected) => void` |
 | blur | 失去焦点/非选中 | ^[Function]`(selected) => void` |
 
@@ -230,6 +239,7 @@ export type DragData = {
   left: number
   top: number
   angle: number
+  skew: number[],
 }
 ```
 
@@ -241,3 +251,4 @@ export type DragData = {
 | default | 自定义默认内容 |
 | resize | 缩放handle |
 | rotate | 旋转handle |
+| skew | 倾斜handle |

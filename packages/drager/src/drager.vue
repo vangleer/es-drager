@@ -39,6 +39,17 @@
     >
       <slot name="rotate" />
     </Rotate>
+
+    <Skew
+      v-if="showSkew"
+      v-model="dragData.skew"
+      :element="dragRef"
+      @skew="emitFn('skew', dragData)"
+      @skew-start="emitFn('skew-start', dragData)"
+      @skew-end="emitFn('skew-end', dragData)"
+    >
+      <slot name="skew" />
+    </Skew>
   </component>
 </template>
 
@@ -65,7 +76,8 @@ import {
   getXY,
   MouseTouchEvent
 } from './utils'
-import Rotate from './rotate.vue'
+import Rotate from './components/rotate.vue'
+import Skew from './components/skew.vue'
 
 const props = defineProps(DragerProps)
 const emit = defineEmits([
@@ -79,6 +91,9 @@ const emit = defineEmits([
   'rotate',
   'rotate-start',
   'rotate-end',
+  'skew',
+  'skew-start',
+  'skew-end',
   'focus',
   'blur'
 ])
@@ -97,13 +112,16 @@ const showResize = computed(() => props.resizable && !props.disabled)
 const showRotate = computed(
   () => props.rotatable && !props.disabled && selected.value
 )
+const showSkew = computed(
+  () => props.skewable && !props.disabled && selected.value
+)
 
 const dots = computed(() => {
   return props.type != 'text' ? dotList.value : dotList.value.filter(d => !['top', 'bottom'].includes(d.side))
 })
 
 const dragStyle = computed(() => {
-  const { width, height, left, top, angle } = dragData.value
+  const { width, height, left, top, angle, skew } = dragData.value
   const style: CSSProperties = {}
   
   if (width) style.width = withUnit(width)
@@ -119,6 +137,15 @@ const dragStyle = computed(() => {
     `translateY(${withUnit(top)})`,
     `rotate(${angle}deg)`,
   ]
+
+  if (skew && skew.length) {
+    let skewStr = `skewX(${skew[0]}deg)`
+    if (skew[1]) {
+      skewStr += ` skewY(${skew[1]}deg)`
+    }
+
+    transform.push(skewStr)
+  }
 
   return {
     ...style,

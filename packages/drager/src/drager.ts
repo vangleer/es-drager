@@ -20,6 +20,9 @@ export type EventType =
   | 'rotate'
   | 'rotate-start'
   | 'rotate-end'
+  | 'skew'
+  | 'skew-start'
+  | 'skew-end'
 export type IDot = {
   side: IDotSide
   cursor?: string
@@ -46,6 +49,10 @@ export const DragerProps = {
     default: true
   },
   rotatable: {
+    type: Boolean,
+    default: false
+  },
+  skewable: {
     type: Boolean,
     default: false
   },
@@ -149,4 +156,5 @@ export interface DragData {
   left: number
   top: number
   angle: number
+  skew?: number[]
 }

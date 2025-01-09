@@ -43,6 +43,13 @@
       <div class="custom-rotate">E</div>
     </template>
   </Drager>
+
+  <Drager :width="100" :height="100" :left="300" :top="450" skewable>
+    skew handle
+    <template #skew>
+      <div class="custom-rotate">S</div>
+    </template>
+  </Drager>
 </template>
 
 <script setup lang="ts">

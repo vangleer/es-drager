@@ -5,6 +5,7 @@
     :left="100"
     :top="100"
     rotatable
+    skewable
     @change="onChange"
     @drag="onDrag"
     @drag-start="onDragStart"
@@ -15,13 +16,16 @@
     @rotate="onRotate"
     @rotate-start="onRotateStart"
     @rotate-end="onRotateEnd"
+    @skew="onSkew"
+    @skew-start="onSkewStart"
+    @skew-end="onSkewEnd"
     @focus="onFocus"
     @blur="onBlur"
   />
 </template>
 
 <script setup lang="ts">
-import Drager, { type DragData } from 'es-drager'
+import Drager, { type DragData } from 'es-drager/index'
 
 // @change="onChange"
 // drag、resize、rotate
@@ -66,6 +70,19 @@ const onRotateStart = (dragData: DragData) => {
 // resize end
 const onRotateEnd = (dragData: DragData) => {
   console.log('onRotateEnd', dragData)
+}
+
+// skewing
+const onSkew = (dragData: DragData) => {
+  console.log('onSkew', dragData)
+}
+// skew start
+const onSkewStart = (dragData: DragData) => {
+  console.log('onSkewStart', dragData)
+}
+// skew end
+const onSkewEnd = (dragData: DragData) => {
+  console.log('onSkewEnd', dragData)
 }
 
 // focus/selected

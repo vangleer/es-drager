@@ -1,5 +1,5 @@
 <template>
-  <Drager v-bind="info" rotatable @change="onChange" />
+  <Drager v-bind="info" rotatable skewable @change="onChange" />
 
   <div class="es-info">
     <div class="es-info-item">
@@ -22,6 +22,11 @@
       <span class="es-info-item-label">angle</span>
       <input v-model.number="info.angle" />
     </div>
+
+    <div class="es-info-item">
+      <span class="es-info-item-label">skew</span>
+      <input v-model.number="info.skew" />
+    </div>
   </div>
 </template>
 
@@ -34,7 +39,8 @@ const info = ref<DragData>({
   height: 120,
   left: 100,
   top: 100,
-  angle: 20
+  angle: 20,
+  skew: [0, 0]
 })
 
 const onChange = (dragData: DragData) => {

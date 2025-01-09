@@ -37,8 +37,8 @@ const dragList = ref([
     { color: '#f44336', text: 'examples.rotateAndResize', rotatable: true }
   ],
   [
+    { color: '#6A00FF', text: 'examples.skew', skewable: true },
     { color: '#6A00FF', text: 'examples.boundary', boundary: true },
-    { color: '#A20025', text: 'examples.disabled', disabled: true },
     { color: '#D80073', text: 'examples.checkCollision', checkCollision: true },
     { color: '#1BA1E2', text: 'examples.minSzie', minWidth: 10, minHeight: 10 }
   ],
@@ -46,6 +46,7 @@ const dragList = ref([
     { color: '#31eff6', text: 'examples.snap', boundary: true, snap: true },
     { color: '#f46619', text: 'examples.markline', boundary: true, markline: true },
     { color: '#6bf419', text: 'examples.snapAndMarkline', boundary: true, snap: true, markline: true },
+    { color: '#A20025', text: 'examples.disabled', disabled: true },
   ]
 ])
 
