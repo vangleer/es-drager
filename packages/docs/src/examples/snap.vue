@@ -196,6 +196,10 @@ const extraLines = (targetRect: DOMRect) => {
   z-index: 999;
 }
 .dragerItem {
-  background: blue;
+  background: #2563eb;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

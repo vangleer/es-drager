@@ -149,7 +149,7 @@ function onDragstart(item: ComponentType) {
 
 function onChange(dragData: DragData, item: ComponentType) {
   Object.keys(dragData).forEach(key => {
-    item[key as keyof DragData] = dragData[key as keyof DragData]
+    (item as any)[key] = dragData[key as keyof DragData]
   })
 }
 </script>

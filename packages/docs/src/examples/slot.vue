@@ -5,7 +5,7 @@
   </Drager>
 
   <Drager class="drager-text" type="text" :left="350" :top="100">
-    <div :contenteditable="true">文本类型</div>
+    <div :contenteditable="true" style="text-align: center;">文本类型</div>
   </Drager>
 
   <Drager :width="100" :height="100" :left="100" :top="300" rotatable>

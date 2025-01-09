@@ -185,8 +185,8 @@ import Drager from 'es-drager'
 | color | 颜色       | ^[string]         |   #3a7afe   |
 | resizable | 是否可缩放       | ^[boolean]        | true     |
 | rotatable | 是否可旋转       | ^[boolean]        | -     |
-| skewable | 是否可倾斜       | ^[boolean]        | -     |
-| boundary | 是否判断边界(最近定位父节点，考虑性能谨慎使用)     | ^[boolean]        | -     |
+| skewable <img src="https://img.shields.io/badge/v1.3.0-3a7afe" /> | 是否可倾斜       | ^[boolean]        | -     |
+| boundary | 是否判断边界(最近定位父节点，考虑性能谨慎使用。只支持移动，缩放在v1.3后不支持)     | ^[boolean]        | -     |
 | disabled | 是否禁用     | ^[boolean]        | -     |
 | minWidth | 最小宽度     | ^[number]        | -     |
 | minHeight | 最小高度     | ^[number]        | -     |

@@ -10,17 +10,10 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
-    path: 'event',
-    component: () => import('@/examples/event.vue'),
+    path: 'slot',
+    component: () => import('@/examples/slot.vue'),
     meta: {
-      title: 'event'
-    }
-  },
-  {
-    path: 'grid',
-    component: () => import('@/examples/grid.vue'),
-    meta: {
-      title: 'grid'
+      title: 'slot'
     }
   },
   {
@@ -30,18 +23,19 @@ export const menuRoutes: RouteRecordRaw[] = [
       title: 'info'
     }
   },
-  {
-    path: 'slot',
-    component: () => import('@/examples/slot.vue'),
-    meta: {
-      title: 'slot'
-    }
-  },
+  
   {
     path: 'chart',
     component: () => import('@/examples/chart.vue'),
     meta: {
       title: 'chart'
+    }
+  },
+  {
+    path: 'grid',
+    component: () => import('@/examples/grid.vue'),
+    meta: {
+      title: 'grid'
     }
   },
   {
@@ -70,6 +64,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     component: () => import('@/examples/snap.vue'),
     meta: {
       title: 'snap'
+    }
+  },
+  {
+    path: 'event',
+    component: () => import('@/examples/event.vue'),
+    meta: {
+      title: 'event'
     }
   },
   // {
