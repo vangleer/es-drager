@@ -1,52 +1,67 @@
 <template>
   <div class="es-layout-aside">
     <slot>
-      <el-collapse v-model="activeNames">
-        <el-collapse-item title="通用" name="1">
-          <div class="collapse-content">
-            <template v-for="item in config.componentList">
+      <div class="es-info-tabs">
+        <div
+          v-for="item in tabs"
+          :class="['es-info-tab', { active: item === activeName }]"
+          @click="activeName = item"
+        >
+          {{ item }}
+        </div>
+      </div>
+      <div v-show="activeName === '组件'" class="collapse-content">
+        <template v-for="item in config.componentList">
+          <AsideBlock
+            v-if="item.component !== 'es-icon'"
+            :item="item"
+            @dragstart="dragstart($event, item)"
+            @dragend="dragend"
+          />
+          <el-popover
+            v-else
+            placement="right"
+            title="图标"
+            trigger="hover"
+          >
+            <template #reference>
               <AsideBlock
-                v-if="item.component !== 'es-icon'"
                 :item="item"
                 @dragstart="dragstart($event, item)"
                 @dragend="dragend"
               />
-              <el-popover
-                v-else
-                placement="right"
-                title="图标"
-                trigger="hover"
-              >
-                <template #reference>
-                  <AsideBlock
-                    :item="item"
-                    @dragstart="dragstart($event, item)"
-                    @dragend="dragend"
-                  />
-                </template>
-                <div class="collapse-content">
-                  <AsideBlock
-                    v-for="item in config.iconList"
-                    :key="item.props.icon"
-                    :item="item"
-                    @dragstart="dragstart($event, item)"
-                    @dragend="dragend"
-                  >
-                    <component
-                      v-if="item.component"
-                      :is="item.component"
-                      v-bind="item.props"
-                    ></component>
-                    <template v-else>{{ item.props.icon }}</template>
-                  </AsideBlock>
-                </div>
-              </el-popover>
             </template>
-          </div>
-        </el-collapse-item>
+            <div class="collapse-content">
+              <AsideBlock
+                v-for="item in config.iconList"
+                :key="item.props.icon"
+                :item="item"
+                @dragstart="dragstart($event, item)"
+                @dragend="dragend"
+              >
+                <component
+                  v-if="item.component"
+                  :is="item.component"
+                  v-bind="item.props"
+                ></component>
+                <template v-else>{{ item.props.icon }}</template>
+              </AsideBlock>
+            </div>
+          </el-popover>
+        </template>
+      </div>
 
-        <el-collapse-item title="模板" name="2"></el-collapse-item>
-      </el-collapse>
+      <div v-show="activeName === '模板'" class="collapse-content">
+        <template v-for="(item, index) in templateList">
+          <div class="es-template-block">
+            <img :src="item.bg" />
+            <h2 class="es-template-title" :style="{ color: index < 2 ? '#333' : '#fff' }">{{ item.title }}</h2>
+            <div class="es-template-ghost">
+              <el-button type="primary" @click="emit('replaceTemplate', getTemplate(item))">使用模板</el-button>
+            </div>
+          </div>
+        </template>
+      </div>
     </slot>
   </div>
 </template>
@@ -56,10 +71,12 @@ import { ref } from 'vue'
 import { registerConfig as config } from '../../utils/editor-config'
 import { ComponentType } from '../../types'
 import AsideBlock from './components/AsideBlock.vue'
+import { templateList, getTemplate } from '../../config/templates'
 
-const emit = defineEmits(['dragstart', 'dragend'])
+const emit = defineEmits(['dragstart', 'dragend', 'replaceTemplate'])
 
-const activeNames = ref(['1', '2', '3'])
+const tabs = ['组件', '模板']
+const activeName = ref<string>(tabs[0])
 
 function dragstart(e: DragEvent, component: ComponentType) {
   let width = 50,
@@ -115,6 +132,55 @@ function dragend() {
 
     .block-text {
       margin-left: 6px;
+    }
+  }
+
+  .es-template-block {
+    position: relative;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    &:hover {
+      .es-template-ghost {
+        display: flex;
+      }
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .es-template-title {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .es-template-ghost {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.es-info-tabs {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  background-color: var(--el-bg-color-page);
+  .es-info-tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    cursor: pointer;
+    &.active {
+      background-color: var(--el-bg-color);
     }
   }
 }

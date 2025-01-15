@@ -1,6 +1,6 @@
 <template>
   <div class="es-layout-container">
-    <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" />
+    <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" @replace-template="handleReplaceTemplate" />
     <div ref="mainRef" class="es-layout-main">
       <div class="es-editor-container" :style="editorContainerStyle">
         <Editor
@@ -188,6 +188,10 @@ function getData() {
   return { ...store.data }
 }
 
+function handleReplaceTemplate(elements: ComponentType[]) {
+  store.data.elements = elements
+}
+
 watch(() => props.data, () => {
   store.update(props.data)
 }, { immediate: true })
@@ -231,9 +235,9 @@ defineExpose({
       background-color: rgba(69,90,100,.2);
     }
   }
-  .es-editor-container {
-    //box-shadow: var(--el-box-shadow);
-    //background-color: var(--es-color-bg);
-  }
+  // .es-editor-container {
+  //   box-shadow: var(--el-box-shadow);
+  //   background-color: var(--es-color-bg);
+  // }
 }
 </style>
