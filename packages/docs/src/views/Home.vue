@@ -40,7 +40,7 @@
           {{ t(`route.${item.meta?.title}`) }}
         </div>
       </Aside>
-      <div class="es-content">
+      <div ref="contentRef" class="es-content">
         <RouterView />
       </div>
 
@@ -89,6 +89,8 @@ const router = useRouter()
 const route = useRoute()
 const useLocale = useLocaleStore()
 
+const contentRef = ref()
+
 // copy code set
 const copyCode = async () => {
   try {
@@ -135,6 +137,13 @@ watch(
   () => {
     current.value =
       menuRoutes.find(item => route.path === `/${item.path}`) || menuRoutes[0]
+
+    if (contentRef.value) {
+      const lines = contentRef.value.querySelectorAll('[class^=es-drager-markline]')
+      lines.forEach((line: HTMLDivElement) => {
+        line.parentElement?.removeChild(line)
+      })
+    }
   },
   { immediate: true }
 )
