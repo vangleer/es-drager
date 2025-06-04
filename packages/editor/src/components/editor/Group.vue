@@ -7,7 +7,10 @@
       v-bind="item.props"
       :style="item.groupStyle"
     >
-      {{ item.text }}
+      <TextEditor
+        v-if="item.text"
+        :text="item.text"
+      />
     </component>
   </div>
 </template>
@@ -15,6 +18,7 @@
 <script setup lang="ts">
 import { ComponentType } from '../../types'
 import { PropType } from 'vue'
+import TextEditor from './TextEditor.vue'
 
 defineProps({
   elements: {

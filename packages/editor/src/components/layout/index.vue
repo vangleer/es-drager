@@ -1,6 +1,10 @@
 <template>
   <div class="es-layout-container">
-    <Aside @dragstart="handleAsideDragstart" @dragend="handleAsideDragend" @replace-template="handleReplaceTemplate" />
+    <Aside
+      @dragstart="handleAsideDragstart"
+      @dragend="handleAsideDragend"
+      @replace-template="handleReplaceTemplate"
+    />
     <div ref="mainRef" class="es-layout-main">
       <div class="es-editor-container" :style="editorContainerStyle">
         <Editor
@@ -171,7 +175,8 @@ function drop(e: DragEvent) {
       left: e.offsetX - currentComponent.width! / 2,
       top: e.offsetY - currentComponent.height! / 2,
       id: useId(),
-      style: currentComponent.style || {}
+      style: currentComponent.style || {},
+      compType: currentComponent.text
     }
   ]
   store.data.elements = elements

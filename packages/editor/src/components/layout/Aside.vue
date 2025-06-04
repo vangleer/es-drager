@@ -184,4 +184,39 @@ function dragend() {
     }
   }
 }
+.structure-content {
+  padding: 10px;
+  .structure-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(var(--el-color-primary-rgb), 0.05);
+      .delete-icon {
+        display: block;
+      }
+    }
+    
+    &.active {
+      background-color: rgba(var(--el-color-primary-rgb), 0.1);
+      color: var(--el-color-primary);
+    }
+    
+    .structure-item-text {
+      margin-left: 6px;
+    }
+    .delete-icon {
+      display: none;
+    }
+    
+  }
+
+  .blue-background-class {
+    background-color: rgba(var(--el-color-primary-rgb), 0.1);
+  }
+}
 </style>

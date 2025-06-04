@@ -1,7 +1,7 @@
 <template>
   <Drager v-bind="info" rotatable skewable @change="onChange" />
 
-  <div class="es-info">
+  <div class="es-info" @click.stop>
     <div class="es-info-item">
       <span>width</span>
       <input v-model.number="info.width" />
