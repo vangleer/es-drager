@@ -29,7 +29,8 @@ export function useDrager(
     height: props.height,
     left: props.left,
     top: props.top,
-    angle: props.angle
+    angle: props.angle,
+    skew: props.skew
   })
   const { marklineEmit } = useMarkline(targetRef, props)
   // 限制多个鼠标键按下的情况
