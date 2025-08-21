@@ -140,9 +140,7 @@ const dragStyle = computed(() => {
 
   if (skew && skew.length) {
     let skewStr = `skewX(${skew[0]}deg)`
-    if (skew[1]) {
-      skewStr += ` skewY(${skew[1]}deg)`
-    }
+    skewStr += ` skewY(${skew[1] ?? 0}deg)`
 
     transform.push(skewStr)
   }
@@ -304,6 +302,16 @@ watch(
     emit('change', { ...val })
   },
   { deep: true }
+)
+
+watch(
+  () => props.skew,
+  (skew, oldSkew) => {
+    dragData.value.skew = skew ?? []
+  },
+  {
+    deep: true,
+  }
 )
 
 watch(
