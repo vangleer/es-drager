@@ -85,6 +85,10 @@ export const DragerProps = {
     type: Number,
     default: 0
   },
+  skew: {
+    type: Array as PropType<number[]>,
+    default: () => [0, 0]
+  },
   color: {
     type: String,
     default: '#3a7afe'
