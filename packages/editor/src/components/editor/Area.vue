@@ -4,7 +4,13 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-
+interface AreaData {
+  scale: number
+}
+// 定义 props 并设置默认值
+const props = withDefaults(defineProps<AreaData>(), {
+  scale: 1
+})
 const emit = defineEmits(['move', 'up'])
 const show = ref(false)
 const areaData = ref({
@@ -28,14 +34,14 @@ function onMouseDown(e: MouseEvent) {
   const { pageX: downX, pageY: downY } = e
   const elRect = (e.target as HTMLElement)!.getBoundingClientRect()
 
-  // 鼠标在编辑器中的偏移量
-  const offsetX = downX - elRect.left
-  const offsetY = downY - elRect.top
+  // 鼠标在编辑器中的偏移量（考虑 scale）
+  const offsetX = (downX - elRect.left) / props.scale
+  const offsetY = (downY - elRect.top) / props.scale
 
   const onMouseMove = (e: MouseEvent) => {
     // 移动的距离
-    const disX = e.pageX - downX
-    const disY = e.pageY - downY
+    const disX = (e.pageX - downX) / props.scale
+    const disY = (e.pageY - downY) / props.scale
 
     // 得到默认的left、top
     let left = offsetX,
